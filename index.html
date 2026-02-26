@@ -8,21 +8,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --primary: #6366f1; --secondary: #a855f7; --accent: #f43f5e;
-            --bg: #020617; --card: rgba(15,23,42,0.7); --border: rgba(255,255,255,0.1);
-            --text: #f8fafc; --text-dim: #94a3b8; --glass-bg: rgba(255,255,255,0.05);
-            --output-bg: #ffffff; --output-text: #1e293b; --success: #10b981;
+            --primary:#6366f1; --secondary:#a855f7; --accent:#f43f5e;
+            --bg:#020617; --card:rgba(15,23,42,0.7); --border:rgba(255,255,255,0.1);
+            --text:#f8fafc; --text-dim:#94a3b8; --glass-bg:rgba(255,255,255,0.05);
+            --output-bg:#ffffff; --output-text:#1e293b; --success:#10b981;
         }
         [data-theme="light"] {
-            --bg: #f8fafc; --card: rgba(255,255,255,0.9); --border: rgba(0,0,0,0.1);
-            --text: #0f172a; --text-dim: #64748b; --glass-bg: rgba(0,0,0,0.04);
+            --bg:#f8fafc; --card:rgba(255,255,255,0.9); --border:rgba(0,0,0,0.1);
+            --text:#0f172a; --text-dim:#64748b; --glass-bg:rgba(0,0,0,0.04);
         }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',sans-serif; }
         body { background-color:var(--bg); color:var(--text); transition:0.4s; min-height:100vh; }
         select option { background:#0f172a; color:white; }
         .mesh { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;
-            background: radial-gradient(at 0% 0%,rgba(99,102,241,0.1) 0,transparent 50%),
-                        radial-gradient(at 100% 100%,rgba(168,85,247,0.1) 0,transparent 50%); }
+            background:radial-gradient(at 0% 0%,rgba(99,102,241,0.1) 0,transparent 50%),
+                       radial-gradient(at 100% 100%,rgba(168,85,247,0.1) 0,transparent 50%); }
         header { padding:1.2rem 2rem; display:flex; justify-content:space-between; align-items:center;
             max-width:1400px; margin:0 auto; position:sticky; top:0; backdrop-filter:blur(20px);
             z-index:100; border-bottom:1px solid var(--border); }
@@ -35,33 +35,18 @@
         .view-section.active { display:block; }
         @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
         .glass-card { background:var(--card); border:1px solid var(--border); border-radius:32px; padding:3rem; backdrop-filter:blur(20px); box-shadow:0 20px 50px rgba(0,0,0,0.1); }
-
-        /* UPLOAD */
         .upload-box { border:2px dashed var(--primary); border-radius:24px; padding:4rem 2rem; text-align:center; transition:0.3s; cursor:pointer; background:var(--glass-bg); margin-bottom:2rem; }
         .upload-box:hover, .upload-box.drag-over { border-color:var(--secondary); background:rgba(99,102,241,0.08); }
-
-        /* CONTROLS */
         .control-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2rem; }
         label { font-size:0.75rem; font-weight:800; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.8rem; display:block; }
         select, input { width:100%; padding:1.1rem; background:var(--glass-bg); border:1px solid var(--border); border-radius:16px; color:var(--text); outline:none; font-size:1rem; transition:0.2s; }
         select:focus, input:focus { border-color:var(--primary); }
-
-        /* PRO BADGE */
-        .pro-badge { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:white; font-size:0.6rem; font-weight:900; padding:2px 8px; border-radius:20px; letter-spacing:1px; vertical-align:middle; margin-left:6px; }
-        .locked-overlay { position:relative; }
-        .locked-overlay::after { content:"🔒 PRO"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-            background:linear-gradient(135deg,var(--primary),var(--secondary)); color:white; padding:8px 20px;
-            border-radius:30px; font-size:0.75rem; font-weight:900; letter-spacing:1px; pointer-events:none; }
-
-        /* BUTTONS */
         .btn { padding:1rem 2rem; border-radius:14px; font-weight:700; cursor:pointer; border:none; transition:0.3s; font-size:0.95rem; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
         .btn-primary { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:white; }
         .btn-outline { background:var(--glass-bg); color:var(--text); border:1px solid var(--border); }
         .btn-danger { background:rgba(244,63,94,0.1); color:var(--accent); border:1px solid var(--accent); }
         .btn-danger:hover { background:var(--accent); color:white; }
         .btn:disabled { opacity:0.4; cursor:not-allowed; }
-
-        /* PROGRESS */
         .step-list { display:flex; flex-direction:column; gap:8px; margin-top:1.2rem; }
         .step { display:flex; align-items:center; gap:10px; font-size:0.8rem; color:var(--text-dim); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
         .step.active { color:var(--primary); }
@@ -69,18 +54,13 @@
         .step-dot { width:8px; height:8px; border-radius:50%; background:currentColor; flex-shrink:0; }
         .step.active .step-dot { animation:pulse 1s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-        /* RESULTS */
         #transcript-area { background:var(--output-bg); color:var(--output-text); padding:2.5rem; border-radius:20px; margin-top:1rem; line-height:2; border:1px solid #ddd; font-size:1.05rem; min-height:100px; }
-        .word-span { display:inline; cursor:pointer; padding:2px 1px; border-radius:4px; transition:0.15s; }
-        .word-span:hover { background:rgba(99,102,241,0.15); }
-        .timestamp-label { font-size:0.7rem; color:#6366f1; font-weight:800; margin-right:4px; font-family:monospace; }
-
-        /* SPEAKER BLOCKS */
+        .word-span { display:inline; cursor:default; padding:2px 1px; border-radius:4px; transition:0.15s; }
+        .word-span:hover { background:rgba(99,102,241,0.12); }
+        .timestamp-label { font-size:0.68rem; color:#6366f1; font-weight:800; margin-right:3px; font-family:monospace; }
         .speaker-block { margin-bottom:1.5rem; padding:1rem 1.5rem; border-radius:16px; background:#f8fafc; border-left:4px solid var(--primary); }
         .speaker-label { font-size:0.7rem; font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
-
-        /* PRICING */
+        .lang-detected-banner { background:rgba(16,185,129,0.1); border:1px solid var(--success); border-radius:12px; padding:0.8rem 1.2rem; margin-bottom:1.5rem; font-size:0.85rem; color:var(--success); font-weight:700; display:none; }
         .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:4rem; }
         .tier { background:var(--card); border:1px solid var(--border); border-radius:32px; padding:2.2rem; transition:0.4s; display:flex; flex-direction:column; }
         .tier:hover { transform:translateY(-10px); border-color:var(--primary); }
@@ -92,32 +72,17 @@
         .feat-list { list-style:none; margin-bottom:2rem; flex-grow:1; border-top:1px solid var(--border); padding-top:1.5rem; }
         .feat-list li { margin-bottom:0.8rem; font-size:0.85rem; color:var(--text-dim); display:flex; align-items:flex-start; gap:10px; line-height:1.3; }
         .feat-list li::before { content:"✓"; color:var(--success); font-weight:bold; }
-
-        /* FAQ */
         .faq-item { margin-bottom:1rem; border:1px solid var(--border); border-radius:16px; overflow:hidden; background:var(--glass-bg); }
         .faq-question { padding:1.5rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700; transition:0.3s; }
         .faq-answer { padding:0 1.5rem; max-height:0; overflow:hidden; transition:0.3s ease-out; color:var(--text-dim); font-size:0.95rem; line-height:1.6; }
         .faq-item.active .faq-answer { padding-bottom:1.5rem; max-height:300px; }
         .faq-item.active .faq-question { color:var(--primary); }
-
-        /* MODAL */
         .modal-wrap { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); display:none; justify-content:center; align-items:center; z-index:1000; }
         .modal-content { background:var(--bg); border:1px solid var(--border); padding:3.5rem; border-radius:32px; width:460px; position:relative; text-align:center; }
-        .close-btn { position:absolute; top:25px; right:25px; font-size:2rem; background:none; border:none; color:var(--text-dim); cursor:pointer; }
-
-        /* PRO UNLOCK MODAL */
         .pro-modal-content { background:var(--bg); border:2px solid var(--primary); padding:3rem; border-radius:32px; width:420px; position:relative; text-align:center; box-shadow:0 0 60px rgba(99,102,241,0.3); }
-
-        /* ERROR / INFO */
+        .close-btn { position:absolute; top:25px; right:25px; font-size:2rem; background:none; border:none; color:var(--text-dim); cursor:pointer; }
         .error-box { background:rgba(244,63,94,0.1); border:1px solid var(--accent); border-radius:16px; padding:1.2rem 1.5rem; margin-top:1.5rem; color:var(--accent); font-size:0.9rem; display:none; }
         .info-box { background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.3); border-radius:16px; padding:1.2rem 1.5rem; margin-bottom:1.5rem; font-size:0.85rem; color:var(--text-dim); }
-
-        /* PRO LOCK SECTION */
-        .pro-lock-wrap { position:relative; }
-        .pro-lock-blur { filter:blur(4px); pointer-events:none; user-select:none; }
-        .pro-lock-gate { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:10; text-align:center; }
-        .pro-lock-gate button { margin-top:12px; }
-
         @media(max-width:900px){ .pricing-grid,.control-grid{grid-template-columns:1fr} }
     </style>
 </head>
@@ -149,14 +114,13 @@
 
 <div class="container">
 
-    <!-- ═══════════════ WORKSPACE ═══════════════ -->
+    <!-- WORKSPACE -->
     <section id="workspace" class="view-section active">
         <div class="glass-card">
             <h1 style="font-size:2.2rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-1.5px">AI Neural Transcription</h1>
-            <p style="color:var(--text-dim);margin-bottom:2.5rem">Powered by AssemblyAI — the world's most accurate speech-to-text engine.</p>
+            <p style="color:var(--text-dim);margin-bottom:2.5rem">Powered by AssemblyAI — supports 99 languages with auto-detection.</p>
 
-            <!-- Pro status bar -->
-            <div id="proBar" style="display:none;background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(168,85,247,0.15));border:1px solid var(--primary);border-radius:16px;padding:1rem 1.5rem;margin-bottom:2rem;display:none;align-items:center;justify-content:space-between">
+            <div id="proBar" style="display:none;background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(168,85,247,0.15));border:1px solid var(--primary);border-radius:16px;padding:1rem 1.5rem;margin-bottom:2rem;align-items:center;justify-content:space-between">
                 <span style="font-weight:800;font-size:0.9rem">⚡ Pro Access Active</span>
                 <span style="font-size:0.75rem;color:var(--text-dim)">All features unlocked</span>
             </div>
@@ -181,29 +145,52 @@
                 <button onclick="resetUpload()" style="background:none;border:none;color:var(--accent);font-weight:800;cursor:pointer;text-transform:uppercase;font-size:0.7rem">✕ Remove</button>
             </div>
 
-            <!-- SETTINGS GRID -->
             <div class="control-grid">
+                <!-- LANGUAGE -->
                 <div>
-                    <label>Source Language</label>
+                    <label>Language</label>
                     <select id="lang">
+                        <option value="auto">✨ Auto-detect (AI picks language)</option>
+                        <option value="nl">Nederlands (Dutch)</option>
                         <option value="en">English</option>
-                        <option value="nl">Dutch</option>
-                        <option value="de">German</option>
-                        <option value="fr">French</option>
-                        <option value="es">Spanish</option>
-                        <option value="pt">Portuguese</option>
-                        <option value="it">Italian</option>
-                        <option value="ja">Japanese</option>
-                        <option value="zh">Chinese</option>
+                        <option value="de">Deutsch (German)</option>
+                        <option value="fr">Français (French)</option>
+                        <option value="es">Español (Spanish)</option>
+                        <option value="pt">Português (Portuguese)</option>
+                        <option value="it">Italiano (Italian)</option>
+                        <option value="pl">Polski (Polish)</option>
+                        <option value="ru">Русский (Russian)</option>
+                        <option value="tr">Türkçe (Turkish)</option>
+                        <option value="uk">Українська (Ukrainian)</option>
+                        <option value="ar">العربية (Arabic)</option>
+                        <option value="zh">中文 (Chinese)</option>
+                        <option value="ja">日本語 (Japanese)</option>
+                        <option value="ko">한국어 (Korean)</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="id">Bahasa Indonesia</option>
+                        <option value="sv">Svenska (Swedish)</option>
+                        <option value="da">Dansk (Danish)</option>
+                        <option value="fi">Suomi (Finnish)</option>
+                        <option value="no">Norsk (Norwegian)</option>
+                        <option value="cs">Čeština (Czech)</option>
+                        <option value="ro">Română (Romanian)</option>
+                        <option value="hu">Magyar (Hungarian)</option>
+                        <option value="el">Ελληνικά (Greek)</option>
+                        <option value="bg">Български (Bulgarian)</option>
+                        <option value="vi">Tiếng Việt (Vietnamese)</option>
+                        <option value="th">ภาษาไทย (Thai)</option>
+                        <option value="uk">Українська (Ukrainian)</option>
+                        <option value="ca">Català (Catalan)</option>
                     </select>
                 </div>
+                <!-- MODE -->
                 <div>
                     <label>Transcription Mode</label>
                     <select id="transcriptMode">
                         <option value="standard">📝 Standard — Full text</option>
                         <option value="words">🔤 Word by Word — with timestamps</option>
-                        <option value="speakers" class="pro-option">🎙️ Speaker Detection — Who said what <span class="pro-badge">PRO</span></option>
-                        <option value="summary" class="pro-option">✨ Auto Summary — Key points <span class="pro-badge">PRO</span></option>
+                        <option value="speakers">🎙️ Speaker Detection — Who said what [PRO]</option>
+                        <option value="summary">✨ Auto Summary — Key points [PRO]</option>
                     </select>
                 </div>
             </div>
@@ -229,7 +216,7 @@
 
             <!-- RESULT -->
             <div id="result" style="display:none;margin-top:4rem;border-top:1px solid var(--border);padding-top:3rem">
-                <div style="display:flex;justify-content:space-between;margin-bottom:2rem;align-items:flex-end;flex-wrap:wrap;gap:1rem">
+                <div style="display:flex;justify-content:space-between;margin-bottom:1.5rem;align-items:flex-end;flex-wrap:wrap;gap:1rem">
                     <div>
                         <h2 style="font-weight:800;font-size:1.8rem">Transcript Result</h2>
                         <p style="color:var(--text-dim);font-size:0.8rem;margin-top:5px" id="resultMeta">Processing complete</p>
@@ -240,6 +227,10 @@
                         <button class="btn btn-primary" onclick="downloadPDF()">📄 PDF</button>
                     </div>
                 </div>
+
+                <!-- Detected language banner -->
+                <div class="lang-detected-banner" id="langBanner"></div>
+
                 <div id="transcript-area"></div>
                 <div style="margin-top:1.5rem">
                     <button class="btn btn-outline" onclick="newTranscription()" style="color:var(--primary)">+ New File</button>
@@ -248,7 +239,7 @@
         </div>
     </section>
 
-    <!-- ═══════════════ PRICING ═══════════════ -->
+    <!-- PRICING -->
     <section id="pricing" class="view-section">
         <div style="text-align:center;margin-bottom:4rem">
             <h1 style="font-size:2.8rem;font-weight:800;margin-bottom:1rem">Simple Pricing</h1>
@@ -261,10 +252,10 @@
                 <div class="price">$0<span>/mo</span></div>
                 <ul class="feat-list">
                     <li>5 hours of transcription / month</li>
-                    <li>Standard transcription</li>
-                    <li>Word-by-word with timestamps</li>
-                    <li>9 languages supported</li>
-                    <li>TXT export</li>
+                    <li>Standard & Word-by-Word mode</li>
+                    <li>Auto language detection</li>
+                    <li>99 languages supported</li>
+                    <li>TXT &amp; PDF export</li>
                 </ul>
                 <button class="btn btn-outline" onclick="switchTab('workspace')" style="width:100%">Get Started Free</button>
             </div>
@@ -276,10 +267,9 @@
                 <ul class="feat-list">
                     <li><strong>Unlimited</strong> transcription hours</li>
                     <li>Speaker Detection — who said what</li>
-                    <li>Auto Summary & Key Points</li>
-                    <li>PDF, TXT export</li>
+                    <li>Auto Summary &amp; Key Points</li>
                     <li>Priority processing</li>
-                    <li>All languages supported</li>
+                    <li>All languages &amp; models</li>
                 </ul>
                 <button class="btn btn-primary" onclick="openProModal()" style="width:100%">Unlock Pro</button>
             </div>
@@ -292,21 +282,24 @@
                     <li>5 team seats included</li>
                     <li>Full API access</li>
                     <li>Custom vocabulary</li>
-                    <li>Dedicated support</li>
-                    <li>Invoice & PO billing</li>
+                    <li>Dedicated support &amp; SLA</li>
                 </ul>
                 <button class="btn btn-outline" onclick="alert('Contact us at hello@transcriptai.com')" style="width:100%">Contact Sales</button>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════ FAQ ═══════════════ -->
+    <!-- FAQ -->
     <section id="faq" class="view-section">
         <div class="glass-card">
             <h1 style="font-size:2.2rem;font-weight:800;margin-bottom:2rem">Frequently Asked Questions</h1>
             <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">How does auto language detection work? <span>+</span></div>
+                <div class="faq-answer">When you select "Auto-detect", AssemblyAI listens to the first 15–90 seconds of your audio and automatically identifies the spoken language with a confidence score. It supports all 99 languages. The detected language is shown after transcription.</div>
+            </div>
+            <div class="faq-item">
                 <div class="faq-question" onclick="toggleFaq(this)">How accurate is the transcription? <span>+</span></div>
-                <div class="faq-answer">AssemblyAI uses Universal-2, one of the most accurate speech-to-text models available, reaching 95–99% accuracy on clear audio. It handles accents, background noise, and multiple speakers reliably.</div>
+                <div class="faq-answer">AssemblyAI achieves 95–99% accuracy on clear audio. It handles accents, background noise, and multiple speakers reliably across all supported languages including Dutch.</div>
             </div>
             <div class="faq-item">
                 <div class="faq-question" onclick="toggleFaq(this)">What is word-by-word transcription? <span>+</span></div>
@@ -314,20 +307,16 @@
             </div>
             <div class="faq-item">
                 <div class="faq-question" onclick="toggleFaq(this)">What file formats are supported? <span>+</span></div>
-                <div class="faq-answer">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC, and most other audio and video formats. Files up to 5GB are supported.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">Is my audio data secure? <span>+</span></div>
-                <div class="faq-answer">Yes. Your files are encrypted in transit and processed on secure AssemblyAI servers. Audio files are automatically deleted after transcription is complete.</div>
+                <div class="faq-answer">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC and most other audio and video formats up to 5GB.</div>
             </div>
             <div class="faq-item">
                 <div class="faq-question" onclick="toggleFaq(this)">How do I unlock Pro features? <span>+</span></div>
-                <div class="faq-answer">After purchasing a Pro plan, you will receive a unique access code via email. Enter this code in the Pro Unlock screen (click "Unlock Pro" in the Pricing page) to activate all Pro features.</div>
+                <div class="faq-answer">After purchasing a Pro plan, you will receive a unique access code via email. Enter this code by clicking "Unlock Pro" in the Pricing page to activate all Pro features instantly.</div>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════ ACCOUNT ═══════════════ -->
+    <!-- ACCOUNT -->
     <section id="account" class="view-section">
         <div class="glass-card">
             <h1>Account Dashboard</h1>
@@ -335,7 +324,7 @@
                 <p style="color:var(--text-dim);text-transform:uppercase;font-size:0.7rem;font-weight:800">PLAN STATUS</p>
                 <h2 id="planTitle" style="margin:0.5rem 0 2rem;font-size:2rem">Free Member</h2>
                 <div id="proActiveArea" style="display:none;margin-bottom:2rem">
-                    <p>Your <strong>Pro</strong> subscription is active. All premium features are unlocked.</p>
+                    <p>Your <strong>Pro</strong> subscription is active. All premium features unlocked.</p>
                     <div style="display:flex;gap:12px;margin-top:1.5rem">
                         <button class="btn btn-danger" onclick="deactivatePro()">Deactivate Pro</button>
                     </div>
@@ -348,7 +337,7 @@
         </div>
     </section>
 
-    <!-- ═══════════════ HISTORY ═══════════════ -->
+    <!-- HISTORY -->
     <section id="history" class="view-section">
         <div class="glass-card">
             <h1>Activity Log</h1>
@@ -358,7 +347,7 @@
                         <tr style="text-align:left;font-size:0.75rem;text-transform:uppercase;color:var(--text-dim)">
                             <th style="padding:1.2rem">File Name</th>
                             <th style="padding:1.2rem">Date</th>
-                            <th style="padding:1.2rem">Mode</th>
+                            <th style="padding:1.2rem">Language</th>
                             <th style="padding:1.2rem">Action</th>
                         </tr>
                     </thead>
@@ -371,7 +360,7 @@
     </section>
 </div>
 
-<!-- ═══════════ AUTH MODAL ═══════════ -->
+<!-- AUTH MODAL -->
 <div class="modal-wrap" id="authModal">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal('authModal')">&times;</button>
@@ -387,13 +376,13 @@
     </div>
 </div>
 
-<!-- ═══════════ PRO UNLOCK MODAL ═══════════ -->
+<!-- PRO MODAL -->
 <div class="modal-wrap" id="proModal">
     <div class="pro-modal-content">
         <button class="close-btn" onclick="closeModal('proModal')">&times;</button>
         <div style="font-size:3rem;margin-bottom:1rem">⚡</div>
         <h2 style="font-weight:800;margin-bottom:0.5rem">Unlock Pro Access</h2>
-        <p style="color:var(--text-dim);font-size:0.9rem;margin-bottom:2rem;line-height:1.5">Enter the access code you received after your purchase to unlock all Pro features.</p>
+        <p style="color:var(--text-dim);font-size:0.9rem;margin-bottom:2rem;line-height:1.5">Enter the access code you received after your purchase.</p>
         <div class="info-box">
             Don't have a code yet? <strong style="color:var(--primary);cursor:pointer" onclick="closeModal('proModal');switchTab('pricing')">Purchase a Pro plan →</strong>
         </div>
@@ -404,293 +393,292 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════
-// ⚙️  CONFIGURATION — Replace these values!
-// ══════════════════════════════════════════════════════
-const ASSEMBLYAI_API_KEY = "2045b621d12347bda9d543af266f5f8e"; // 🔑 Paste your AssemblyAI key here
-const PRO_PASSWORDS = ["MYPRO2024", "TRANSCRIPTPRO", "UNLOCK123"];  // 🔒 Your Pro access codes
+// ══════════════════════════════════════════════════
+// ⚙️  CONFIGURATION
+// ══════════════════════════════════════════════════
+const ASSEMBLYAI_API_KEY = "2045b621d12347bda9d543af266f5f8e"; // 🔑 Paste your key here
+const PRO_PASSWORDS = ["MYPRO2024", "TRANSCRIPTPRO", "UNLOCK123"]; // 🔒 Your Pro codes
 
-// ══════════════════════════════════════════════════════
-let state = {
-    isPro: false, loggedIn: false, theme: 'dark',
-    currentFile: null, history: [], lastTranscript: '', lastWords: []
+// Language code → human readable name (native + English)
+const LANG_NAMES = {
+    en:"English", nl:"Nederlands (Dutch)", de:"Deutsch (German)", fr:"Français (French)",
+    es:"Español (Spanish)", pt:"Português (Portuguese)", it:"Italiano (Italian)",
+    pl:"Polski (Polish)", ru:"Русский (Russian)", tr:"Türkçe (Turkish)",
+    uk:"Українська (Ukrainian)", ar:"العربية (Arabic)", zh:"中文 (Chinese)",
+    ja:"日本語 (Japanese)", ko:"한국어 (Korean)", hi:"हिन्दी (Hindi)",
+    id:"Bahasa Indonesia", sv:"Svenska (Swedish)", da:"Dansk (Danish)",
+    fi:"Suomi (Finnish)", no:"Norsk (Norwegian)", cs:"Čeština (Czech)",
+    ro:"Română (Romanian)", hu:"Magyar (Hungarian)", el:"Ελληνικά (Greek)",
+    bg:"Български (Bulgarian)", vi:"Tiếng Việt (Vietnamese)", th:"ภาษาไทย (Thai)",
+    ca:"Català (Catalan)"
 };
 
-// ─── THEME ─────────────────────────────────────────────
+// ══════════════════════════════════════════════════
+let state = { isPro:false, loggedIn:false, theme:'dark', currentFile:null, history:[] };
+
 function toggleTheme() {
-    state.theme = state.theme === 'dark' ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', state.theme);
-    document.getElementById('themeIcon').innerText = state.theme === 'dark' ? '☀️' : '🌙';
+    state.theme = state.theme==='dark'?'light':'dark';
+    document.body.setAttribute('data-theme',state.theme);
+    document.getElementById('themeIcon').innerText = state.theme==='dark'?'☀️':'🌙';
 }
 
-// ─── TABS ──────────────────────────────────────────────
 function switchTab(id) {
-    document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-center a').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-center a').forEach(a=>a.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    const nav = document.getElementById('tab-' + id);
-    if (nav) nav.classList.add('active');
-    window.scrollTo(0, 0);
+    const nav = document.getElementById('tab-'+id);
+    if(nav) nav.classList.add('active');
+    window.scrollTo(0,0);
 }
 
-// ─── MODALS ────────────────────────────────────────────
-function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-function openProModal()  { document.getElementById('proModal').style.display = 'flex'; }
-function closeModal(id)  { document.getElementById(id).style.display = 'none'; }
+function openAuthModal() { document.getElementById('authModal').style.display='flex'; }
+function openProModal()  { document.getElementById('proModal').style.display='flex'; }
+function closeModal(id)  { document.getElementById(id).style.display='none'; }
+function toggleFaq(el)   { el.parentElement.classList.toggle('active'); }
 
 function simulateLogin() {
-    state.loggedIn = true;
-    document.getElementById('loginHeaderBtn').innerText = 'Account';
-    document.getElementById('signupHeaderBtn').style.display = 'none';
-    document.getElementById('tab-account').style.display = 'block';
+    state.loggedIn=true;
+    document.getElementById('loginHeaderBtn').innerText='Account';
+    document.getElementById('signupHeaderBtn').style.display='none';
+    document.getElementById('tab-account').style.display='block';
     closeModal('authModal');
 }
 
-// ─── PRO SYSTEM ────────────────────────────────────────
+// ── PRO ──────────────────────────────────────────
 function activatePro() {
     const code = document.getElementById('proCodeInput').value.trim().toUpperCase();
-    if (PRO_PASSWORDS.includes(code)) {
-        state.isPro = true;
+    if(PRO_PASSWORDS.includes(code)) {
+        state.isPro=true;
         closeModal('proModal');
         updateProUI();
         alert('🎉 Pro access activated! All features are now unlocked.');
         switchTab('workspace');
     } else {
-        document.getElementById('proCodeError').style.display = 'block';
+        document.getElementById('proCodeError').style.display='block';
     }
 }
-
 function deactivatePro() {
-    if (confirm('Deactivate Pro access?')) { state.isPro = false; updateProUI(); }
+    if(confirm('Deactivate Pro access?')) { state.isPro=false; updateProUI(); }
 }
-
 function updateProUI() {
-    document.getElementById('planTitle').innerText = state.isPro ? 'Pro Member' : 'Free Member';
-    document.getElementById('proActiveArea').style.display = state.isPro ? 'block' : 'none';
-    document.getElementById('upgradeArea').style.display = state.isPro ? 'none' : 'block';
-    const proBar = document.getElementById('proBar');
-    proBar.style.display = state.isPro ? 'flex' : 'none';
+    document.getElementById('planTitle').innerText = state.isPro?'Pro Member':'Free Member';
+    document.getElementById('proActiveArea').style.display = state.isPro?'block':'none';
+    document.getElementById('upgradeArea').style.display  = state.isPro?'none':'block';
+    document.getElementById('proBar').style.display       = state.isPro?'flex':'none';
 }
-
-function requirePro(featureName) {
-    if (!state.isPro) {
-        if (confirm(`🔒 "${featureName}" is a Pro feature.\n\nWould you like to unlock Pro access?`)) {
-            openProModal();
-        }
+function requirePro(name) {
+    if(!state.isPro) {
+        if(confirm(`🔒 "${name}" is a Pro feature.\nWould you like to unlock Pro access?`)) openProModal();
         return false;
     }
     return true;
 }
 
-// ─── FILE HANDLING ─────────────────────────────────────
+// ── FILE ─────────────────────────────────────────
 function dragOver(e) { e.preventDefault(); document.getElementById('uploadBox').classList.add('drag-over'); }
 function dragLeave()  { document.getElementById('uploadBox').classList.remove('drag-over'); }
-function dropFile(e)  { e.preventDefault(); dragLeave(); if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); }
-function handleFileSelect(input) { if (input.files[0]) processFile(input.files[0]); }
+function dropFile(e)  { e.preventDefault(); dragLeave(); if(e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); }
+function handleFileSelect(input) { if(input.files[0]) processFile(input.files[0]); }
 
 function processFile(file) {
-    state.currentFile = file;
-    document.getElementById('fileInfo').style.display = 'flex';
-    document.getElementById('fileName').innerText = file.name;
-    document.getElementById('fileSize').innerText = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+    state.currentFile=file;
+    document.getElementById('fileInfo').style.display='flex';
+    document.getElementById('fileName').innerText=file.name;
+    document.getElementById('fileSize').innerText=(file.size/1024/1024).toFixed(1)+' MB';
     hideError();
-    updateBtn();
+    document.getElementById('processBtn').disabled=false;
 }
-
 function resetUpload() {
-    state.currentFile = null;
-    document.getElementById('fileInfo').style.display = 'none';
-    document.getElementById('fileInput').value = '';
-    updateBtn();
+    state.currentFile=null;
+    document.getElementById('fileInfo').style.display='none';
+    document.getElementById('fileInput').value='';
+    document.getElementById('processBtn').disabled=true;
 }
-
-function updateBtn() {
-    document.getElementById('processBtn').disabled = !state.currentFile;
-}
-
 function newTranscription() {
     resetUpload();
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('transcript-area').innerHTML = '';
-    window.scrollTo(0, 0);
+    document.getElementById('result').style.display='none';
+    document.getElementById('transcript-area').innerHTML='';
+    window.scrollTo(0,0);
 }
 
-// ─── TRANSCRIPTION ─────────────────────────────────────
+// ── MAIN TRANSCRIPTION ───────────────────────────
 async function startProcessing() {
     const file = state.currentFile;
+    const langVal = document.getElementById('lang').value;
     const mode = document.getElementById('transcriptMode').value;
-    const lang = document.getElementById('lang').value;
 
-    // Pro gate
-    if ((mode === 'speakers' || mode === 'summary') && !state.isPro) {
-        requirePro(mode === 'speakers' ? 'Speaker Detection' : 'Auto Summary');
-        return;
-    }
+    if((mode==='speakers'||mode==='summary') && !requirePro(mode==='speakers'?'Speaker Detection':'Auto Summary')) return;
 
     hideError();
-    document.getElementById('processBtn').disabled = true;
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('bar').style.width = '0%';
-    ['step1','step2','step3','step4'].forEach(s => document.getElementById(s).className = 'step');
+    document.getElementById('processBtn').disabled=true;
+    document.getElementById('result').style.display='none';
+    document.getElementById('langBanner').style.display='none';
+    document.getElementById('loading').style.display='block';
+    document.getElementById('bar').style.width='0%';
+    ['step1','step2','step3','step4'].forEach(s=>document.getElementById(s).className='step');
 
     try {
         // STEP 1: Read file
-        setStep('step1','active');
-        bar(10);
+        setStep('step1','active'); bar(10);
         const arrayBuffer = await file.arrayBuffer();
         setStep('step1','done');
 
-        // STEP 2: Upload to AssemblyAI
-        setStep('step2','active');
-        bar(25);
-
+        // STEP 2: Upload file to AssemblyAI
+        setStep('step2','active'); bar(25);
         const uploadRes = await fetch('https://api.assemblyai.com/v2/upload', {
-            method: 'POST',
-            headers: { 'authorization': ASSEMBLYAI_API_KEY, 'Transfer-Encoding': 'chunked' },
+            method:'POST',
+            headers:{ 'authorization': ASSEMBLYAI_API_KEY },
             body: arrayBuffer
         });
-        if (!uploadRes.ok) throw new Error(`Upload failed (${uploadRes.status}). Check your API key.`);
+        if(!uploadRes.ok) {
+            const t = await uploadRes.text();
+            throw new Error(`Upload failed (${uploadRes.status}): ${t}`);
+        }
         const { upload_url } = await uploadRes.json();
         setStep('step2','done');
 
-        // STEP 3: Submit transcript job
-        setStep('step3','active');
-        bar(50);
+        // STEP 3: Submit transcription job
+        setStep('step3','active'); bar(50);
 
-        const transcriptBody = {
+        // Build request body — KEY FIX:
+        // language_detection and language_code cannot be used together!
+        const body = {
             audio_url: upload_url,
-            language_code: lang,
             punctuate: true,
-            format_text: true,
+            format_text: true
         };
 
-        if (mode === 'words' || mode === 'standard') {
-            // words always included in response
+        if(langVal === 'auto') {
+            // Auto-detect: let AssemblyAI figure out the language
+            body.language_detection = true;
+        } else {
+            // Manual: set the language code directly
+            body.language_code = langVal;
         }
-        if (mode === 'speakers') {
-            transcriptBody.speaker_labels = true;
+
+        if(mode === 'speakers') {
+            body.speaker_labels = true;
         }
-        if (mode === 'summary') {
-            transcriptBody.summarization = true;
-            transcriptBody.summary_model = 'informative';
-            transcriptBody.summary_type = 'bullets';
+        if(mode === 'summary') {
+            body.summarization = true;
+            body.summary_model = 'informative';
+            body.summary_type = 'bullets';
         }
 
         const submitRes = await fetch('https://api.assemblyai.com/v2/transcript', {
-            method: 'POST',
-            headers: { 'authorization': ASSEMBLYAI_API_KEY, 'content-type': 'application/json' },
-            body: JSON.stringify(transcriptBody)
+            method:'POST',
+            headers:{ 'authorization': ASSEMBLYAI_API_KEY, 'content-type':'application/json' },
+            body: JSON.stringify(body)
         });
-        if (!submitRes.ok) throw new Error(`Submission failed (${submitRes.status}).`);
+        if(!submitRes.ok) {
+            const t = await submitRes.text();
+            throw new Error(`Submission failed (${submitRes.status}): ${t}`);
+        }
         const { id } = await submitRes.json();
 
-        // STEP 4: Poll for result
-        setStep('step4','active');
-        bar(70);
-
+        // STEP 4: Poll until done
+        setStep('step4','active'); bar(70);
         const startTime = Date.now();
         let transcript;
-        while (true) {
-            await new Promise(r => setTimeout(r, 2500));
+        while(true) {
+            await new Promise(r=>setTimeout(r,2500));
             const pollRes = await fetch(`https://api.assemblyai.com/v2/transcript/${id}`, {
-                headers: { 'authorization': ASSEMBLYAI_API_KEY }
+                headers:{ 'authorization': ASSEMBLYAI_API_KEY }
             });
             transcript = await pollRes.json();
-            if (transcript.status === 'completed') break;
-            if (transcript.status === 'error') throw new Error('Transcription failed: ' + transcript.error);
+            if(transcript.status==='completed') break;
+            if(transcript.status==='error') throw new Error('Transcription error: '+transcript.error);
         }
 
-        bar(100);
-        setStep('step4','done');
+        bar(100); setStep('step4','done');
+        const elapsed = ((Date.now()-startTime)/1000).toFixed(1);
 
-        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-        state.lastTranscript = transcript.text;
-        state.lastWords = transcript.words || [];
+        // Show detected language if auto-detect was used
+        if(langVal==='auto' && transcript.language_code) {
+            const detectedName = LANG_NAMES[transcript.language_code] || transcript.language_code;
+            const confidence = transcript.language_confidence ? Math.round(transcript.language_confidence*100) : '?';
+            const banner = document.getElementById('langBanner');
+            banner.innerHTML = `🌍 Detected language: <strong>${detectedName}</strong> — ${confidence}% confidence`;
+            banner.style.display = 'block';
+        }
 
-        displayResult(transcript, mode, elapsed, file.name);
-        saveHistory(file.name, mode, transcript.text);
+        displayResult(transcript, mode, elapsed, file.name, transcript.language_code || langVal);
+        saveHistory(file.name, transcript.language_code || langVal, transcript.text);
 
-    } catch (err) {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('processBtn').disabled = false;
+    } catch(err) {
+        document.getElementById('loading').style.display='none';
+        document.getElementById('processBtn').disabled=false;
         showError(err.message);
     }
 }
 
-function setStep(id, cls) { document.getElementById(id).className = 'step ' + cls; }
-function bar(pct) { document.getElementById('bar').style.width = pct + '%'; }
+function setStep(id,cls) { document.getElementById(id).className='step '+cls; }
+function bar(pct) { document.getElementById('bar').style.width=pct+'%'; }
 
-// ─── DISPLAY RESULT ────────────────────────────────────
-function displayResult(transcript, mode, elapsed, filename) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('result').style.display = 'block';
-    document.getElementById('resultMeta').textContent = `Completed in ${elapsed}s • ${filename}`;
-    document.getElementById('processBtn').disabled = false;
+// ── DISPLAY ──────────────────────────────────────
+function displayResult(transcript, mode, elapsed, filename, langCode) {
+    document.getElementById('loading').style.display='none';
+    document.getElementById('result').style.display='block';
+    const langName = LANG_NAMES[langCode] || langCode || '';
+    document.getElementById('resultMeta').textContent = `Completed in ${elapsed}s • ${filename}${langName?' • '+langName:''}`;
+    document.getElementById('processBtn').disabled=false;
 
     const area = document.getElementById('transcript-area');
-    area.innerHTML = '';
+    area.innerHTML='';
 
-    if (mode === 'words' && transcript.words?.length) {
-        // Word-by-word with timestamps
-        let html = '<div style="line-height:2.2">';
+    if(mode==='words' && transcript.words?.length) {
+        let html='<div style="line-height:2.4">';
         transcript.words.forEach(w => {
-            const ts = formatTime(w.start);
-            html += `<span class="word-span" title="${ts}" data-start="${w.start}">
-                        <span class="timestamp-label">[${ts}]</span>${w.text} </span>`;
+            html+=`<span class="word-span" title="${formatTime(w.start)}"><span class="timestamp-label">[${formatTime(w.start)}]</span>${w.text} </span>`;
         });
-        html += '</div>';
-        area.innerHTML = html;
+        html+='</div>';
+        area.innerHTML=html;
 
-    } else if (mode === 'speakers' && transcript.utterances?.length) {
-        // Speaker detection
-        const colors = ['#6366f1','#a855f7','#f43f5e','#10b981','#f59e0b'];
-        transcript.utterances.forEach((u, i) => {
-            const color = colors[u.speaker.charCodeAt(0) % colors.length];
-            area.innerHTML += `
+    } else if(mode==='speakers' && transcript.utterances?.length) {
+        const colors=['#6366f1','#a855f7','#f43f5e','#10b981','#f59e0b'];
+        transcript.utterances.forEach(u => {
+            const color = colors[u.speaker.charCodeAt(0)%colors.length];
+            area.innerHTML+=`
                 <div class="speaker-block" style="border-left-color:${color}">
                     <div class="speaker-label" style="color:${color}">🎙️ Speaker ${u.speaker} — ${formatTime(u.start)}</div>
                     <div>${u.text}</div>
                 </div>`;
         });
 
-    } else if (mode === 'summary' && transcript.summary) {
-        // Summary mode
-        area.innerHTML = `
+    } else if(mode==='summary' && transcript.summary) {
+        area.innerHTML=`
             <div style="margin-bottom:1.5rem">
                 <h3 style="color:var(--primary);font-size:1rem;font-weight:800;margin-bottom:1rem">✨ AI Summary</h3>
                 <div style="line-height:1.8">${transcript.summary.replace(/\n/g,'<br>')}</div>
             </div>
             <hr style="border:none;border-top:1px solid #ddd;margin:1.5rem 0">
             <div style="line-height:2;color:#666;font-size:0.95rem">${transcript.text}</div>`;
-
     } else {
-        // Standard
-        area.innerHTML = `<div style="line-height:2">${transcript.text}</div>`;
+        area.innerHTML=`<div style="line-height:2">${transcript.text}</div>`;
     }
 
-    window.scrollTo({ top: document.getElementById('result').offsetTop - 100, behavior: 'smooth' });
+    window.scrollTo({top:document.getElementById('result').offsetTop-100,behavior:'smooth'});
 }
 
 function formatTime(ms) {
-    const s = Math.floor(ms / 1000);
-    const m = Math.floor(s / 60);
-    return `${String(m).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
+    const s=Math.floor(ms/1000), m=Math.floor(s/60);
+    return `${String(m).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
 }
 
-// ─── HISTORY ───────────────────────────────────────────
-function saveHistory(filename, mode, text) {
+// ── HISTORY ──────────────────────────────────────
+function saveHistory(filename, langCode, text) {
     const now = new Date();
+    const langName = LANG_NAMES[langCode] || langCode || 'Unknown';
     state.history.unshift({
-        filename, mode, text,
-        date: now.toLocaleDateString('en-US') + ' ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
+        filename, langName, text,
+        date: now.toLocaleDateString('en-US')+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
     });
     const tbody = document.getElementById('historyBody');
-    tbody.innerHTML = state.history.map((item, i) => `
+    tbody.innerHTML = state.history.map((item,i)=>`
         <tr style="border-top:1px solid var(--border)">
             <td style="padding:1.5rem 1.2rem">${item.filename}</td>
             <td style="padding:1.2rem;color:var(--text-dim);font-size:0.85rem">${item.date}</td>
-            <td style="padding:1.2rem"><span style="color:var(--success)">● ${item.mode}</span></td>
+            <td style="padding:1.2rem"><span style="color:var(--success)">● ${item.langName}</span></td>
             <td style="padding:1.2rem">
                 <button class="btn btn-outline" style="padding:5px 12px;font-size:0.75rem" onclick="viewHistory(${i})">View</button>
             </td>
@@ -699,33 +687,745 @@ function saveHistory(filename, mode, text) {
 
 function viewHistory(i) {
     const item = state.history[i];
-    document.getElementById('transcript-area').innerHTML = `<div style="line-height:2">${item.text}</div>`;
-    document.getElementById('resultMeta').textContent = `Saved on ${item.date} • ${item.filename}`;
-    document.getElementById('result').style.display = 'block';
+    document.getElementById('transcript-area').innerHTML=`<div style="line-height:2">${item.text}</div>`;
+    document.getElementById('resultMeta').textContent=`Saved on ${item.date} • ${item.filename}`;
+    document.getElementById('result').style.display='block';
+    document.getElementById('langBanner').style.display='none';
     switchTab('workspace');
 }
 
-// ─── EXPORT ────────────────────────────────────────────
+// ── EXPORT ───────────────────────────────────────
 function copyText() {
     navigator.clipboard.writeText(document.getElementById('transcript-area').innerText)
-        .then(() => alert('✓ Copied to clipboard!'));
+        .then(()=>alert('✓ Copied to clipboard!'));
 }
-
 function downloadTXT() {
-    const blob = new Blob([document.getElementById('transcript-area').innerText], {type:'text/plain'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = 'transcript.txt'; a.click();
+    const blob=new Blob([document.getElementById('transcript-area').innerText],{type:'text/plain'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='transcript.txt'; a.click();
 }
-
 function downloadPDF() {
-    html2pdf().set({ margin:15, filename:'Transcript.pdf', html2canvas:{scale:2}, jsPDF:{unit:'mm',format:'a4'} })
+    html2pdf().set({margin:15,filename:'Transcript.pdf',html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}})
         .from(document.getElementById('transcript-area')).save();
 }
 
-// ─── HELPERS ───────────────────────────────────────────
-function showError(msg) { const b = document.getElementById('errorBox'); b.textContent = '⚠️ ' + msg; b.style.display = 'block'; }
-function hideError()    { document.getElementById('errorBox').style.display = 'none'; }
-function toggleFaq(el)  { el.parentElement.classList.toggle('active'); }
+function showError(msg) { const b=document.getElementById('errorBox'); b.textContent='⚠️ '+msg; b.style.display='block'; }
+function hideError()    { document.getElementById('errorBox').style.display='none'; }
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TranscriptAI | Premium Audio Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary:#6366f1; --secondary:#a855f7; --accent:#f43f5e;
+            --bg:#020617; --card:rgba(15,23,42,0.7); --border:rgba(255,255,255,0.1);
+            --text:#f8fafc; --text-dim:#94a3b8; --glass-bg:rgba(255,255,255,0.05);
+            --output-bg:#ffffff; --output-text:#1e293b; --success:#10b981;
+        }
+        [data-theme="light"] {
+            --bg:#f8fafc; --card:rgba(255,255,255,0.9); --border:rgba(0,0,0,0.1);
+            --text:#0f172a; --text-dim:#64748b; --glass-bg:rgba(0,0,0,0.04);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',sans-serif; }
+        body { background-color:var(--bg); color:var(--text); transition:0.4s; min-height:100vh; }
+        select option { background:#0f172a; color:white; }
+        .mesh { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;
+            background:radial-gradient(at 0% 0%,rgba(99,102,241,0.1) 0,transparent 50%),
+                       radial-gradient(at 100% 100%,rgba(168,85,247,0.1) 0,transparent 50%); }
+        header { padding:1.2rem 2rem; display:flex; justify-content:space-between; align-items:center;
+            max-width:1400px; margin:0 auto; position:sticky; top:0; backdrop-filter:blur(20px);
+            z-index:100; border-bottom:1px solid var(--border); }
+        .logo { font-size:1.4rem; font-weight:800; display:flex; align-items:center; gap:12px; cursor:pointer; letter-spacing:-0.5px; color:var(--text); }
+        .nav-center { display:flex; gap:1.5rem; background:var(--glass-bg); padding:0.5rem 1.5rem; border-radius:100px; border:1px solid var(--border); }
+        .nav-center a { text-decoration:none; color:var(--text-dim); font-size:0.85rem; font-weight:700; transition:0.3s; cursor:pointer; }
+        .nav-center a:hover, .nav-center a.active { color:var(--primary); }
+        .container { max-width:1100px; margin:3rem auto; padding:0 2rem; }
+        .view-section { display:none; animation:slideUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+        .view-section.active { display:block; }
+        @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .glass-card { background:var(--card); border:1px solid var(--border); border-radius:32px; padding:3rem; backdrop-filter:blur(20px); box-shadow:0 20px 50px rgba(0,0,0,0.1); }
+        .upload-box { border:2px dashed var(--primary); border-radius:24px; padding:4rem 2rem; text-align:center; transition:0.3s; cursor:pointer; background:var(--glass-bg); margin-bottom:2rem; }
+        .upload-box:hover, .upload-box.drag-over { border-color:var(--secondary); background:rgba(99,102,241,0.08); }
+        .control-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2rem; }
+        label { font-size:0.75rem; font-weight:800; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.8rem; display:block; }
+        select, input { width:100%; padding:1.1rem; background:var(--glass-bg); border:1px solid var(--border); border-radius:16px; color:var(--text); outline:none; font-size:1rem; transition:0.2s; }
+        select:focus, input:focus { border-color:var(--primary); }
+        .btn { padding:1rem 2rem; border-radius:14px; font-weight:700; cursor:pointer; border:none; transition:0.3s; font-size:0.95rem; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+        .btn-primary { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:white; }
+        .btn-outline { background:var(--glass-bg); color:var(--text); border:1px solid var(--border); }
+        .btn-danger { background:rgba(244,63,94,0.1); color:var(--accent); border:1px solid var(--accent); }
+        .btn-danger:hover { background:var(--accent); color:white; }
+        .btn:disabled { opacity:0.4; cursor:not-allowed; }
+        .step-list { display:flex; flex-direction:column; gap:8px; margin-top:1.2rem; }
+        .step { display:flex; align-items:center; gap:10px; font-size:0.8rem; color:var(--text-dim); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+        .step.active { color:var(--primary); }
+        .step.done { color:var(--success); }
+        .step-dot { width:8px; height:8px; border-radius:50%; background:currentColor; flex-shrink:0; }
+        .step.active .step-dot { animation:pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        #transcript-area { background:var(--output-bg); color:var(--output-text); padding:2.5rem; border-radius:20px; margin-top:1rem; line-height:2; border:1px solid #ddd; font-size:1.05rem; min-height:100px; }
+        .word-span { display:inline; cursor:default; padding:2px 1px; border-radius:4px; transition:0.15s; }
+        .word-span:hover { background:rgba(99,102,241,0.12); }
+        .timestamp-label { font-size:0.68rem; color:#6366f1; font-weight:800; margin-right:3px; font-family:monospace; }
+        .speaker-block { margin-bottom:1.5rem; padding:1rem 1.5rem; border-radius:16px; background:#f8fafc; border-left:4px solid var(--primary); }
+        .speaker-label { font-size:0.7rem; font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+        .lang-detected-banner { background:rgba(16,185,129,0.1); border:1px solid var(--success); border-radius:12px; padding:0.8rem 1.2rem; margin-bottom:1.5rem; font-size:0.85rem; color:var(--success); font-weight:700; display:none; }
+        .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:4rem; }
+        .tier { background:var(--card); border:1px solid var(--border); border-radius:32px; padding:2.2rem; transition:0.4s; display:flex; flex-direction:column; }
+        .tier:hover { transform:translateY(-10px); border-color:var(--primary); }
+        .tier.popular { border:2px solid var(--primary); position:relative; box-shadow:0 15px 30px rgba(99,102,241,0.2); }
+        .tier h3 { font-size:1.3rem; font-weight:800; margin-bottom:0.4rem; }
+        .tier p.desc { font-size:0.85rem; color:var(--text-dim); margin-bottom:1.5rem; min-height:45px; line-height:1.4; }
+        .tier .price { font-size:2.8rem; font-weight:800; margin-bottom:1.5rem; letter-spacing:-1.5px; }
+        .tier .price span { font-size:1rem; color:var(--text-dim); }
+        .feat-list { list-style:none; margin-bottom:2rem; flex-grow:1; border-top:1px solid var(--border); padding-top:1.5rem; }
+        .feat-list li { margin-bottom:0.8rem; font-size:0.85rem; color:var(--text-dim); display:flex; align-items:flex-start; gap:10px; line-height:1.3; }
+        .feat-list li::before { content:"✓"; color:var(--success); font-weight:bold; }
+        .faq-item { margin-bottom:1rem; border:1px solid var(--border); border-radius:16px; overflow:hidden; background:var(--glass-bg); }
+        .faq-question { padding:1.5rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700; transition:0.3s; }
+        .faq-answer { padding:0 1.5rem; max-height:0; overflow:hidden; transition:0.3s ease-out; color:var(--text-dim); font-size:0.95rem; line-height:1.6; }
+        .faq-item.active .faq-answer { padding-bottom:1.5rem; max-height:300px; }
+        .faq-item.active .faq-question { color:var(--primary); }
+        .modal-wrap { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); display:none; justify-content:center; align-items:center; z-index:1000; }
+        .modal-content { background:var(--bg); border:1px solid var(--border); padding:3.5rem; border-radius:32px; width:460px; position:relative; text-align:center; }
+        .pro-modal-content { background:var(--bg); border:2px solid var(--primary); padding:3rem; border-radius:32px; width:420px; position:relative; text-align:center; box-shadow:0 0 60px rgba(99,102,241,0.3); }
+        .close-btn { position:absolute; top:25px; right:25px; font-size:2rem; background:none; border:none; color:var(--text-dim); cursor:pointer; }
+        .error-box { background:rgba(244,63,94,0.1); border:1px solid var(--accent); border-radius:16px; padding:1.2rem 1.5rem; margin-top:1.5rem; color:var(--accent); font-size:0.9rem; display:none; }
+        .info-box { background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.3); border-radius:16px; padding:1.2rem 1.5rem; margin-bottom:1.5rem; font-size:0.85rem; color:var(--text-dim); }
+        @media(max-width:900px){ .pricing-grid,.control-grid{grid-template-columns:1fr} }
+    </style>
+</head>
+<body data-theme="dark">
+<div class="mesh"></div>
+
+<header>
+    <div class="logo" onclick="switchTab('workspace')">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="url(#lg)"/>
+            <path d="M9 16V16.01M13 13V19M17 10V22M21 13V19M25 16V16.01" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+        </svg>
+        TranscriptAI
+    </div>
+    <div class="nav-center">
+        <a onclick="switchTab('workspace')" id="tab-workspace" class="active">Workspace</a>
+        <a onclick="switchTab('history')" id="tab-history">History</a>
+        <a onclick="switchTab('pricing')" id="tab-pricing">Pricing</a>
+        <a onclick="switchTab('faq')" id="tab-faq">FAQ</a>
+        <a onclick="switchTab('account')" id="tab-account" style="display:none">Account</a>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center">
+        <button class="btn btn-outline" style="width:45px;height:45px;padding:0;border-radius:50%" onclick="toggleTheme()" id="themeIcon">☀️</button>
+        <button class="btn btn-outline" onclick="openAuthModal()" id="loginHeaderBtn">Log In</button>
+        <button class="btn btn-primary" onclick="openAuthModal()" id="signupHeaderBtn">Sign Up</button>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- WORKSPACE -->
+    <section id="workspace" class="view-section active">
+        <div class="glass-card">
+            <h1 style="font-size:2.2rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-1.5px">AI Neural Transcription</h1>
+            <p style="color:var(--text-dim);margin-bottom:2.5rem">Powered by AssemblyAI — supports 99 languages with auto-detection.</p>
+
+            <div id="proBar" style="display:none;background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(168,85,247,0.15));border:1px solid var(--primary);border-radius:16px;padding:1rem 1.5rem;margin-bottom:2rem;align-items:center;justify-content:space-between">
+                <span style="font-weight:800;font-size:0.9rem">⚡ Pro Access Active</span>
+                <span style="font-size:0.75rem;color:var(--text-dim)">All features unlocked</span>
+            </div>
+
+            <!-- UPLOAD -->
+            <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+                <div style="font-size:4rem;margin-bottom:1rem">☁️</div>
+                <h3 style="margin-bottom:0.5rem">Upload Audio / Video File</h3>
+                <p style="color:var(--text-dim);font-size:0.9rem">Drag your file here or click to browse</p>
+                <p style="color:var(--text-dim);font-size:0.8rem;margin-top:0.5rem">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC — Max 5GB</p>
+                <input type="file" id="fileInput" hidden accept="audio/*,video/*" onchange="handleFileSelect(this)">
+            </div>
+
+            <div id="fileInfo" style="display:none;margin-bottom:2rem;padding:1.2rem;background:var(--glass-bg);border-radius:18px;border:1px solid var(--primary);justify-content:space-between;align-items:center">
+                <div style="display:flex;align-items:center;gap:12px">
+                    <span style="font-size:1.5rem">🎵</span>
+                    <div>
+                        <span id="fileName" style="font-weight:700;display:block">...</span>
+                        <span id="fileSize" style="font-size:0.75rem;color:var(--text-dim)">...</span>
+                    </div>
+                </div>
+                <button onclick="resetUpload()" style="background:none;border:none;color:var(--accent);font-weight:800;cursor:pointer;text-transform:uppercase;font-size:0.7rem">✕ Remove</button>
+            </div>
+
+            <div class="control-grid">
+                <!-- LANGUAGE -->
+                <div>
+                    <label>Language</label>
+                    <select id="lang">
+                        <option value="auto">✨ Auto-detect (AI picks language)</option>
+                        <option value="nl">Nederlands (Dutch)</option>
+                        <option value="en">English</option>
+                        <option value="de">Deutsch (German)</option>
+                        <option value="fr">Français (French)</option>
+                        <option value="es">Español (Spanish)</option>
+                        <option value="pt">Português (Portuguese)</option>
+                        <option value="it">Italiano (Italian)</option>
+                        <option value="pl">Polski (Polish)</option>
+                        <option value="ru">Русский (Russian)</option>
+                        <option value="tr">Türkçe (Turkish)</option>
+                        <option value="uk">Українська (Ukrainian)</option>
+                        <option value="ar">العربية (Arabic)</option>
+                        <option value="zh">中文 (Chinese)</option>
+                        <option value="ja">日本語 (Japanese)</option>
+                        <option value="ko">한국어 (Korean)</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="id">Bahasa Indonesia</option>
+                        <option value="sv">Svenska (Swedish)</option>
+                        <option value="da">Dansk (Danish)</option>
+                        <option value="fi">Suomi (Finnish)</option>
+                        <option value="no">Norsk (Norwegian)</option>
+                        <option value="cs">Čeština (Czech)</option>
+                        <option value="ro">Română (Romanian)</option>
+                        <option value="hu">Magyar (Hungarian)</option>
+                        <option value="el">Ελληνικά (Greek)</option>
+                        <option value="bg">Български (Bulgarian)</option>
+                        <option value="vi">Tiếng Việt (Vietnamese)</option>
+                        <option value="th">ภาษาไทย (Thai)</option>
+                        <option value="uk">Українська (Ukrainian)</option>
+                        <option value="ca">Català (Catalan)</option>
+                    </select>
+                </div>
+                <!-- MODE -->
+                <div>
+                    <label>Transcription Mode</label>
+                    <select id="transcriptMode">
+                        <option value="standard">📝 Standard — Full text</option>
+                        <option value="words">🔤 Word by Word — with timestamps</option>
+                        <option value="speakers">🎙️ Speaker Detection — Who said what [PRO]</option>
+                        <option value="summary">✨ Auto Summary — Key points [PRO]</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top:2.5rem;width:100%;height:60px;font-size:1.05rem" id="processBtn" disabled onclick="startProcessing()">
+                🎙️ Start Transcription
+            </button>
+
+            <div class="error-box" id="errorBox"></div>
+
+            <!-- LOADING -->
+            <div id="loading" style="display:none;margin-top:3rem">
+                <div style="height:8px;background:var(--glass-bg);border-radius:20px;overflow:hidden;border:1px solid var(--border)">
+                    <div id="bar" style="width:0%;height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width 0.8s ease;border-radius:20px"></div>
+                </div>
+                <div class="step-list">
+                    <div class="step" id="step1"><div class="step-dot"></div>Reading file...</div>
+                    <div class="step" id="step2"><div class="step-dot"></div>Uploading to AssemblyAI...</div>
+                    <div class="step" id="step3"><div class="step-dot"></div>AI is processing speech...</div>
+                    <div class="step" id="step4"><div class="step-dot"></div>Building transcript...</div>
+                </div>
+            </div>
+
+            <!-- RESULT -->
+            <div id="result" style="display:none;margin-top:4rem;border-top:1px solid var(--border);padding-top:3rem">
+                <div style="display:flex;justify-content:space-between;margin-bottom:1.5rem;align-items:flex-end;flex-wrap:wrap;gap:1rem">
+                    <div>
+                        <h2 style="font-weight:800;font-size:1.8rem">Transcript Result</h2>
+                        <p style="color:var(--text-dim);font-size:0.8rem;margin-top:5px" id="resultMeta">Processing complete</p>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap">
+                        <button class="btn btn-outline" onclick="copyText()">📋 Copy</button>
+                        <button class="btn btn-outline" onclick="downloadTXT()">💾 TXT</button>
+                        <button class="btn btn-primary" onclick="downloadPDF()">📄 PDF</button>
+                    </div>
+                </div>
+
+                <!-- Detected language banner -->
+                <div class="lang-detected-banner" id="langBanner"></div>
+
+                <div id="transcript-area"></div>
+                <div style="margin-top:1.5rem">
+                    <button class="btn btn-outline" onclick="newTranscription()" style="color:var(--primary)">+ New File</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="view-section">
+        <div style="text-align:center;margin-bottom:4rem">
+            <h1 style="font-size:2.8rem;font-weight:800;margin-bottom:1rem">Simple Pricing</h1>
+            <p style="color:var(--text-dim);max-width:600px;margin:0 auto;line-height:1.6">Professional transcription powered by AssemblyAI. Cancel anytime.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="tier">
+                <h3>Free</h3>
+                <p class="desc">Get started and test the engine at no cost.</p>
+                <div class="price">$0<span>/mo</span></div>
+                <ul class="feat-list">
+                    <li>5 hours of transcription / month</li>
+                    <li>Standard & Word-by-Word mode</li>
+                    <li>Auto language detection</li>
+                    <li>99 languages supported</li>
+                    <li>TXT &amp; PDF export</li>
+                </ul>
+                <button class="btn btn-outline" onclick="switchTab('workspace')" style="width:100%">Get Started Free</button>
+            </div>
+            <div class="tier popular">
+                <div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:var(--primary);color:white;padding:6px 16px;border-radius:30px;font-size:0.65rem;font-weight:900;letter-spacing:1px">MOST POPULAR</div>
+                <h3>Pro</h3>
+                <p class="desc">For creators, journalists, and power users.</p>
+                <div class="price">$12<span>/mo</span></div>
+                <ul class="feat-list">
+                    <li><strong>Unlimited</strong> transcription hours</li>
+                    <li>Speaker Detection — who said what</li>
+                    <li>Auto Summary &amp; Key Points</li>
+                    <li>Priority processing</li>
+                    <li>All languages &amp; models</li>
+                </ul>
+                <button class="btn btn-primary" onclick="openProModal()" style="width:100%">Unlock Pro</button>
+            </div>
+            <div class="tier">
+                <h3>Business</h3>
+                <p class="desc">Enterprise-grade for teams and agencies.</p>
+                <div class="price">$49<span>/mo</span></div>
+                <ul class="feat-list">
+                    <li>Everything in Pro</li>
+                    <li>5 team seats included</li>
+                    <li>Full API access</li>
+                    <li>Custom vocabulary</li>
+                    <li>Dedicated support &amp; SLA</li>
+                </ul>
+                <button class="btn btn-outline" onclick="alert('Contact us at hello@transcriptai.com')" style="width:100%">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="view-section">
+        <div class="glass-card">
+            <h1 style="font-size:2.2rem;font-weight:800;margin-bottom:2rem">Frequently Asked Questions</h1>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">How does auto language detection work? <span>+</span></div>
+                <div class="faq-answer">When you select "Auto-detect", AssemblyAI listens to the first 15–90 seconds of your audio and automatically identifies the spoken language with a confidence score. It supports all 99 languages. The detected language is shown after transcription.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">How accurate is the transcription? <span>+</span></div>
+                <div class="faq-answer">AssemblyAI achieves 95–99% accuracy on clear audio. It handles accents, background noise, and multiple speakers reliably across all supported languages including Dutch.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">What is word-by-word transcription? <span>+</span></div>
+                <div class="faq-answer">Word-by-word mode shows every single word with its exact timestamp (e.g. [00:03] Hello [00:04] everyone). This is ideal for subtitles, video editing, or finding specific moments in long recordings.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">What file formats are supported? <span>+</span></div>
+                <div class="faq-answer">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC and most other audio and video formats up to 5GB.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">How do I unlock Pro features? <span>+</span></div>
+                <div class="faq-answer">After purchasing a Pro plan, you will receive a unique access code via email. Enter this code by clicking "Unlock Pro" in the Pricing page to activate all Pro features instantly.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section id="account" class="view-section">
+        <div class="glass-card">
+            <h1>Account Dashboard</h1>
+            <div style="background:var(--glass-bg);padding:2.5rem;border-radius:24px;border:1px solid var(--border);margin-top:2rem">
+                <p style="color:var(--text-dim);text-transform:uppercase;font-size:0.7rem;font-weight:800">PLAN STATUS</p>
+                <h2 id="planTitle" style="margin:0.5rem 0 2rem;font-size:2rem">Free Member</h2>
+                <div id="proActiveArea" style="display:none;margin-bottom:2rem">
+                    <p>Your <strong>Pro</strong> subscription is active. All premium features unlocked.</p>
+                    <div style="display:flex;gap:12px;margin-top:1.5rem">
+                        <button class="btn btn-danger" onclick="deactivatePro()">Deactivate Pro</button>
+                    </div>
+                </div>
+                <div id="upgradeArea">
+                    <p style="margin-bottom:1.5rem;color:var(--text-dim)">Unlock Speaker Detection, Auto-Summary, and unlimited usage.</p>
+                    <button class="btn btn-primary" onclick="switchTab('pricing')">View Plans</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="history" class="view-section">
+        <div class="glass-card">
+            <h1>Activity Log</h1>
+            <div style="border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:2rem">
+                <table style="width:100%;border-collapse:collapse">
+                    <thead style="background:var(--glass-bg)">
+                        <tr style="text-align:left;font-size:0.75rem;text-transform:uppercase;color:var(--text-dim)">
+                            <th style="padding:1.2rem">File Name</th>
+                            <th style="padding:1.2rem">Date</th>
+                            <th style="padding:1.2rem">Language</th>
+                            <th style="padding:1.2rem">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody" style="font-size:0.95rem">
+                        <tr><td colspan="4" style="padding:2rem;text-align:center;color:var(--text-dim)">No transcriptions yet. Upload a file to get started.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-wrap" id="authModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal('authModal')">&times;</button>
+        <h2 style="font-weight:800;margin-bottom:2rem">Sign In</h2>
+        <button class="btn btn-outline" onclick="simulateLogin()" style="width:100%;background:white;color:black;margin-bottom:1.5rem">
+            <img src="https://www.google.com/favicon.ico" width="16"> Continue with Google
+        </button>
+        <div style="display:flex;flex-direction:column;gap:12px">
+            <input type="email" placeholder="Email Address">
+            <input type="password" placeholder="Password">
+            <button class="btn btn-primary" onclick="simulateLogin()" style="width:100%">Sign In</button>
+        </div>
+    </div>
+</div>
+
+<!-- PRO MODAL -->
+<div class="modal-wrap" id="proModal">
+    <div class="pro-modal-content">
+        <button class="close-btn" onclick="closeModal('proModal')">&times;</button>
+        <div style="font-size:3rem;margin-bottom:1rem">⚡</div>
+        <h2 style="font-weight:800;margin-bottom:0.5rem">Unlock Pro Access</h2>
+        <p style="color:var(--text-dim);font-size:0.9rem;margin-bottom:2rem;line-height:1.5">Enter the access code you received after your purchase.</p>
+        <div class="info-box">
+            Don't have a code yet? <strong style="color:var(--primary);cursor:pointer" onclick="closeModal('proModal');switchTab('pricing')">Purchase a Pro plan →</strong>
+        </div>
+        <input type="text" id="proCodeInput" placeholder="Enter your Pro access code..." style="text-align:center;font-size:1.1rem;font-weight:700;letter-spacing:2px;margin-bottom:1rem">
+        <div id="proCodeError" style="color:var(--accent);font-size:0.85rem;margin-bottom:1rem;display:none">❌ Invalid code. Please check and try again.</div>
+        <button class="btn btn-primary" onclick="activatePro()" style="width:100%;height:55px">Activate Pro</button>
+    </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// ⚙️  CONFIGURATION
+// ══════════════════════════════════════════════════
+const ASSEMBLYAI_API_KEY = "YOUR_ASSEMBLYAI_API_KEY_HERE"; // 🔑 Paste your key here
+const PRO_PASSWORDS = ["MYPRO2024", "TRANSCRIPTPRO", "UNLOCK123"]; // 🔒 Your Pro codes
+
+// Language code → human readable name (native + English)
+const LANG_NAMES = {
+    en:"English", nl:"Nederlands (Dutch)", de:"Deutsch (German)", fr:"Français (French)",
+    es:"Español (Spanish)", pt:"Português (Portuguese)", it:"Italiano (Italian)",
+    pl:"Polski (Polish)", ru:"Русский (Russian)", tr:"Türkçe (Turkish)",
+    uk:"Українська (Ukrainian)", ar:"العربية (Arabic)", zh:"中文 (Chinese)",
+    ja:"日本語 (Japanese)", ko:"한국어 (Korean)", hi:"हिन्दी (Hindi)",
+    id:"Bahasa Indonesia", sv:"Svenska (Swedish)", da:"Dansk (Danish)",
+    fi:"Suomi (Finnish)", no:"Norsk (Norwegian)", cs:"Čeština (Czech)",
+    ro:"Română (Romanian)", hu:"Magyar (Hungarian)", el:"Ελληνικά (Greek)",
+    bg:"Български (Bulgarian)", vi:"Tiếng Việt (Vietnamese)", th:"ภาษาไทย (Thai)",
+    ca:"Català (Catalan)"
+};
+
+// ══════════════════════════════════════════════════
+let state = { isPro:false, loggedIn:false, theme:'dark', currentFile:null, history:[] };
+
+function toggleTheme() {
+    state.theme = state.theme==='dark'?'light':'dark';
+    document.body.setAttribute('data-theme',state.theme);
+    document.getElementById('themeIcon').innerText = state.theme==='dark'?'☀️':'🌙';
+}
+
+function switchTab(id) {
+    document.querySelectorAll('.view-section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-center a').forEach(a=>a.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const nav = document.getElementById('tab-'+id);
+    if(nav) nav.classList.add('active');
+    window.scrollTo(0,0);
+}
+
+function openAuthModal() { document.getElementById('authModal').style.display='flex'; }
+function openProModal()  { document.getElementById('proModal').style.display='flex'; }
+function closeModal(id)  { document.getElementById(id).style.display='none'; }
+function toggleFaq(el)   { el.parentElement.classList.toggle('active'); }
+
+function simulateLogin() {
+    state.loggedIn=true;
+    document.getElementById('loginHeaderBtn').innerText='Account';
+    document.getElementById('signupHeaderBtn').style.display='none';
+    document.getElementById('tab-account').style.display='block';
+    closeModal('authModal');
+}
+
+// ── PRO ──────────────────────────────────────────
+function activatePro() {
+    const code = document.getElementById('proCodeInput').value.trim().toUpperCase();
+    if(PRO_PASSWORDS.includes(code)) {
+        state.isPro=true;
+        closeModal('proModal');
+        updateProUI();
+        alert('🎉 Pro access activated! All features are now unlocked.');
+        switchTab('workspace');
+    } else {
+        document.getElementById('proCodeError').style.display='block';
+    }
+}
+function deactivatePro() {
+    if(confirm('Deactivate Pro access?')) { state.isPro=false; updateProUI(); }
+}
+function updateProUI() {
+    document.getElementById('planTitle').innerText = state.isPro?'Pro Member':'Free Member';
+    document.getElementById('proActiveArea').style.display = state.isPro?'block':'none';
+    document.getElementById('upgradeArea').style.display  = state.isPro?'none':'block';
+    document.getElementById('proBar').style.display       = state.isPro?'flex':'none';
+}
+function requirePro(name) {
+    if(!state.isPro) {
+        if(confirm(`🔒 "${name}" is a Pro feature.\nWould you like to unlock Pro access?`)) openProModal();
+        return false;
+    }
+    return true;
+}
+
+// ── FILE ─────────────────────────────────────────
+function dragOver(e) { e.preventDefault(); document.getElementById('uploadBox').classList.add('drag-over'); }
+function dragLeave()  { document.getElementById('uploadBox').classList.remove('drag-over'); }
+function dropFile(e)  { e.preventDefault(); dragLeave(); if(e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); }
+function handleFileSelect(input) { if(input.files[0]) processFile(input.files[0]); }
+
+function processFile(file) {
+    state.currentFile=file;
+    document.getElementById('fileInfo').style.display='flex';
+    document.getElementById('fileName').innerText=file.name;
+    document.getElementById('fileSize').innerText=(file.size/1024/1024).toFixed(1)+' MB';
+    hideError();
+    document.getElementById('processBtn').disabled=false;
+}
+function resetUpload() {
+    state.currentFile=null;
+    document.getElementById('fileInfo').style.display='none';
+    document.getElementById('fileInput').value='';
+    document.getElementById('processBtn').disabled=true;
+}
+function newTranscription() {
+    resetUpload();
+    document.getElementById('result').style.display='none';
+    document.getElementById('transcript-area').innerHTML='';
+    window.scrollTo(0,0);
+}
+
+// ── MAIN TRANSCRIPTION ───────────────────────────
+async function startProcessing() {
+    const file = state.currentFile;
+    const langVal = document.getElementById('lang').value;
+    const mode = document.getElementById('transcriptMode').value;
+
+    if((mode==='speakers'||mode==='summary') && !requirePro(mode==='speakers'?'Speaker Detection':'Auto Summary')) return;
+
+    hideError();
+    document.getElementById('processBtn').disabled=true;
+    document.getElementById('result').style.display='none';
+    document.getElementById('langBanner').style.display='none';
+    document.getElementById('loading').style.display='block';
+    document.getElementById('bar').style.width='0%';
+    ['step1','step2','step3','step4'].forEach(s=>document.getElementById(s).className='step');
+
+    try {
+        // STEP 1: Read file
+        setStep('step1','active'); bar(10);
+        const arrayBuffer = await file.arrayBuffer();
+        setStep('step1','done');
+
+        // STEP 2: Upload file to AssemblyAI
+        setStep('step2','active'); bar(25);
+        const uploadRes = await fetch('https://api.assemblyai.com/v2/upload', {
+            method:'POST',
+            headers:{ 'authorization': ASSEMBLYAI_API_KEY },
+            body: arrayBuffer
+        });
+        if(!uploadRes.ok) {
+            const t = await uploadRes.text();
+            throw new Error(`Upload failed (${uploadRes.status}): ${t}`);
+        }
+        const { upload_url } = await uploadRes.json();
+        setStep('step2','done');
+
+        // STEP 3: Submit transcription job
+        setStep('step3','active'); bar(50);
+
+        // Build request body — KEY FIX:
+        // language_detection and language_code cannot be used together!
+        const body = {
+            audio_url: upload_url,
+            punctuate: true,
+            format_text: true
+        };
+
+        if(langVal === 'auto') {
+            // Auto-detect: let AssemblyAI figure out the language
+            body.language_detection = true;
+        } else {
+            // Manual: set the language code directly
+            body.language_code = langVal;
+        }
+
+        if(mode === 'speakers') {
+            body.speaker_labels = true;
+        }
+        if(mode === 'summary') {
+            body.summarization = true;
+            body.summary_model = 'informative';
+            body.summary_type = 'bullets';
+        }
+
+        const submitRes = await fetch('https://api.assemblyai.com/v2/transcript', {
+            method:'POST',
+            headers:{ 'authorization': ASSEMBLYAI_API_KEY, 'content-type':'application/json' },
+            body: JSON.stringify(body)
+        });
+        if(!submitRes.ok) {
+            const t = await submitRes.text();
+            throw new Error(`Submission failed (${submitRes.status}): ${t}`);
+        }
+        const { id } = await submitRes.json();
+
+        // STEP 4: Poll until done
+        setStep('step4','active'); bar(70);
+        const startTime = Date.now();
+        let transcript;
+        while(true) {
+            await new Promise(r=>setTimeout(r,2500));
+            const pollRes = await fetch(`https://api.assemblyai.com/v2/transcript/${id}`, {
+                headers:{ 'authorization': ASSEMBLYAI_API_KEY }
+            });
+            transcript = await pollRes.json();
+            if(transcript.status==='completed') break;
+            if(transcript.status==='error') throw new Error('Transcription error: '+transcript.error);
+        }
+
+        bar(100); setStep('step4','done');
+        const elapsed = ((Date.now()-startTime)/1000).toFixed(1);
+
+        // Show detected language if auto-detect was used
+        if(langVal==='auto' && transcript.language_code) {
+            const detectedName = LANG_NAMES[transcript.language_code] || transcript.language_code;
+            const confidence = transcript.language_confidence ? Math.round(transcript.language_confidence*100) : '?';
+            const banner = document.getElementById('langBanner');
+            banner.innerHTML = `🌍 Detected language: <strong>${detectedName}</strong> — ${confidence}% confidence`;
+            banner.style.display = 'block';
+        }
+
+        displayResult(transcript, mode, elapsed, file.name, transcript.language_code || langVal);
+        saveHistory(file.name, transcript.language_code || langVal, transcript.text);
+
+    } catch(err) {
+        document.getElementById('loading').style.display='none';
+        document.getElementById('processBtn').disabled=false;
+        showError(err.message);
+    }
+}
+
+function setStep(id,cls) { document.getElementById(id).className='step '+cls; }
+function bar(pct) { document.getElementById('bar').style.width=pct+'%'; }
+
+// ── DISPLAY ──────────────────────────────────────
+function displayResult(transcript, mode, elapsed, filename, langCode) {
+    document.getElementById('loading').style.display='none';
+    document.getElementById('result').style.display='block';
+    const langName = LANG_NAMES[langCode] || langCode || '';
+    document.getElementById('resultMeta').textContent = `Completed in ${elapsed}s • ${filename}${langName?' • '+langName:''}`;
+    document.getElementById('processBtn').disabled=false;
+
+    const area = document.getElementById('transcript-area');
+    area.innerHTML='';
+
+    if(mode==='words' && transcript.words?.length) {
+        let html='<div style="line-height:2.4">';
+        transcript.words.forEach(w => {
+            html+=`<span class="word-span" title="${formatTime(w.start)}"><span class="timestamp-label">[${formatTime(w.start)}]</span>${w.text} </span>`;
+        });
+        html+='</div>';
+        area.innerHTML=html;
+
+    } else if(mode==='speakers' && transcript.utterances?.length) {
+        const colors=['#6366f1','#a855f7','#f43f5e','#10b981','#f59e0b'];
+        transcript.utterances.forEach(u => {
+            const color = colors[u.speaker.charCodeAt(0)%colors.length];
+            area.innerHTML+=`
+                <div class="speaker-block" style="border-left-color:${color}">
+                    <div class="speaker-label" style="color:${color}">🎙️ Speaker ${u.speaker} — ${formatTime(u.start)}</div>
+                    <div>${u.text}</div>
+                </div>`;
+        });
+
+    } else if(mode==='summary' && transcript.summary) {
+        area.innerHTML=`
+            <div style="margin-bottom:1.5rem">
+                <h3 style="color:var(--primary);font-size:1rem;font-weight:800;margin-bottom:1rem">✨ AI Summary</h3>
+                <div style="line-height:1.8">${transcript.summary.replace(/\n/g,'<br>')}</div>
+            </div>
+            <hr style="border:none;border-top:1px solid #ddd;margin:1.5rem 0">
+            <div style="line-height:2;color:#666;font-size:0.95rem">${transcript.text}</div>`;
+    } else {
+        area.innerHTML=`<div style="line-height:2">${transcript.text}</div>`;
+    }
+
+    window.scrollTo({top:document.getElementById('result').offsetTop-100,behavior:'smooth'});
+}
+
+function formatTime(ms) {
+    const s=Math.floor(ms/1000), m=Math.floor(s/60);
+    return `${String(m).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+}
+
+// ── HISTORY ──────────────────────────────────────
+function saveHistory(filename, langCode, text) {
+    const now = new Date();
+    const langName = LANG_NAMES[langCode] || langCode || 'Unknown';
+    state.history.unshift({
+        filename, langName, text,
+        date: now.toLocaleDateString('en-US')+' '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
+    });
+    const tbody = document.getElementById('historyBody');
+    tbody.innerHTML = state.history.map((item,i)=>`
+        <tr style="border-top:1px solid var(--border)">
+            <td style="padding:1.5rem 1.2rem">${item.filename}</td>
+            <td style="padding:1.2rem;color:var(--text-dim);font-size:0.85rem">${item.date}</td>
+            <td style="padding:1.2rem"><span style="color:var(--success)">● ${item.langName}</span></td>
+            <td style="padding:1.2rem">
+                <button class="btn btn-outline" style="padding:5px 12px;font-size:0.75rem" onclick="viewHistory(${i})">View</button>
+            </td>
+        </tr>`).join('');
+}
+
+function viewHistory(i) {
+    const item = state.history[i];
+    document.getElementById('transcript-area').innerHTML=`<div style="line-height:2">${item.text}</div>`;
+    document.getElementById('resultMeta').textContent=`Saved on ${item.date} • ${item.filename}`;
+    document.getElementById('result').style.display='block';
+    document.getElementById('langBanner').style.display='none';
+    switchTab('workspace');
+}
+
+// ── EXPORT ───────────────────────────────────────
+function copyText() {
+    navigator.clipboard.writeText(document.getElementById('transcript-area').innerText)
+        .then(()=>alert('✓ Copied to clipboard!'));
+}
+function downloadTXT() {
+    const blob=new Blob([document.getElementById('transcript-area').innerText],{type:'text/plain'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='transcript.txt'; a.click();
+}
+function downloadPDF() {
+    html2pdf().set({margin:15,filename:'Transcript.pdf',html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}})
+        .from(document.getElementById('transcript-area')).save();
+}
+
+function showError(msg) { const b=document.getElementById('errorBox'); b.textContent='⚠️ '+msg; b.style.display='block'; }
+function hideError()    { document.getElementById('errorBox').style.display='none'; }
 </script>
 </body>
 </html>
