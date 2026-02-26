@@ -544,6 +544,7 @@ async function startProcessing() {
         // language_detection and language_code cannot be used together!
         const body = {
             audio_url: upload_url,
+            speech_model: "universal-2",
             punctuate: true,
             format_text: true
         };
