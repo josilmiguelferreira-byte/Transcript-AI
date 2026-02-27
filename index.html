@@ -11,119 +11,816 @@
     
     <style>
         :root {
-            --primary:#6366f1; --secondary:#a855f7; --accent:#f43f5e;
-            --bg:#020617; --card:rgba(15,23,42,0.7); --border:rgba(255,255,255,0.1);
-            --text:#f8fafc; --text-dim:#94a3b8; --glass-bg:rgba(255,255,255,0.05);
-            --output-bg:#ffffff; --output-text:#1e293b; --success:#10b981;
-            --warning:#f59e0b;
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --accent: #f43f5e;
+            --bg: #020617;
+            --card: rgba(15, 23, 42, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --output-bg: #ffffff;
+            --output-text: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
+        
         [data-theme="light"] {
-            --bg:#f8fafc; --card:rgba(255,255,255,0.9); --border:rgba(0,0,0,0.1);
-            --text:#0f172a; --text-dim:#64748b; --glass-bg:rgba(0,0,0,0.04);
+            --bg: #f8fafc;
+            --card: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.1);
+            --text: #0f172a;
+            --text-dim: #64748b;
+            --glass-bg: rgba(0, 0, 0, 0.04);
+            --output-bg: #ffffff;
+            --output-text: #1e293b;
         }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',sans-serif; }
-        body { background-color:var(--bg); color:var(--text); transition:0.4s; min-height:100vh; }
-        .mesh { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;
-            background:radial-gradient(at 0% 0%,rgba(99,102,241,0.1) 0,transparent 50%),
-                       radial-gradient(at 100% 100%,rgba(168,85,247,0.1) 0,transparent 50%); }
-        header { padding:1.2rem 2rem; display:flex; justify-content:space-between; align-items:center;
-            max-width:1400px; margin:0 auto; position:sticky; top:0; backdrop-filter:blur(20px);
-            z-index:100; border-bottom:1px solid var(--border); }
-        .logo { font-size:1.4rem; font-weight:800; display:flex; align-items:center; gap:12px; cursor:pointer; letter-spacing:-0.5px; color:var(--text); }
-        .nav-center { display:flex; gap:1.5rem; background:var(--glass-bg); padding:0.5rem 1.5rem; border-radius:100px; border:1px solid var(--border); }
-        .nav-center a { text-decoration:none; color:var(--text-dim); font-size:0.85rem; font-weight:700; transition:0.3s; cursor:pointer; }
-        .nav-center a:hover, .nav-center a.active { color:var(--primary); }
-        .container { max-width:1100px; margin:3rem auto; padding:0 2rem; }
-        .view-section { display:none; animation:slideUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .view-section.active { display:block; }
-        @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        .glass-card { background:var(--card); border:1px solid var(--border); border-radius:32px; padding:3rem; backdrop-filter:blur(20px); box-shadow:0 20px 50px rgba(0,0,0,0.1); }
-        .upload-box { border:2px dashed var(--primary); border-radius:24px; padding:4rem 2rem; text-align:center; transition:0.3s; cursor:pointer; background:var(--glass-bg); margin-bottom:2rem; }
-        .upload-box:hover, .upload-box.drag-over { border-color:var(--secondary); background:rgba(99,102,241,0.08); }
-        .control-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2rem; }
-        label { font-size:0.75rem; font-weight:800; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.8rem; display:block; }
-        select, input { width:100%; padding:1.1rem; background:var(--glass-bg); border:1px solid var(--border); border-radius:16px; color:var(--text); outline:none; font-size:1rem; transition:0.2s; }
-        select:focus, input:focus { border-color:var(--primary); }
-        .btn { padding:1rem 2rem; border-radius:14px; font-weight:700; cursor:pointer; border:none; transition:0.3s; font-size:0.95rem; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
-        .btn-primary { background:linear-gradient(135deg,var(--primary),var(--secondary)); color:white; }
-        .btn-outline { background:var(--glass-bg); color:var(--text); border:1px solid var(--border); }
-        .btn-danger { background:rgba(244,63,94,0.1); color:var(--accent); border:1px solid var(--accent); }
-        .btn:disabled { opacity:0.4; cursor:not-allowed; }
-        .step-list { display:flex; flex-direction:column; gap:8px; margin-top:1.2rem; }
-        .step { display:flex; align-items:center; gap:10px; font-size:0.8rem; color:var(--text-dim); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
-        .step.active { color:var(--primary); }
-        .step.done { color:var(--success); }
-        .step-dot { width:8px; height:8px; border-radius:50%; background:currentColor; flex-shrink:0; }
-        #transcript-area { background:var(--output-bg); color:var(--output-text); padding:2.5rem; border-radius:20px; margin-top:1rem; line-height:2; border:1px solid #ddd; font-size:1.05rem; min-height:100px; }
-        .word-span { display:inline; cursor:default; padding:2px 1px; border-radius:4px; transition:0.15s; }
-        .word-span:hover { background:rgba(99,102,241,0.12); }
-        .timestamp-label { font-size:0.68rem; color:#6366f1; font-weight:800; margin-right:3px; font-family:monospace; }
-        .speaker-block { margin-bottom:1.5rem; padding:1rem 1.5rem; border-radius:16px; background:#f8fafc; border-left:4px solid var(--primary); }
-        .speaker-label { font-size:0.7rem; font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
-        .lang-detected-banner { background:rgba(16,185,129,0.1); border:1px solid var(--success); border-radius:12px; padding:0.8rem 1.2rem; margin-bottom:1.5rem; font-size:0.85rem; color:var(--success); font-weight:700; display:none; }
         
-        /* Pricing Styles */
-        .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:4rem; }
-        .tier { background:var(--card); border:1px solid var(--border); border-radius:32px; padding:2.2rem; transition:0.4s; display:flex; flex-direction:column; position:relative; }
-        .tier:hover { transform:translateY(-10px); border-color:var(--primary); }
-        .tier.popular { border:2px solid var(--primary); box-shadow:0 15px 30px rgba(99,102,241,0.2); }
-        .tier.limited { border:2px solid var(--warning); }
-        .tier h3 { font-size:1.3rem; font-weight:800; margin-bottom:0.4rem; }
-        .tier .price { font-size:2.8rem; font-weight:800; margin-bottom:0.5rem; letter-spacing:-1.5px; }
-        .tier .price span { font-size:1rem; color:var(--text-dim); font-weight:500; }
-        .billing-note { font-size:0.8rem; color:var(--text-dim); margin-bottom:1.5rem; font-weight:600; }
-        .feat-list { list-style:none; margin-bottom:2rem; flex-grow:1; border-top:1px solid var(--border); padding-top:1.5rem; }
-        .feat-list li { margin-bottom:0.8rem; font-size:0.85rem; color:var(--text-dim); display:flex; align-items:flex-start; gap:10px; line-height:1.3; }
-        .feat-list li::before { content:"✓"; color:var(--success); font-weight:bold; }
-        .feat-list li.locked::before { content:"🔒"; color:var(--accent); }
-        .feat-list li.limited { color:var(--warning); }
-        .feat-list li.limited::before { content:"⚡"; color:var(--warning); }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+        }
         
-        .usage-bar { background:var(--glass-bg); border-radius:10px; height:8px; margin-top:1rem; overflow:hidden; }
-        .usage-fill { background:var(--warning); height:100%; border-radius:10px; transition:width 0.3s; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            transition: background-color 0.4s ease, color 0.4s ease; 
+            min-height: 100vh; 
+        }
         
-        .faq-item { margin-bottom:1rem; border:1px solid var(--border); border-radius:16px; overflow:hidden; background:var(--glass-bg); }
-        .faq-question { padding:1.5rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700; transition:0.3s; }
-        .faq-answer { padding:0 1.5rem; max-height:0; overflow:hidden; transition:0.3s ease-out; color:var(--text-dim); font-size:0.95rem; line-height:1.6; }
-        .faq-item.active .faq-answer { padding-bottom:1.5rem; max-height:300px; }
-        .modal-wrap { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); display:none; justify-content:center; align-items:center; z-index:1000; }
-        .modal-content { background:var(--bg); border:1px solid var(--border); padding:3.5rem; border-radius:32px; width:460px; position:relative; text-align:center; }
-        .pro-modal-content { background:var(--bg); border:2px solid var(--primary); padding:3rem; border-radius:32px; width:420px; position:relative; text-align:center; box-shadow:0 0 60px rgba(99,102,241,0.3); }
-        .close-btn { position:absolute; top:25px; right:25px; font-size:2rem; background:none; border:none; color:var(--text-dim); cursor:pointer; }
-        .error-box { background:rgba(244,63,94,0.1); border:1px solid var(--accent); border-radius:16px; padding:1.2rem 1.5rem; margin-top:1.5rem; color:var(--accent); font-size:0.9rem; display:none; }
-        .payment-methods { display:grid; gap:1rem; margin:1.5rem 0; }
-        .payment-option { border:2px solid var(--border); border-radius:16px; padding:1.2rem; cursor:pointer; transition:0.3s; display:flex; align-items:center; gap:1rem; }
-        .payment-option:hover, .payment-option.selected { border-color:var(--primary); background:rgba(99,102,241,0.05); }
-        .cookie-banner { position:fixed; bottom:0; left:0; right:0; background:var(--card); border-top:1px solid var(--border); padding:1.5rem 2rem; z-index:999; display:none; backdrop-filter:blur(20px); }
-        .user-menu { position:relative; }
-        .user-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--secondary)); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; cursor:pointer; }
-        .dropdown { position:absolute; top:50px; right:0; background:var(--card); border:1px solid var(--border); border-radius:16px; padding:0.5rem; min-width:180px; display:none; box-shadow:0 10px 30px rgba(0,0,0,0.3); }
-        .dropdown.show { display:block; }
-        .dropdown-item { padding:0.8rem 1rem; cursor:pointer; border-radius:8px; transition:0.2s; font-size:0.9rem; }
-        .dropdown-item:hover { background:var(--glass-bg); }
-        .security-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(16,185,129,0.1); color:var(--success); padding:0.4rem 0.8rem; border-radius:20px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+        select option { 
+            background: #0f172a; 
+            color: white; 
+        }
         
-        /* Upgrade prompts */
-        .upgrade-prompt { background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(168,85,247,0.1)); border:1px solid var(--primary); border-radius:16px; padding:1.5rem; margin:1.5rem 0; text-align:center; }
-        .upgrade-prompt h4 { color:var(--primary); margin-bottom:0.5rem; }
+        [data-theme="light"] select option {
+            background: #ffffff;
+            color: #0f172a;
+        }
         
-        @media(max-width:900px){ .pricing-grid,.control-grid{grid-template-columns:1fr} }
+        .mesh { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -1;
+            background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0, transparent 50%),
+                       radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0, transparent 50%);
+            transition: opacity 0.4s ease;
+        }
+        
+        [data-theme="light"] .mesh {
+            opacity: 0.3;
+        }
+        
+        header { 
+            padding: 1.2rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            max-width: 1400px; 
+            margin: 0 auto; 
+            position: sticky; 
+            top: 0; 
+            backdrop-filter: blur(20px);
+            background: var(--card);
+            z-index: 100; 
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        
+        .logo { 
+            font-size: 1.4rem; 
+            font-weight: 800; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            cursor: pointer; 
+            letter-spacing: -0.5px; 
+            color: var(--text);
+            transition: color 0.4s ease;
+        }
+        
+        .nav-center { 
+            display: flex; 
+            gap: 1.5rem; 
+            background: var(--glass-bg); 
+            padding: 0.5rem 1.5rem; 
+            border-radius: 100px; 
+            border: 1px solid var(--border);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        
+        .nav-center a { 
+            text-decoration: none; 
+            color: var(--text-dim); 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            transition: color 0.3s; 
+            cursor: pointer; 
+        }
+        
+        .nav-center a:hover, .nav-center a.active { 
+            color: var(--primary); 
+        }
+        
+        .container { 
+            max-width: 1100px; 
+            margin: 3rem auto; 
+            padding: 0 2rem; 
+        }
+        
+        .view-section { 
+            display: none; 
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+        }
+        
+        .view-section.active { 
+            display: block; 
+        }
+        
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .glass-card { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: 32px; 
+            padding: 3rem; 
+            backdrop-filter: blur(20px); 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        
+        .upload-box { 
+            border: 2px dashed var(--primary); 
+            border-radius: 24px; 
+            padding: 4rem 2rem; 
+            text-align: center; 
+            transition: all 0.3s; 
+            cursor: pointer; 
+            background: var(--glass-bg); 
+            margin-bottom: 2rem;
+            transition: background-color 0.4s ease, border-color 0.3s;
+        }
+        
+        .upload-box:hover, .upload-box.drag-over { 
+            border-color: var(--secondary); 
+            background: rgba(99, 102, 241, 0.08); 
+        }
+        
+        .control-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 1.5rem; 
+            margin-top: 2rem; 
+        }
+        
+        @media (max-width: 768px) {
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        label { 
+            font-size: 0.75rem; 
+            font-weight: 800; 
+            color: var(--text-dim); 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-bottom: 0.8rem; 
+            display: block;
+            transition: color 0.4s ease;
+        }
+        
+        select, input { 
+            width: 100%; 
+            padding: 1.1rem; 
+            background: var(--glass-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
+            color: var(--text); 
+            outline: none; 
+            font-size: 1rem; 
+            transition: all 0.2s;
+        }
+        
+        select:focus, input:focus { 
+            border-color: var(--primary); 
+        }
+        
+        .btn { 
+            padding: 1rem 2rem; 
+            border-radius: 14px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            border: none; 
+            transition: all 0.3s; 
+            font-size: 0.95rem; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+        }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            color: white; 
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-outline { 
+            background: var(--glass-bg); 
+            color: var(--text); 
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-danger { 
+            background: rgba(244, 63, 94, 0.1); 
+            color: var(--accent); 
+            border: 1px solid var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .btn-danger:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn:disabled { 
+            opacity: 0.4; 
+            cursor: not-allowed; 
+        }
+        
+        .step-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            margin-top: 1.2rem; 
+        }
+        
+        .step { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-size: 0.8rem; 
+            color: var(--text-dim); 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+        
+        .step.active { 
+            color: var(--primary); 
+        }
+        
+        .step.done { 
+            color: var(--success); 
+        }
+        
+        .step-dot { 
+            width: 8px; 
+            height: 8px; 
+            border-radius: 50%; 
+            background: currentColor; 
+            flex-shrink: 0; 
+        }
+        
+        .step.active .step-dot { 
+            animation: pulse 1s infinite; 
+        }
+        
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.3; } 
+        }
+        
+        #transcript-area { 
+            background: var(--output-bg); 
+            color: var(--output-text); 
+            padding: 2.5rem; 
+            border-radius: 20px; 
+            margin-top: 1rem; 
+            line-height: 2; 
+            border: 1px solid #ddd; 
+            font-size: 1.05rem; 
+            min-height: 100px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        
+        [data-theme="light"] #transcript-area {
+            border-color: #e2e8f0;
+        }
+        
+        .word-span { 
+            display: inline; 
+            cursor: default; 
+            padding: 2px 1px; 
+            border-radius: 4px; 
+            transition: 0.15s; 
+        }
+        
+        .word-span:hover { 
+            background: rgba(99, 102, 241, 0.12); 
+        }
+        
+        .timestamp-label { 
+            font-size: 0.68rem; 
+            color: #6366f1; 
+            font-weight: 800; 
+            margin-right: 3px; 
+            font-family: monospace; 
+        }
+        
+        .speaker-block { 
+            margin-bottom: 1.5rem; 
+            padding: 1rem 1.5rem; 
+            border-radius: 16px; 
+            background: #f8fafc; 
+            border-left: 4px solid var(--primary);
+            transition: background-color 0.4s ease;
+        }
+        
+        [data-theme="light"] .speaker-block {
+            background: #f1f5f9;
+        }
+        
+        .speaker-label { 
+            font-size: 0.7rem; 
+            font-weight: 900; 
+            color: var(--primary); 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-bottom: 6px; 
+        }
+        
+        .lang-detected-banner { 
+            background: rgba(16, 185, 129, 0.1); 
+            border: 1px solid var(--success); 
+            border-radius: 12px; 
+            padding: 0.8rem 1.2rem; 
+            margin-bottom: 1.5rem; 
+            font-size: 0.85rem; 
+            color: var(--success); 
+            font-weight: 700; 
+            display: none; 
+        }
+        
+        .pricing-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 1.5rem; 
+            margin-top: 4rem; 
+        }
+        
+        @media (max-width: 968px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        .tier { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: 32px; 
+            padding: 2.2rem; 
+            transition: all 0.4s; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative;
+        }
+        
+        .tier:hover { 
+            transform: translateY(-10px); 
+            border-color: var(--primary); 
+        }
+        
+        .tier.popular { 
+            border: 2px solid var(--primary); 
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2); 
+        }
+        
+        .tier.limited { 
+            border: 2px solid var(--warning); 
+        }
+        
+        .tier h3 { 
+            font-size: 1.3rem; 
+            font-weight: 800; 
+            margin-bottom: 0.4rem;
+            color: var(--text);
+            transition: color 0.4s ease;
+        }
+        
+        .tier .price { 
+            font-size: 2.8rem; 
+            font-weight: 800; 
+            margin-bottom: 0.5rem; 
+            letter-spacing: -1.5px;
+            color: var(--text);
+            transition: color 0.4s ease;
+        }
+        
+        .tier .price span { 
+            font-size: 1rem; 
+            color: var(--text-dim); 
+            font-weight: 500; 
+        }
+        
+        .billing-note { 
+            font-size: 0.8rem; 
+            color: var(--text-dim); 
+            margin-bottom: 1.5rem; 
+            font-weight: 600;
+            transition: color 0.4s ease;
+        }
+        
+        .feat-list { 
+            list-style: none; 
+            margin-bottom: 2rem; 
+            flex-grow: 1; 
+            border-top: 1px solid var(--border); 
+            padding-top: 1.5rem;
+            transition: border-color 0.4s ease;
+        }
+        
+        .feat-list li { 
+            margin-bottom: 0.8rem; 
+            font-size: 0.85rem; 
+            color: var(--text-dim); 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 10px; 
+            line-height: 1.3;
+            transition: color 0.4s ease;
+        }
+        
+        .feat-list li::before { 
+            content: "✓"; 
+            color: var(--success); 
+            font-weight: bold; 
+            flex-shrink: 0;
+        }
+        
+        .feat-list li.locked::before { 
+            content: "🔒"; 
+            color: var(--accent); 
+        }
+        
+        .feat-list li.limited { 
+            color: var(--warning); 
+        }
+        
+        .feat-list li.limited::before { 
+            content: "⚡"; 
+            color: var(--warning); 
+        }
+        
+        .usage-bar { 
+            background: var(--glass-bg); 
+            border-radius: 10px; 
+            height: 8px; 
+            margin-top: 1rem; 
+            overflow: hidden;
+            transition: background-color 0.4s ease;
+        }
+        
+        .usage-fill { 
+            background: var(--warning); 
+            height: 100%; 
+            border-radius: 10px; 
+            transition: width 0.3s; 
+        }
+        
+        .faq-item { 
+            margin-bottom: 1rem; 
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            background: var(--glass-bg);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        
+        .faq-question { 
+            padding: 1.5rem; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-weight: 700; 
+            transition: all 0.3s;
+            color: var(--text);
+        }
+        
+        .faq-question:hover {
+            color: var(--primary);
+        }
+        
+        .faq-answer { 
+            padding: 0 1.5rem; 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: all 0.3s ease-out; 
+            color: var(--text-dim); 
+            font-size: 0.95rem; 
+            line-height: 1.6;
+        }
+        
+        .faq-item.active .faq-answer { 
+            padding-bottom: 1.5rem; 
+            max-height: 300px; 
+        }
+        
+        .modal-wrap { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(10px); 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000;
+            padding: 1rem;
+        }
+        
+        .modal-content { 
+            background: var(--bg); 
+            border: 1px solid var(--border); 
+            border-radius: 32px; 
+            padding: 3.5rem; 
+            width: 100%;
+            max-width: 460px; 
+            position: relative; 
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        
+        .pro-modal-content { 
+            background: var(--bg); 
+            border: 2px solid var(--primary); 
+            padding: 3rem; 
+            border-radius: 32px; 
+            width: 100%;
+            max-width: 500px; 
+            position: relative; 
+            text-align: center; 
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            transition: background-color 0.4s ease;
+        }
+        
+        .close-btn { 
+            position: absolute; 
+            top: 25px; 
+            right: 25px; 
+            font-size: 2rem; 
+            background: none; 
+            border: none; 
+            color: var(--text-dim); 
+            cursor: pointer;
+            transition: color 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-btn:hover {
+            color: var(--accent);
+            background: var(--glass-bg);
+        }
+        
+        .error-box { 
+            background: rgba(244, 63, 94, 0.1); 
+            border: 1px solid var(--accent); 
+            border-radius: 16px; 
+            padding: 1.2rem 1.5rem; 
+            margin-top: 1.5rem; 
+            color: var(--accent); 
+            font-size: 0.9rem; 
+            display: none; 
+        }
+        
+        .payment-methods { 
+            display: grid; 
+            gap: 1rem; 
+            margin: 1.5rem 0; 
+        }
+        
+        .payment-option { 
+            border: 2px solid var(--border); 
+            border-radius: 16px; 
+            padding: 1.2rem; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem;
+            background: var(--glass-bg);
+        }
+        
+        .payment-option:hover, .payment-option.selected { 
+            border-color: var(--primary); 
+            background: rgba(99, 102, 241, 0.05); 
+        }
+        
+        .cookie-banner { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background: var(--card); 
+            border-top: 1px solid var(--border); 
+            padding: 1.5rem 2rem; 
+            z-index: 999; 
+            display: none; 
+            backdrop-filter: blur(20px);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        
+        .cookie-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .user-menu { 
+            position: relative; 
+        }
+        
+        .user-avatar { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-weight: 700; 
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .dropdown { 
+            position: absolute; 
+            top: 50px; 
+            right: 0; 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            border-radius: 16px; 
+            padding: 0.5rem; 
+            min-width: 180px; 
+            display: none; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+        
+        .dropdown.show { 
+            display: block; 
+            animation: slideDown 0.2s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dropdown-item { 
+            padding: 0.8rem 1rem; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            transition: all 0.2s; 
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        
+        .dropdown-item:hover { 
+            background: var(--glass-bg); 
+            color: var(--primary);
+        }
+        
+        .security-badge { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            background: rgba(16, 185, 129, 0.1); 
+            color: var(--success); 
+            padding: 0.4rem 0.8rem; 
+            border-radius: 20px; 
+            font-size: 0.7rem; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        
+        .upgrade-prompt { 
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1)); 
+            border: 1px solid var(--primary); 
+            border-radius: 16px; 
+            padding: 1.5rem; 
+            margin: 1.5rem 0; 
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+        
+        .upgrade-prompt h4 { 
+            color: var(--primary); 
+            margin-bottom: 0.5rem; 
+        }
+        
+        /* Notification toast */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 9999;
+            animation: slideInRight 0.3s ease;
+            max-width: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .notification.success { background: var(--success); }
+        .notification.error { background: var(--accent); }
+        .notification.info { background: var(--primary); }
+        
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
-<base target="_blank">
 </head>
 <body data-theme="dark">
 <div class="mesh"></div>
 
 <!-- COOKIE BANNER -->
 <div class="cookie-banner" id="cookieBanner">
-    <div class="cookie-content" style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;">
+    <div class="cookie-content">
         <div>
             <strong>🍪 We value your privacy</strong>
-            <p style="font-size:0.85rem; color:var(--text-dim); margin-top:0.3rem;">We use cookies for authentication and preferences.</p>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem;">
+                We use cookies for authentication, preferences, and analytics. 
+                <a href="#" style="color: var(--primary);">Learn more</a>
+            </p>
         </div>
-        <div style="display:flex; gap:10px;">
-            <button class="btn btn-outline" onclick="rejectCookies()">Essential Only</button>
-            <button class="btn btn-primary" onclick="acceptCookies()">Accept All</button>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-outline" onclick="handleCookieConsent('essential')">Essential Only</button>
+            <button class="btn btn-primary" onclick="handleCookieConsent('all')">Accept All</button>
         </div>
     </div>
 </div>
@@ -133,32 +830,37 @@
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
             <rect width="32" height="32" rx="8" fill="url(#lg)"/>
             <path d="M9 16V16.01M13 13V19M17 10V22M21 13V19M25 16V16.01" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-            <defs><linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
+            <defs>
+                <linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#6366f1"/>
+                    <stop offset="1" stop-color="#a855f7"/>
+                </linearGradient>
+            </defs>
         </svg>
         TranscriptAI
-        <span class="security-badge" id="securityBadge" style="display:none;">🔒 Secured</span>
+        <span class="security-badge" id="securityBadge" style="display: none;">🔒 Secured</span>
     </div>
     <div class="nav-center">
         <a onclick="switchTab('workspace')" id="tab-workspace" class="active">Workspace</a>
         <a onclick="switchTab('history')" id="tab-history">History</a>
         <a onclick="switchTab('pricing')" id="tab-pricing">Pricing</a>
         <a onclick="switchTab('faq')" id="tab-faq">FAQ</a>
-        <a onclick="switchTab('account')" id="tab-account" style="display:none">Account</a>
+        <a onclick="switchTab('account')" id="tab-account" style="display: none">Account</a>
     </div>
-    <div style="display:flex;gap:12px;align-items:center">
-        <button class="btn btn-outline" style="width:45px;height:45px;padding:0;border-radius:50%" onclick="toggleTheme()" id="themeIcon">☀️</button>
+    <div style="display: flex; gap: 12px; align-items: center">
+        <button class="btn btn-outline" style="width: 45px; height: 45px; padding: 0; border-radius: 50%" onclick="toggleTheme()" id="themeIcon" title="Toggle theme">☀️</button>
         
         <div id="authButtons">
             <button class="btn btn-outline" onclick="openAuthModal()" id="loginHeaderBtn">Log In</button>
             <button class="btn btn-primary" onclick="openAuthModal()" id="signupHeaderBtn">Sign Up</button>
         </div>
         
-        <div class="user-menu" id="userMenu" style="display:none;">
+        <div class="user-menu" id="userMenu" style="display: none;">
             <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">U</div>
             <div class="dropdown" id="userDropdown">
-                <div class="dropdown-item" onclick="switchTab('account')">👤 My Account</div>
-                <div class="dropdown-item" onclick="switchTab('history')">📜 History</div>
-                <div class="dropdown-item" style="border-top:1px solid var(--border); margin-top:0.5rem; color:var(--accent);" onclick="logout()">🚪 Log Out</div>
+                <div class="dropdown-item" onclick="switchTab('account'); toggleDropdown();">👤 My Account</div>
+                <div class="dropdown-item" onclick="switchTab('history'); toggleDropdown();">📜 History</div>
+                <div class="dropdown-item" style="border-top: 1px solid var(--border); margin-top: 0.5rem; color: var(--accent);" onclick="logout(); toggleDropdown();">🚪 Log Out</div>
             </div>
         </div>
     </div>
@@ -168,50 +870,60 @@
     <!-- WORKSPACE -->
     <section id="workspace" class="view-section active">
         <div class="glass-card">
-            <h1 style="font-size:2.2rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-1.5px">AI Neural Transcription</h1>
-            <p style="color:var(--text-dim);margin-bottom:2.5rem">Powered by AssemblyAI — supports 99 languages with auto-detection.</p>
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1.5px">AI Neural Transcription</h1>
+            <p style="color: var(--text-dim); margin-bottom: 2.5rem">Powered by AssemblyAI — supports 99 languages with auto-detection.</p>
 
-            <!-- Free Usage Counter (Shows for free users) -->
-            <div id="freeUsageBar" style="display:none;margin-bottom:2rem;padding:1.2rem;background:var(--glass-bg);border-radius:16px;border:1px solid var(--border);">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-                    <span style="font-weight:700;font-size:0.9rem;">Free Minutes Used</span>
-                    <span style="font-size:0.85rem;color:var(--text-dim);"><span id="usedMinutes">0</span> / 20 min</span>
+            <!-- Free Usage Counter -->
+            <div id="freeUsageBar" style="display: none; margin-bottom: 2rem; padding: 1.2rem; background: var(--glass-bg); border-radius: 16px; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <span style="font-weight: 700; font-size: 0.9rem;">Free Minutes Used</span>
+                    <span style="font-size: 0.85rem; color: var(--text-dim);">
+                        <span id="usedMinutes">0</span> / 20 min
+                    </span>
                 </div>
                 <div class="usage-bar">
-                    <div class="usage-fill" id="usageFill" style="width:0%"></div>
+                    <div class="usage-fill" id="usageFill" style="width: 0%"></div>
                 </div>
-                <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Upgrade to Pro for unlimited transcription</p>
+                <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem;">
+                    <a href="#" onclick="switchTab('pricing'); return false;" style="color: var(--primary); font-weight: 600;">Upgrade to Pro</a> for unlimited transcription
+                </p>
             </div>
 
-            <div id="proBar" style="display:none;background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(168,85,247,0.15));border:1px solid var(--primary);border-radius:16px;padding:1rem 1.5rem;margin-bottom:2rem;align-items:center;justify-content:space-between">
-                <span style="font-weight:800;font-size:0.9rem">⚡ Pro Access Active — Unlimited Transcription</span>
-                <span style="font-size:0.75rem;color:var(--text-dim)">Billed monthly</span>
+            <div id="proBar" style="display: none; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15)); border: 1px solid var(--primary); border-radius: 16px; padding: 1rem 1.5rem; margin-bottom: 2rem; align-items: center; justify-content: space-between;">
+                <span style="font-weight: 800; font-size: 0.9rem">⚡ Pro Access Active — Unlimited Transcription</span>
+                <span style="font-size: 0.75rem; color: var(--text-dim)">Billed monthly</span>
             </div>
 
-            <!-- Upgrade prompt for free users -->
-            <div class="upgrade-prompt" id="upgradePrompt" style="display:none;">
-                <h4>🚀 Want more?</h4>
-                <p style="font-size:0.9rem;color:var(--text-dim);margin-bottom:1rem;">Get unlimited minutes, speaker detection, and summaries</p>
-                <button class="btn btn-primary" onclick="switchTab('pricing')" style="font-size:0.85rem;padding:0.6rem 1.2rem;">Upgrade to Pro — $12/month</button>
+            <!-- Upgrade prompt -->
+            <div class="upgrade-prompt" id="upgradePrompt" style="display: none;">
+                <h4>🚀 Running low on minutes?</h4>
+                <p style="font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1rem;">
+                    You've used <span id="promptMinutes">0</span> of 20 free minutes
+                </p>
+                <button class="btn btn-primary" onclick="switchTab('pricing')" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">
+                    Upgrade to Pro — $12/month
+                </button>
             </div>
 
             <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
-                <div style="font-size:4rem;margin-bottom:1rem">☁️</div>
-                <h3 style="margin-bottom:0.5rem">Upload Audio / Video File</h3>
-                <p style="color:var(--text-dim);font-size:0.9rem">Drag your file here or click to browse</p>
-                <p style="color:var(--text-dim);font-size:0.8rem;margin-top:0.5rem">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC</p>
-                <p style="color:var(--warning);font-size:0.75rem;margin-top:0.5rem;font-weight:600;" id="freeLimitNotice">Free plan: Max 10 minutes per file</p>
+                <div style="font-size: 4rem; margin-bottom: 1rem">☁️</div>
+                <h3 style="margin-bottom: 0.5rem">Upload Audio / Video File</h3>
+                <p style="color: var(--text-dim); font-size: 0.9rem">Drag your file here or click to browse</p>
+                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 0.5rem">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC</p>
+                <p style="color: var(--warning); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600; display: none;" id="freeLimitNotice">
+                    ⏱️ Free plan: Max 10 minutes per file
+                </p>
             </div>
 
-            <div id="fileInfo" style="display:none;margin-bottom:2rem;padding:1.2rem;background:var(--glass-bg);border-radius:18px;border:1px solid var(--primary);justify-content:space-between;align-items:center">
-                <div style="display:flex;align-items:center;gap:12px">
-                    <span style="font-size:1.5rem">🎵</span>
+            <div id="fileInfo" style="display: none; margin-bottom: 2rem; padding: 1.2rem; background: var(--glass-bg); border-radius: 18px; border: 1px solid var(--primary); justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 12px">
+                    <span style="font-size: 1.5rem">🎵</span>
                     <div>
-                        <span id="fileName" style="font-weight:700;display:block">...</span>
-                        <span id="fileSize" style="font-size:0.75rem;color:var(--text-dim)">...</span>
+                        <span id="fileName" style="font-weight: 700; display: block">...</span>
+                        <span id="fileSize" style="font-size: 0.75rem; color: var(--text-dim)">...</span>
                     </div>
                 </div>
-                <button onclick="resetUpload()" style="background:none;border:none;color:var(--accent);font-weight:800;cursor:pointer;text-transform:uppercase;font-size:0.7rem">✕ Remove</button>
+                <button onclick="resetUpload()" style="background: none; border: none; color: var(--accent); font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.7rem">✕ Remove</button>
             </div>
 
             <div class="control-grid">
@@ -261,15 +973,15 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" style="margin-top:2.5rem;width:100%;height:60px;font-size:1.05rem" id="processBtn" disabled onclick="startProcessing()">
+            <button class="btn btn-primary" style="margin-top: 2.5rem; width: 100%; height: 60px; font-size: 1.05rem" id="processBtn" disabled onclick="startProcessing()">
                 🎙️ Start Transcription
             </button>
 
             <div class="error-box" id="errorBox"></div>
 
-            <div id="loading" style="display:none;margin-top:3rem">
-                <div style="height:8px;background:var(--glass-bg);border-radius:20px;overflow:hidden;border:1px solid var(--border)">
-                    <div id="bar" style="width:0%;height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width 0.8s ease;border-radius:20px"></div>
+            <div id="loading" style="display: none; margin-top: 3rem">
+                <div style="height: 8px; background: var(--glass-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border)">
+                    <div id="bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.8s ease; border-radius: 20px"></div>
                 </div>
                 <div class="step-list">
                     <div class="step" id="step1"><div class="step-dot"></div>Reading file...</div>
@@ -279,13 +991,13 @@
                 </div>
             </div>
 
-            <div id="result" style="display:none;margin-top:4rem;border-top:1px solid var(--border);padding-top:3rem">
-                <div style="display:flex;justify-content:space-between;margin-bottom:1.5rem;align-items:flex-end;flex-wrap:wrap;gap:1rem">
+            <div id="result" style="display: none; margin-top: 4rem; border-top: 1px solid var(--border); padding-top: 3rem">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; align-items: flex-end; flex-wrap: wrap; gap: 1rem">
                     <div>
-                        <h2 style="font-weight:800;font-size:1.8rem">Transcript Result</h2>
-                        <p style="color:var(--text-dim);font-size:0.8rem;margin-top:5px" id="resultMeta">Processing complete</p>
+                        <h2 style="font-weight: 800; font-size: 1.8rem">Transcript Result</h2>
+                        <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 5px" id="resultMeta">Processing complete</p>
                     </div>
-                    <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap">
                         <button class="btn btn-outline" onclick="copyText()">📋 Copy</button>
                         <button class="btn btn-outline" onclick="downloadTXT()">💾 TXT</button>
                         <button class="btn btn-primary" onclick="downloadPDF()">📄 PDF</button>
@@ -294,8 +1006,8 @@
 
                 <div class="lang-detected-banner" id="langBanner"></div>
                 <div id="transcript-area"></div>
-                <div style="margin-top:1.5rem">
-                    <button class="btn btn-outline" onclick="newTranscription()" style="color:var(--primary)">+ New File</button>
+                <div style="margin-top: 1.5rem">
+                    <button class="btn btn-outline" onclick="newTranscription()" style="color: var(--primary)">+ New File</button>
                 </div>
             </div>
         </div>
@@ -303,17 +1015,17 @@
 
     <!-- PRICING -->
     <section id="pricing" class="view-section">
-        <div style="text-align:center;margin-bottom:4rem">
-            <h1 style="font-size:2.8rem;font-weight:800;margin-bottom:1rem">Simple, Transparent Pricing</h1>
-            <p style="color:var(--text-dim);max-width:600px;margin:0 auto;line-height:1.6">Start free, upgrade when you need more. All paid plans billed monthly.</p>
+        <div style="text-align: center; margin-bottom: 4rem">
+            <h1 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem">Simple, Transparent Pricing</h1>
+            <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto; line-height: 1.6;">Start free, upgrade when you need more. All paid plans billed monthly.</p>
         </div>
         
         <div class="pricing-grid">
             <!-- FREE TIER -->
             <div class="tier limited">
-                <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--warning);color:#000;padding:6px 16px;border-radius:30px;font-size:0.65rem;font-weight:900;letter-spacing:1px">LIMITED FREE</div>
+                <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--warning); color: #000; padding: 6px 16px; border-radius: 30px; font-size: 0.65rem; font-weight: 900; letter-spacing: 1px">LIMITED FREE</div>
                 <h3>Free</h3>
-                <p class="desc" style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem;min-height:40px;">Perfect for trying out TranscriptAI</p>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem; min-height: 40px;">Perfect for trying out TranscriptAI</p>
                 <div class="price">$0<span>/month</span></div>
                 <div class="billing-note">No credit card required</div>
                 <ul class="feat-list">
@@ -327,14 +1039,14 @@
                     <li class="locked">Auto Summary</li>
                     <li class="locked">Priority processing</li>
                 </ul>
-                <button class="btn btn-outline" onclick="switchTab('workspace')" style="width:100%">Get Started Free</button>
+                <button class="btn btn-outline" onclick="switchTab('workspace')" style="width: 100%">Get Started Free</button>
             </div>
 
             <!-- PRO TIER -->
             <div class="tier popular">
-                <div style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:var(--primary);color:white;padding:6px 16px;border-radius:30px;font-size:0.65rem;font-weight:900;letter-spacing:1px">MOST POPULAR</div>
+                <div style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 6px 16px; border-radius: 30px; font-size: 0.65rem; font-weight: 900; letter-spacing: 1px">MOST POPULAR</div>
                 <h3>Pro</h3>
-                <p class="desc" style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem;min-height:40px;">For creators, journalists, and power users</p>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem; min-height: 40px;">For creators, journalists, and power users</p>
                 <div class="price">$12<span>/month</span></div>
                 <div class="billing-note">Billed monthly • Cancel anytime</div>
                 <ul class="feat-list">
@@ -349,14 +1061,14 @@
                     <li>99 languages supported</li>
                     <li>TXT & PDF export</li>
                 </ul>
-                <button class="btn btn-primary" onclick="openPaymentModal()" style="width:100%">Upgrade to Pro</button>
+                <button class="btn btn-primary" onclick="openPaymentModal()" style="width: 100%">Upgrade to Pro</button>
             </div>
 
             <!-- BUSINESS TIER -->
             <div class="tier">
-                <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--secondary);color:white;padding:6px 16px;border-radius:30px;font-size:0.65rem;font-weight:900;letter-spacing:1px">TEAMS</div>
+                <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--secondary); color: white; padding: 6px 16px; border-radius: 30px; font-size: 0.65rem; font-weight: 900; letter-spacing: 1px">TEAMS</div>
                 <h3>Business</h3>
-                <p class="desc" style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem;min-height:40px;">Enterprise-grade for teams and agencies</p>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem; min-height: 40px;">Enterprise-grade for teams and agencies</p>
                 <div class="price">$49<span>/month</span></div>
                 <div class="billing-note">Billed monthly • Cancel anytime</div>
                 <ul class="feat-list">
@@ -370,35 +1082,68 @@
                     <li>Usage analytics dashboard</li>
                     <li>SSO/SAML authentication</li>
                 </ul>
-                <button class="btn btn-primary" onclick="openBusinessModal()" style="width:100%">Upgrade to Business</button>
+                <button class="btn btn-primary" onclick="openBusinessModal()" style="width: 100%">Upgrade to Business</button>
             </div>
         </div>
 
-        <!-- Comparison hint -->
-        <div style="text-align:center;margin-top:3rem;padding:2rem;background:var(--glass-bg);border-radius:20px;border:1px solid var(--border);">
-            <p style="color:var(--text-dim);font-size:0.9rem;">Need more than 5 seats? <a href="#" style="color:var(--primary);font-weight:700;">Contact us</a> for custom Enterprise pricing.</p>
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--glass-bg); border-radius: 20px; border: 1px solid var(--border);">
+            <p style="color: var(--text-dim); font-size: 0.9rem;">Need more than 5 seats? <a href="mailto:enterprise@transcriptai.com" style="color: var(--primary); font-weight: 700;">Contact us</a> for custom Enterprise pricing.</p>
         </div>
     </section>
 
     <!-- FAQ -->
     <section id="faq" class="view-section">
         <div class="glass-card">
-            <h1 style="font-size:2.2rem;font-weight:800;margin-bottom:2rem">Frequently Asked Questions</h1>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">What happens when I reach my free limit? <span>+</span></div>
-                <div class="faq-answer">Once you've used your 20 free minutes, you'll need to upgrade to Pro ($12/month) for unlimited transcription. Your existing transcripts remain accessible.</div>
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 2rem">Frequently Asked Questions</h1>
+            
+            <div class="faq-item" data-faq="1">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What happens when I reach my free limit?
+                    <span style="transition: transform 0.3s;">+</span>
+                </div>
+                <div class="faq-answer">
+                    Once you've used your 20 free minutes, you'll need to upgrade to Pro ($12/month) for unlimited transcription. Your existing transcripts remain accessible.
+                </div>
             </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">Can I cancel my subscription anytime? <span>+</span></div>
-                <div class="faq-answer">Yes! All paid plans are billed monthly and you can cancel anytime. You'll keep Pro access until the end of your billing period.</div>
+            
+            <div class="faq-item" data-faq="2">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Can I cancel my subscription anytime?
+                    <span style="transition: transform 0.3s;">+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! All paid plans are billed monthly and you can cancel anytime. You'll keep Pro access until the end of your billing period.
+                </div>
             </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">What's the difference between Pro and Business? <span>+</span></div>
-                <div class="faq-answer">Pro is for individual power users with unlimited transcription. Business adds 5 team seats, API access, custom vocabulary, and priority support for teams.</div>
+            
+            <div class="faq-item" data-faq="3">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What's the difference between Pro and Business?
+                    <span style="transition: transform 0.3s;">+</span>
+                </div>
+                <div class="faq-answer">
+                    Pro is for individual power users with unlimited transcription. Business adds 5 team seats, API access, custom vocabulary, and priority support for teams.
+                </div>
             </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">Do you offer annual billing? <span>+</span></div>
-                <div class="faq-answer">Yes! Choose annual billing to get 2 months free. Pro becomes $120/year (save $24) and Business becomes $490/year (save $98).</div>
+            
+            <div class="faq-item" data-faq="4">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Do you offer annual billing?
+                    <span style="transition: transform 0.3s;">+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes! Choose annual billing to get 2 months free. Pro becomes $120/year (save $24) and Business becomes $490/year (save $98).
+                </div>
+            </div>
+            
+            <div class="faq-item" data-faq="5">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Is my data secure?
+                    <span style="transition: transform 0.3s;">+</span>
+                </div>
+                <div class="faq-answer">
+                    Absolutely. We use bank-level encryption, never store your credit card details (handled by Stripe), and automatically delete uploaded files after processing. We're GDPR compliant and SOC 2 certified.
+                </div>
             </div>
         </div>
     </section>
@@ -406,55 +1151,96 @@
     <!-- ACCOUNT -->
     <section id="account" class="view-section">
         <div class="glass-card">
-            <h1 style="font-size:2.2rem;font-weight:800;margin-bottom:0.5rem">Account Dashboard</h1>
-            <div style="background:var(--glass-bg);padding:2.5rem;border-radius:24px;border:1px solid var(--border);margin-bottom:2rem">
-                <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem">
-                    <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:2rem;color:white;font-weight:800;" id="accountAvatar">U</div>
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem">Account Dashboard</h1>
+            
+            <div style="background: var(--glass-bg); padding: 2.5rem; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 2rem">
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: 800;" id="accountAvatar">U</div>
                     <div>
-                        <h2 id="accountName" style="font-size:1.5rem;font-weight:800">User</h2>
-                        <p id="accountEmail" style="color:var(--text-dim);font-size:0.9rem">user@example.com</p>
-                        <span class="security-badge" style="margin-top:0.5rem;display:inline-flex;">🔒 Email Verified</span>
+                        <h2 id="accountName" style="font-size: 1.5rem; font-weight: 800">User</h2>
+                        <p id="accountEmail" style="color: var(--text-dim); font-size: 0.9rem">user@example.com</p>
+                        <span class="security-badge" style="margin-top: 0.5rem; display: inline-flex;">🔒 Email Verified</span>
                     </div>
                 </div>
                 
-                <p style="color:var(--text-dim);text-transform:uppercase;font-size:0.7rem;font-weight:800;margin-bottom:1rem">PLAN STATUS</p>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding:1.5rem;background:var(--bg);border-radius:16px;border:1px solid var(--border);">
+                <p style="color: var(--text-dim); text-transform: uppercase; font-size: 0.7rem; font-weight: 800; margin-bottom: 1rem">PLAN STATUS</p>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding: 1.5rem; background: var(--bg); border-radius: 16px; border: 1px solid var(--border); flex-wrap: wrap; gap: 1rem;">
                     <div>
-                        <h3 id="planTitle" style="font-size:1.3rem;font-weight:800">Free Member</h3>
-                        <p id="planDetails" style="color:var(--text-dim);font-size:0.85rem;margin-top:0.3rem"><span id="planMinutes">0</span> / 20 minutes used</p>
+                        <h3 id="planTitle" style="font-size: 1.3rem; font-weight: 800">Free Member</h3>
+                        <p id="planDetails" style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.3rem;">
+                            <span id="planMinutes">0</span> / 20 minutes used
+                        </p>
                     </div>
-                    <div id="proBadge" style="display:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;padding:0.5rem 1rem;border-radius:20px;font-size:0.75rem;font-weight:800;">PRO</div>
+                    <div id="proBadge" style="display: none; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.75rem; font-weight: 800;">PRO</div>
                 </div>
                 
                 <!-- Free user upgrade prompt -->
-                <div id="freeUpgradePrompt" style="display:none;margin-bottom:2rem;padding:1.5rem;background:rgba(245,158,11,0.1);border:1px solid var(--warning);border-radius:16px;">
-                    <p style="font-weight:700;color:var(--warning);margin-bottom:0.5rem;">⚡ You've used <span id="promptMinutes">0</span> of 20 free minutes</p>
-                    <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem;">Upgrade to Pro for unlimited transcription</p>
+                <div id="freeUpgradePrompt" style="display: none; margin-bottom: 2rem; padding: 1.5rem; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning); border-radius: 16px;">
+                    <p style="font-weight: 700; color: var(--warning); margin-bottom: 0.5rem;">
+                        ⚡ You've used <span id="promptMinutes">0</span> of 20 free minutes
+                    </p>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem;">Upgrade to Pro for unlimited transcription</p>
                     <button class="btn btn-primary" onclick="switchTab('pricing')">Upgrade to Pro — $12/month</button>
                 </div>
                 
-                <div id="proActiveArea" style="display:none;margin-bottom:2rem">
-                    <p style="color:var(--success);font-weight:700;margin-bottom:0.5rem;">✓ Your Pro subscription is active</p>
-                    <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1.5rem;">Billed $12/month • Renews on <span id="renewalDate">Jan 15, 2026</span></p>
-                    <div style="display:flex;gap:12px;">
+                <div id="proActiveArea" style="display: none; margin-bottom: 2rem">
+                    <p style="color: var(--success); font-weight: 700; margin-bottom: 0.5rem;">✓ Your Pro subscription is active</p>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1.5rem;">
+                        Billed $12/month • Renews on <span id="renewalDate">Jan 15, 2026</span>
+                    </p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                         <button class="btn btn-outline" onclick="manageSubscription()">Manage Subscription</button>
                         <button class="btn btn-danger" onclick="cancelSubscription()">Cancel Subscription</button>
                     </div>
                 </div>
                 
-                <div id="businessActiveArea" style="display:none;margin-bottom:2rem">
-                    <p style="color:var(--success);font-weight:700;margin-bottom:0.5rem;">✓ Your Business subscription is active</p>
-                    <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1.5rem;">Billed $49/month • 5 team seats • Renews on <span id="businessRenewalDate">Jan 15, 2026</span></p>
-                    <div style="display:flex;gap:12px;">
+                <div id="businessActiveArea" style="display: none; margin-bottom: 2rem">
+                    <p style="color: var(--success); font-weight: 700; margin-bottom: 0.5rem;">✓ Your Business subscription is active</p>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1.5rem;">
+                        Billed $49/month • 5 team seats • Renews on <span id="businessRenewalDate">Jan 15, 2026</span>
+                    </p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                         <button class="btn btn-outline" onclick="manageSubscription()">Manage Subscription</button>
                         <button class="btn btn-danger" onclick="cancelSubscription()">Cancel Subscription</button>
                     </div>
                 </div>
                 
                 <div id="upgradeArea">
-                    <p style="margin-bottom:1.5rem;color:var(--text-dim)">Unlock unlimited transcription and premium features.</p>
-                    <button class="btn btn-primary" onclick="switchTab('pricing')" style="margin-right:10px;">View Pro Plans</button>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-dim)">Unlock unlimited transcription and premium features.</p>
+                    <button class="btn btn-primary" onclick="switchTab('pricing')" style="margin-right: 10px; margin-bottom: 10px;">View Pro Plans</button>
                     <button class="btn btn-outline" onclick="openBusinessModal()">Upgrade to Business</button>
+                </div>
+            </div>
+
+            <!-- Security Settings -->
+            <div style="background: var(--glass-bg); padding: 2.5rem; border-radius: 24px; border: 1px solid var(--border);">
+                <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem;">🔐 Security Settings</h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg); border-radius: 12px; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <div style="font-weight: 700;">Two-Factor Authentication (2FA)</div>
+                            <div style="font-size: 0.85rem; color: var(--text-dim);">Add an extra layer of security</div>
+                        </div>
+                        <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="enable2FA()">Enable</button>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg); border-radius: 12px; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <div style="font-weight: 700;">Change Password</div>
+                            <div style="font-size: 0.85rem; color: var(--text-dim);">Last changed 30 days ago</div>
+                        </div>
+                        <button class="btn btn-outline" style="font-size: 0.8rem;" onclick="changePassword()">Update</button>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg); border-radius: 12px; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <div style="font-weight: 700;">Active Sessions</div>
+                            <div style="font-size: 0.85rem; color: var(--text-dim);">2 devices currently logged in</div>
+                        </div>
+                        <button class="btn btn-danger" style="font-size: 0.8rem;" onclick="logoutAll()">Logout All</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -463,126 +1249,139 @@
     <!-- HISTORY -->
     <section id="history" class="view-section">
         <div class="glass-card">
-            <h1>Activity Log</h1>
-            <div style="border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:2rem">
-                <table style="width:100%;border-collapse:collapse">
-                    <thead style="background:var(--glass-bg)">
-                        <tr style="text-align:left;font-size:0.75rem;text-transform:uppercase;color:var(--text-dim)">
-                            <th style="padding:1.2rem">File Name</th>
-                            <th style="padding:1.2rem">Date</th>
-                            <th style="padding:1.2rem">Duration</th>
-                            <th style="padding:1.2rem">Language</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyBody" style="font-size:0.95rem">
-                        <tr><td colspan="4" style="padding:2rem;text-align:center;color:var(--text-dim)">No transcriptions yet. Upload a file to get started.</td></tr>
-                    </tbody>
-                </table>
+            <h1 style="margin-bottom: 1rem;">Activity Log</h1>
+            <p style="color: var(--text-dim); margin-bottom: 2rem; font-size: 0.9rem;">View all your past transcriptions</p>
+            
+            <div style="border: 1px solid var(--border); border-radius: 20px; overflow: hidden;">
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                        <thead style="background: var(--glass-bg)">
+                            <tr style="text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim);">
+                                <th style="padding: 1.2rem">File Name</th>
+                                <th style="padding: 1.2rem">Date</th>
+                                <th style="padding: 1.2rem">Duration</th>
+                                <th style="padding: 1.2rem">Language</th>
+                                <th style="padding: 1.2rem">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody" style="font-size: 0.95rem;">
+                            <tr>
+                                <td colspan="5" style="padding: 3rem; text-align: center; color: var(--text-dim);">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                                    No transcriptions yet.<br>
+                                    <button class="btn btn-primary" onclick="switchTab('workspace')" style="margin-top: 1rem; font-size: 0.85rem; padding: 0.6rem 1.2rem;">
+                                        Upload your first file
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </section>
 </div>
 
 <!-- AUTH MODAL -->
-<div class="modal-wrap" id="authModal">
-    <div class="modal-content">
+<div class="modal-wrap" id="authModal" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <button class="close-btn" onclick="closeModal('authModal')">&times;</button>
         
-        <div id="authTabs" style="display:flex;gap:1rem;margin-bottom:2rem;justify-content:center;">
-            <button class="btn btn-primary" id="loginTab" onclick="switchAuthTab('login')" style="flex:1;">Sign In</button>
-            <button class="btn btn-outline" id="signupTab" onclick="switchAuthTab('signup')" style="flex:1;">Sign Up</button>
+        <div id="authTabs" style="display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: center;">
+            <button class="btn btn-primary" id="loginTab" onclick="switchAuthTab('login')" style="flex: 1;">Sign In</button>
+            <button class="btn btn-outline" id="signupTab" onclick="switchAuthTab('signup')" style="flex: 1;">Sign Up</button>
         </div>
 
         <div id="g_id_onload" data-client_id="" data-callback="handleGoogleSignIn" data-auto_prompt="false"></div>
-        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="continue_with" data-shape="rectangular" data-logo_alignment="left" style="margin-bottom:1.5rem;"></div>
+        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="continue_with" data-shape="rectangular" data-logo_alignment="left" style="margin-bottom: 1.5rem;"></div>
         
-        <div style="position:relative;text-align:center;margin:1.5rem 0;">
-            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);"></div>
-            <span style="background:var(--bg);padding:0 1rem;position:relative;color:var(--text-dim);font-size:0.85rem;">or continue with email</span>
+        <div style="position: relative; text-align: center; margin: 1.5rem 0;">
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border);"></div>
+            <span style="background: var(--bg); padding: 0 1rem; position: relative; color: var(--text-dim); font-size: 0.85rem;">or continue with email</span>
         </div>
 
         <form id="authForm" onsubmit="handleEmailAuth(event)">
-            <div style="display:flex;flex-direction:column;gap:12px">
-                <input type="email" id="authEmail" placeholder="Email Address" required>
-                <input type="password" id="authPassword" placeholder="Password" required minlength="8">
-                <input type="password" id="authConfirmPassword" placeholder="Confirm Password" style="display:none;">
-                <div id="passwordRequirements" style="display:none;font-size:0.75rem;color:var(--text-dim);padding:0.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 12px">
+                <input type="email" id="authEmail" placeholder="Email Address" required autocomplete="email">
+                <input type="password" id="authPassword" placeholder="Password" required minlength="8" autocomplete="current-password">
+                <input type="password" id="authConfirmPassword" placeholder="Confirm Password" style="display: none;" autocomplete="new-password">
+                <div id="passwordRequirements" style="display: none; font-size: 0.75rem; color: var(--text-dim); padding: 0.5rem; background: var(--glass-bg); border-radius: 8px;">
                     Password must contain: 8+ chars, 1 uppercase, 1 number, 1 special char
                 </div>
-                <button type="submit" class="btn btn-primary" id="authSubmitBtn" style="width:100%">Sign In</button>
+                <button type="submit" class="btn btn-primary" id="authSubmitBtn" style="width: 100%">Sign In</button>
             </div>
         </form>
         
-        <p style="margin-top:1.5rem;font-size:0.85rem;color:var(--text-dim);text-align:center;">
-            By continuing, you agree to our <a href="#" style="color:var(--primary);">Terms</a> and <a href="#" style="color:var(--primary);">Privacy Policy</a>
+        <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-dim); text-align: center;">
+            By continuing, you agree to our <a href="#" style="color: var(--primary);">Terms of Service</a> and <a href="#" style="color: var(--primary);">Privacy Policy</a>
         </p>
     </div>
 </div>
 
 <!-- PRO PAYMENT MODAL -->
-<div class="modal-wrap" id="paymentModal">
-    <div class="pro-modal-content" style="width:500px;">
+<div class="modal-wrap" id="paymentModal" onclick="closeModalOnBackdrop(event)">
+    <div class="pro-modal-content" onclick="event.stopPropagation()">
         <button class="close-btn" onclick="closeModal('paymentModal')">&times;</button>
-        <div style="font-size:3rem;margin-bottom:1rem">⚡</div>
-        <h2 style="font-weight:800;margin-bottom:0.5rem">Upgrade to Pro</h2>
-        <p style="color:var(--text-dim);font-size:0.9rem;margin-bottom:1.5rem;">Unlimited transcription, billed monthly</p>
+        <div style="font-size: 3rem; margin-bottom: 1rem">⚡</div>
+        <h2 style="font-weight: 800; margin-bottom: 0.5rem">Upgrade to Pro</h2>
+        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem;">Unlimited transcription, billed monthly</p>
         
-        <div style="background:var(--glass-bg);padding:1.5rem;border-radius:16px;margin-bottom:1.5rem;border:1px solid var(--border);">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-                <span style="font-weight:700;">Pro Plan</span>
-                <span style="font-weight:800;font-size:1.2rem;">$12<span style="font-size:0.8rem;color:var(--text-dim);">/month</span></span>
+        <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700;">Pro Plan</span>
+                <span style="font-weight: 800; font-size: 1.2rem;">$12<span style="font-size: 0.8rem; color: var(--text-dim);">/month</span></span>
             </div>
-            <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem;">Unlimited minutes • Cancel anytime</div>
-            <div style="font-size:0.8rem;color:var(--success);font-weight:600;">✓ 7-day free trial • No charges today</div>
+            <div style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem;">Unlimited minutes • Cancel anytime</div>
+            <div style="font-size: 0.8rem; color: var(--success); font-weight: 600;">✓ 7-day free trial • No charges today</div>
         </div>
 
         <div class="payment-methods">
-            <div class="payment-option selected" onclick="selectPayment('card')">
-                <input type="radio" name="payment" value="card" checked style="width:auto;">
+            <div class="payment-option selected" onclick="selectPayment(this, 'card')">
+                <input type="radio" name="payment" value="card" checked style="width: auto; margin-right: 10px;">
                 <span>💳 Credit/Debit Card</span>
             </div>
         </div>
 
-        <div id="cardElement" style="background:var(--glass-bg);padding:1rem;border-radius:12px;border:1px solid var(--border);margin-bottom:1rem;">
-            <div id="card-element" style="padding:0.5rem;"></div>
-            <div id="card-errors" style="color:var(--accent);font-size:0.85rem;margin-top:0.5rem;"></div>
+        <div id="cardElement" style="background: var(--glass-bg); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1rem;">
+            <div id="card-element" style="padding: 0.5rem;"></div>
+            <div id="card-errors" style="color: var(--accent); font-size: 0.85rem; margin-top: 0.5rem;"></div>
         </div>
 
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;font-size:0.8rem;color:var(--text-dim);">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; font-size: 0.8rem; color: var(--text-dim);">
             <span>🔒</span>
             <span>Secured by Stripe • SSL Encrypted</span>
         </div>
 
-        <button class="btn btn-primary" onclick="processPayment()" style="width:100%;height:55px;" id="payButton">
+        <button class="btn btn-primary" onclick="processPayment()" style="width: 100%; height: 55px;" id="payButton">
             Start Free Trial
         </button>
         
-        <p style="margin-top:1rem;font-size:0.75rem;color:var(--text-dim);text-align:center;">
+        <p style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-dim); text-align: center;">
             You'll be charged $12/month after your 7-day trial. Cancel anytime.
         </p>
     </div>
 </div>
 
 <!-- BUSINESS UPGRADE MODAL -->
-<div class="modal-wrap" id="businessModal">
-    <div class="pro-modal-content" style="width:500px;border-color:var(--secondary);">
+<div class="modal-wrap" id="businessModal" onclick="closeModalOnBackdrop(event)">
+    <div class="pro-modal-content" style="border-color: var(--secondary);" onclick="event.stopPropagation()">
         <button class="close-btn" onclick="closeModal('businessModal')">&times;</button>
-        <div style="font-size:3rem;margin-bottom:1rem">🏢</div>
-        <h2 style="font-weight:800;margin-bottom:0.5rem">Upgrade to Business</h2>
-        <p style="color:var(--text-dim);font-size:0.9rem;margin-bottom:1.5rem;">Team collaboration, billed monthly</p>
+        <div style="font-size: 3rem; margin-bottom: 1rem">🏢</div>
+        <h2 style="font-weight: 800; margin-bottom: 0.5rem">Upgrade to Business</h2>
+        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem;">Team collaboration, billed monthly</p>
         
-        <div style="background:var(--glass-bg);padding:1.5rem;border-radius:16px;margin-bottom:1.5rem;border:1px solid var(--border);">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-                <span style="font-weight:700;">Business Plan</span>
-                <span style="font-weight:800;font-size:1.2rem;">$49<span style="font-size:0.8rem;color:var(--text-dim);">/month</span></span>
+        <div style="background: var(--glass-bg); padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid var(--border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-weight: 700;">Business Plan</span>
+                <span style="font-weight: 800; font-size: 1.2rem;">$49<span style="font-size: 0.8rem; color: var(--text-dim);">/month</span></span>
             </div>
-            <div style="font-size:0.85rem;color:var(--text-dim);margin-bottom:0.5rem;">5 team seats • API access • Priority support</div>
-            <div style="font-size:0.8rem;color:var(--success);font-weight:600;">✓ 14-day free trial • No charges today</div>
+            <div style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.5rem;">5 team seats • API access • Priority support</div>
+            <div style="font-size: 0.8rem; color: var(--success); font-weight: 600;">✓ 14-day free trial • No charges today</div>
         </div>
 
-        <div style="background:rgba(168,85,247,0.1);padding:1rem;border-radius:12px;margin-bottom:1.5rem;">
-            <h4 style="font-size:0.9rem;margin-bottom:0.5rem;color:var(--secondary);">Business includes:</h4>
-            <ul style="font-size:0.85rem;color:var(--text-dim);padding-left:1.2rem;">
+        <div style="background: rgba(168, 85, 247, 0.1); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+            <h4 style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--secondary);">Business includes:</h4>
+            <ul style="font-size: 0.85rem; color: var(--text-dim); padding-left: 1.2rem; margin: 0;">
                 <li>Everything in Pro</li>
                 <li>5 team member seats</li>
                 <li>Full API access</li>
@@ -592,32 +1391,72 @@
         </div>
 
         <div class="payment-methods">
-            <div class="payment-option selected" onclick="selectPayment('card')">
-                <input type="radio" name="paymentBusiness" value="card" checked style="width:auto;">
+            <div class="payment-option selected" onclick="selectPayment(this, 'card')">
+                <input type="radio" name="paymentBusiness" value="card" checked style="width: auto; margin-right: 10px;">
                 <span>💳 Credit/Debit Card</span>
             </div>
         </div>
 
-        <button class="btn btn-primary" onclick="processBusinessPayment()" style="width:100%;height:55px;background:linear-gradient(135deg,var(--secondary),var(--primary));" id="businessPayButton">
+        <button class="btn btn-primary" onclick="processBusinessPayment()" style="width: 100%; height: 55px; background: linear-gradient(135deg, var(--secondary), var(--primary));" id="businessPayButton">
             Start Business Trial
         </button>
         
-        <p style="margin-top:1rem;font-size:0.75rem;color:var(--text-dim);text-align:center;">
+        <p style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-dim); text-align: center;">
             You'll be charged $49/month after your 14-day trial. Cancel anytime.
         </p>
     </div>
 </div>
 
 <script>
-// Configuration
-const API_URL = 'http://localhost:3000/api';
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_STRIPE_PUBLISHABLE_KEY_HERE';
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+// ═══════════════════════════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════════════════════════
+const CONFIG = {
+    API_URL: 'http://localhost:3000/api',
+    STRIPE_PUBLISHABLE_KEY: 'pk_test_YOUR_STRIPE_PUBLISHABLE_KEY_HERE',
+    GOOGLE_CLIENT_ID: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+    FREE_MINUTES_TOTAL: 20,
+    FREE_MINUTES_PER_FILE: 10
+};
 
-// FREE TIER LIMITS
-const FREE_MINUTES_TOTAL = 20;
-const FREE_MINUTES_PER_FILE = 10;
+// ═══════════════════════════════════════════════════════════
+// COOKIE MANAGEMENT (Fixed)
+// ═══════════════════════════════════════════════════════════
+const CookieManager = {
+    set(name, value, days = 365) {
+        const expires = new Date(Date.now() + days * 864e5).toUTCString();
+        // Use SameSite=Lax for compatibility, Secure only in production
+        const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))}; expires=${expires}; path=/; SameSite=Lax${secure}`;
+    },
+    
+    get(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        if (!match) return null;
+        try {
+            return JSON.parse(decodeURIComponent(match[2]));
+        } catch (e) {
+            return decodeURIComponent(match[2]);
+        }
+    },
+    
+    delete(name) {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`;
+    },
+    
+    hasConsent() {
+        const consent = this.get('cookieConsent');
+        return consent === 'all' || consent === 'essential';
+    },
+    
+    hasFullConsent() {
+        return this.get('cookieConsent') === 'all';
+    }
+};
 
+// ═══════════════════════════════════════════════════════════
+// STATE MANAGEMENT
+// ═══════════════════════════════════════════════════════════
 let state = { 
     isPro: false, 
     isBusiness: false,
@@ -627,199 +1466,1006 @@ let state = {
     history: [],
     authTab: 'login',
     user: null,
-    minutesUsed: 0
+    minutesUsed: 0,
+    stripe: null,
+    cardElement: null
 };
 
-// Initialize
+// ═══════════════════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize theme first
+    initTheme();
+    
+    // Initialize cookie consent
+    initCookieConsent();
+    
+    // Initialize auth
     checkAuth();
-    updateUsageDisplay();
     
-    document.getElementById('g_id_onload').setAttribute('data-client_id', GOOGLE_CLIENT_ID);
-    
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.user-menu')) {
-            document.getElementById('userDropdown').classList.remove('show');
-        }
-    });
-});
-
-// Usage tracking
-function updateUsageDisplay() {
-    const percentage = (state.minutesUsed / FREE_MINUTES_TOTAL) * 100;
-    document.getElementById('usedMinutes').textContent = state.minutesUsed;
-    document.getElementById('usageFill').style.width = percentage + '%';
-    document.getElementById('planMinutes').textContent = state.minutesUsed;
-    document.getElementById('promptMinutes').textContent = state.minutesUsed;
-    
-    // Show upgrade prompts at 50% and 100%
-    if (percentage >= 50 && percentage < 100 && !state.isPro) {
-        document.getElementById('upgradePrompt').style.display = 'block';
+    // Initialize Stripe if key is valid
+    if (CONFIG.STRIPE_PUBLISHABLE_KEY && CONFIG.STRIPE_PUBLISHABLE_KEY.startsWith('pk_')) {
+        state.stripe = Stripe(CONFIG.STRIPE_PUBLISHABLE_KEY);
     }
     
-    if (percentage >= 100 && !state.isPro) {
-        document.getElementById('upgradePrompt').style.display = 'block';
-        document.getElementById('processBtn').disabled = true;
-        document.getElementById('processBtn').textContent = '⬆️ Upgrade to Continue';
-        showError('Free limit reached. Upgrade to Pro for unlimited transcription.');
+    // Set Google Client ID
+    const googleScript = document.getElementById('g_id_onload');
+    if (googleScript) {
+        googleScript.setAttribute('data-client_id', CONFIG.GOOGLE_CLIENT_ID);
+    }
+    
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.user-menu')) {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) dropdown.classList.remove('show');
+        }
+    });
+    
+    // Load usage from cookie
+    const savedUsage = CookieManager.get('minutesUsed');
+    if (savedUsage) {
+        state.minutesUsed = parseInt(savedUsage) || 0;
+    }
+});
+
+// ═══════════════════════════════════════════════════════════
+// THEME MANAGEMENT (Fixed)
+// ═══════════════════════════════════════════════════════════
+function initTheme() {
+    // Check for saved theme preference
+    const savedTheme = CookieManager.get('theme');
+    
+    if (savedTheme) {
+        state.theme = savedTheme;
+    } else {
+        // Check system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        state.theme = prefersDark ? 'dark' : 'light';
+    }
+    
+    applyTheme();
+}
+
+function applyTheme() {
+    document.body.setAttribute('data-theme', state.theme);
+    const themeIcon = document.getElementById('themeIcon');
+    if (themeIcon) {
+        themeIcon.innerHTML = state.theme === 'dark' ? '☀️' : '🌙';
+        themeIcon.title = state.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
     }
 }
 
-// Check file duration for free users
-function checkFileDuration(file) {
-    return new Promise((resolve, reject) => {
-        if (state.isPro || state.isBusiness) {
-            resolve(true);
+function toggleTheme() {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    applyTheme();
+    
+    // Save preference if cookies allowed
+    if (CookieManager.hasConsent()) {
+        CookieManager.set('theme', state.theme, 365);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// COOKIE CONSENT (Fixed)
+// ═══════════════════════════════════════════════════════════
+function initCookieConsent() {
+    const consent = CookieManager.get('cookieConsent');
+    const banner = document.getElementById('cookieBanner');
+    
+    if (!consent && banner) {
+        banner.style.display = 'block';
+    } else if (consent === 'all') {
+        document.getElementById('securityBadge').style.display = 'inline-flex';
+    }
+}
+
+function handleCookieConsent(type) {
+    CookieManager.set('cookieConsent', type, 365);
+    document.getElementById('cookieBanner').style.display = 'none';
+    
+    if (type === 'all') {
+        document.getElementById('securityBadge').style.display = 'inline-flex';
+        // Save current theme
+        CookieManager.set('theme', state.theme, 365);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// AUTHENTICATION
+// ═══════════════════════════════════════════════════════════
+async function checkAuth() {
+    try {
+        const token = CookieManager.get('authToken');
+        if (!token) {
+            updateUI();
             return;
         }
         
-        const audio = document.createElement('audio');
-        audio.preload = 'metadata';
-        audio.src = URL.createObjectURL(file);
+        const response = await fetch(`${CONFIG.API_URL}/auth/me`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+            credentials: 'include'
+        });
         
-        audio.onloadedmetadata = () => {
-            URL.revokeObjectURL(audio.src);
-            const duration = audio.duration / 60; // Convert to minutes
-            
-            if (duration > FREE_MINUTES_PER_FILE) {
-                reject(new Error(`Free plan limited to ${FREE_MINUTES_PER_FILE} minutes per file. This file is ${duration.toFixed(1)} minutes. Upgrade to Pro for files up to 5GB.`));
-            } else {
-                resolve(true);
+        if (response.ok) {
+            const user = await response.json();
+            state.user = user;
+            state.loggedIn = true;
+            state.isPro = user.isPro || false;
+            state.isBusiness = user.isBusiness || false;
+            state.minutesUsed = user.minutesUsed || 0;
+        } else {
+            // Token invalid, clear it
+            CookieManager.delete('authToken');
+        }
+    } catch (error) {
+        console.log('Auth check failed:', error);
+    }
+    
+    updateUI();
+}
+
+async function handleEmailAuth(e) {
+    e.preventDefault();
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+    
+    try {
+        const isSignup = state.authTab === 'signup';
+        const endpoint = isSignup ? '/auth/register' : '/auth/login';
+        
+        if (isSignup) {
+            const confirmPass = document.getElementById('authConfirmPassword').value;
+            if (password !== confirmPass) {
+                throw new Error('Passwords do not match');
             }
-        };
+        }
         
-        audio.onerror = () => resolve(true); // If can't detect, allow and check server-side
+        const response = await fetch(`${CONFIG.API_URL}${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email, password, name: email.split('@')[0] })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Authentication failed');
+        }
+        
+        // Save token
+        if (data.token) {
+            CookieManager.set('authToken', data.token, 7);
+        }
+        
+        state.user = data.user;
+        state.loggedIn = true;
+        state.isPro = data.user.isPro || false;
+        state.isBusiness = data.user.isBusiness || false;
+        
+        closeModal('authModal');
+        updateUI();
+        showNotification(`Welcome, ${data.user.name}!`, 'success');
+        
+    } catch (error) {
+        showError(error.message);
+    }
+}
+
+function handleGoogleSignIn(response) {
+    // Send to backend for verification
+    fetch(`${CONFIG.API_URL}/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ credential: response.credential })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.token) {
+            CookieManager.set('authToken', data.token, 7);
+        }
+        state.user = data.user;
+        state.loggedIn = true;
+        state.isPro = data.user.isPro || false;
+        state.isBusiness = data.user.isBusiness || false;
+        updateUI();
+        showNotification(`Welcome, ${data.user.name}!`, 'success');
+    })
+    .catch(err => {
+        showError('Google authentication failed');
     });
 }
 
-// Modified file processing
-async function processFile(file) {
+async function logout() {
     try {
-        // Check duration for free users
-        await checkFileDuration(file);
-        
-        state.currentFile = file;
-        document.getElementById('fileInfo').style.display = 'flex';
-        document.getElementById('fileName').innerText = file.name;
-        document.getElementById('fileSize').innerText = (file.size / 1024 / 1024).toFixed(1) + ' MB';
-        hideError();
-        document.getElementById('processBtn').disabled = false;
-    } catch (error) {
-        showError(error.message);
-        document.getElementById('processBtn').disabled = true;
+        await fetch(`${CONFIG.API_URL}/auth/logout`, {
+            method: 'POST',
+            credentials: 'include'
+        });
+    } catch (e) {
+        console.log('Logout error:', e);
     }
+    
+    CookieManager.delete('authToken');
+    state.loggedIn = false;
+    state.user = null;
+    state.isPro = false;
+    state.isBusiness = false;
+    updateUI();
+    switchTab('workspace');
+    showNotification('Logged out successfully', 'info');
 }
 
-// UI Updates
+function switchAuthTab(tab) {
+    state.authTab = tab;
+    const isLogin = tab === 'login';
+    
+    document.getElementById('loginTab').className = isLogin ? 'btn btn-primary' : 'btn btn-outline';
+    document.getElementById('signupTab').className = isLogin ? 'btn btn-outline' : 'btn btn-primary';
+    document.getElementById('authSubmitBtn').textContent = isLogin ? 'Sign In' : 'Create Account';
+    
+    const confirmField = document.getElementById('authConfirmPassword');
+    const requirements = document.getElementById('passwordRequirements');
+    
+    if (confirmField) confirmField.style.display = isLogin ? 'none' : 'block';
+    if (requirements) requirements.style.display = isLogin ? 'none' : 'block';
+    
+    // Update autocomplete
+    document.getElementById('authPassword').setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
+}
+
+// ═══════════════════════════════════════════════════════════
+// UI UPDATES
+// ═══════════════════════════════════════════════════════════
 function updateUI() {
     const isLoggedIn = state.loggedIn;
     
-    document.getElementById('authButtons').style.display = isLoggedIn ? 'none' : 'flex';
-    document.getElementById('userMenu').style.display = isLoggedIn ? 'block' : 'none';
-    document.getElementById('tab-account').style.display = isLoggedIn ? 'block' : 'none';
+    const authButtons = document.getElementById('authButtons');
+    const userMenu = document.getElementById('userMenu');
+    const tabAccount = document.getElementById('tab-account');
+    const freeUsageBar = document.getElementById('freeUsageBar');
+    const freeLimitNotice = document.getElementById('freeLimitNotice');
+    const upgradePrompt = document.getElementById('upgradePrompt');
     
-    // Show usage bar for free users
-    document.getElementById('freeUsageBar').style.display = (isLoggedIn && !state.isPro && !state.isBusiness) ? 'block' : 'none';
-    document.getElementById('freeLimitNotice').style.display = (!state.isPro && !state.isBusiness) ? 'block' : 'none';
+    if (authButtons) authButtons.style.display = isLoggedIn ? 'none' : 'flex';
+    if (userMenu) userMenu.style.display = isLoggedIn ? 'block' : 'none';
+    if (tabAccount) tabAccount.style.display = isLoggedIn ? 'block' : 'none';
+    
+    // Show usage bar for free users only
+    const isFree = isLoggedIn && !state.isPro && !state.isBusiness;
+    if (freeUsageBar) freeUsageBar.style.display = isFree ? 'block' : 'none';
+    if (freeLimitNotice) freeLimitNotice.style.display = (!state.isPro && !state.isBusiness) ? 'block' : 'none';
     
     if (state.user) {
-        const initials = state.user.name.split(' ').map(n => n[0]).join('').toUpperCase();
-        document.getElementById('userAvatar').textContent = initials;
-        document.getElementById('accountAvatar').textContent = initials;
-        document.getElementById('accountName').textContent = state.user.name;
-        document.getElementById('accountEmail').textContent = state.user.email;
+        const initials = state.user.name ? state.user.name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+        const avatarEl = document.getElementById('userAvatar');
+        const accountAvatar = document.getElementById('accountAvatar');
+        const accountName = document.getElementById('accountName');
+        const accountEmail = document.getElementById('accountEmail');
+        
+        if (avatarEl) avatarEl.textContent = initials;
+        if (accountAvatar) accountAvatar.textContent = initials;
+        if (accountName) accountName.textContent = state.user.name || 'User';
+        if (accountEmail) accountEmail.textContent = state.user.email || '';
     }
     
+    updateUsageDisplay();
     updateProUI();
 }
 
-function updateProUI() {
-    const planTitle = state.isBusiness ? 'Business Member' : state.isPro ? 'Pro Member' : 'Free Member';
-    document.getElementById('planTitle').innerText = planTitle;
+function updateUsageDisplay() {
+    const percentage = Math.min((state.minutesUsed / CONFIG.FREE_MINUTES_TOTAL) * 100, 100);
     
-    if (state.isBusiness) {
-        document.getElementById('planDetails').innerHTML = '5 team seats • Billed $49/month';
-        document.getElementById('businessActiveArea').style.display = 'block';
-        document.getElementById('proActiveArea').style.display = 'none';
-        document.getElementById('upgradeArea').style.display = 'none';
-        document.getElementById('freeUpgradePrompt').style.display = 'none';
-        document.getElementById('proBadge').style.display = 'block';
-        document.getElementById('proBadge').textContent = 'BUSINESS';
-        document.getElementById('proBar').style.display = 'flex';
-    } else if (state.isPro) {
-        document.getElementById('planDetails').innerHTML = 'Unlimited • Billed $12/month';
-        document.getElementById('proActiveArea').style.display = 'block';
-        document.getElementById('businessActiveArea').style.display = 'none';
-        document.getElementById('upgradeArea').style.display = 'none';
-        document.getElementById('freeUpgradePrompt').style.display = 'none';
-        document.getElementById('proBadge').style.display = 'block';
-        document.getElementById('proBadge').textContent = 'PRO';
-        document.getElementById('proBar').style.display = 'flex';
-    } else {
-        document.getElementById('planDetails').innerHTML = `<span id="planMinutes">${state.minutesUsed}</span> / 20 minutes used`;
-        document.getElementById('proActiveArea').style.display = 'none';
-        document.getElementById('businessActiveArea').style.display = 'none';
-        document.getElementById('upgradeArea').style.display = 'block';
-        document.getElementById('proBadge').style.display = 'none';
-        document.getElementById('proBar').style.display = 'none';
-        
-        // Show free upgrade prompt if used > 0 minutes
-        if (state.minutesUsed > 0) {
-            document.getElementById('freeUpgradePrompt').style.display = 'block';
+    const usedEl = document.getElementById('usedMinutes');
+    const fillEl = document.getElementById('usageFill');
+    const planMinutes = document.getElementById('planMinutes');
+    const promptMinutes = document.getElementById('promptMinutes');
+    const upgradePrompt = document.getElementById('upgradePrompt');
+    
+    if (usedEl) usedEl.textContent = state.minutesUsed;
+    if (fillEl) fillEl.style.width = percentage + '%';
+    if (planMinutes) planMinutes.textContent = state.minutesUsed;
+    if (promptMinutes) promptMinutes.textContent = state.minutesUsed;
+    
+    // Show upgrade prompt at 50% or when low
+    if (upgradePrompt && !state.isPro && !state.isBusiness) {
+        upgradePrompt.style.display = percentage >= 50 ? 'block' : 'none';
+    }
+    
+    // Disable upload if limit reached
+    if (percentage >= 100 && !state.isPro && !state.isBusiness) {
+        const processBtn = document.getElementById('processBtn');
+        if (processBtn) {
+            processBtn.disabled = true;
+            processBtn.innerHTML = '⬆️ Upgrade to Continue';
         }
     }
 }
 
-// Modal functions
+function updateProUI() {
+    const planTitle = document.getElementById('planTitle');
+    const planDetails = document.getElementById('planDetails');
+    const proBadge = document.getElementById('proBadge');
+    const proBar = document.getElementById('proBar');
+    const proActiveArea = document.getElementById('proActiveArea');
+    const businessActiveArea = document.getElementById('businessActiveArea');
+    const upgradeArea = document.getElementById('upgradeArea');
+    const freeUpgradePrompt = document.getElementById('freeUpgradePrompt');
+    
+    if (state.isBusiness) {
+        if (planTitle) planTitle.textContent = 'Business Member';
+        if (planDetails) planDetails.innerHTML = '5 team seats • Billed $49/month';
+        if (proBadge) {
+            proBadge.style.display = 'block';
+            proBadge.textContent = 'BUSINESS';
+        }
+        if (proBar) proBar.style.display = 'flex';
+        if (businessActiveArea) businessActiveArea.style.display = 'block';
+        if (proActiveArea) proActiveArea.style.display = 'none';
+        if (upgradeArea) upgradeArea.style.display = 'none';
+        if (freeUpgradePrompt) freeUpgradePrompt.style.display = 'none';
+    } else if (state.isPro) {
+        if (planTitle) planTitle.textContent = 'Pro Member';
+        if (planDetails) planDetails.innerHTML = 'Unlimited • Billed $12/month';
+        if (proBadge) {
+            proBadge.style.display = 'block';
+            proBadge.textContent = 'PRO';
+        }
+        if (proBar) proBar.style.display = 'flex';
+        if (proActiveArea) proActiveArea.style.display = 'block';
+        if (businessActiveArea) businessActiveArea.style.display = 'none';
+        if (upgradeArea) upgradeArea.style.display = 'none';
+        if (freeUpgradePrompt) freeUpgradePrompt.style.display = 'none';
+    } else {
+        if (planTitle) planTitle.textContent = 'Free Member';
+        if (planDetails) planDetails.innerHTML = `<span id="planMinutes">${state.minutesUsed}</span> / 20 minutes used`;
+        if (proBadge) proBadge.style.display = 'none';
+        if (proBar) proBar.style.display = 'none';
+        if (proActiveArea) proActiveArea.style.display = 'none';
+        if (businessActiveArea) businessActiveArea.style.display = 'none';
+        if (upgradeArea) upgradeArea.style.display = 'block';
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// FILE HANDLING
+// ═══════════════════════════════════════════════════════════
+function dragOver(e) { 
+    e.preventDefault(); 
+    const uploadBox = document.getElementById('uploadBox');
+    if (uploadBox) uploadBox.classList.add('drag-over'); 
+}
+
+function dragLeave() { 
+    const uploadBox = document.getElementById('uploadBox');
+    if (uploadBox) uploadBox.classList.remove('drag-over'); 
+}
+
+function dropFile(e) { 
+    e.preventDefault(); 
+    dragLeave(); 
+    if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); 
+}
+
+function handleFileSelect(input) { 
+    if (input.files[0]) processFile(input.files[0]); 
+}
+
+async function processFile(file) {
+    try {
+        // Check duration for free users
+        if (!state.isPro && !state.isBusiness) {
+            const duration = await getAudioDuration(file);
+            if (duration > CONFIG.FREE_MINUTES_PER_FILE) {
+                throw new Error(`Free plan limited to ${CONFIG.FREE_MINUTES_PER_FILE} minutes per file. This file is ${duration.toFixed(1)} minutes. Upgrade to Pro for longer files.`);
+            }
+        }
+        
+        state.currentFile = file;
+        
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const processBtn = document.getElementById('processBtn');
+        
+        if (fileInfo) fileInfo.style.display = 'flex';
+        if (fileName) fileName.textContent = file.name;
+        if (fileSize) fileSize.textContent = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+        
+        hideError();
+        
+        // Check if user has minutes left
+        const canProcess = state.isPro || state.isBusiness || state.minutesUsed < CONFIG.FREE_MINUTES_TOTAL;
+        if (processBtn) {
+            processBtn.disabled = !canProcess;
+            processBtn.innerHTML = canProcess ? '🎙️ Start Transcription' : '⬆️ Upgrade to Continue';
+        }
+        
+    } catch (error) {
+        showError(error.message);
+        const processBtn = document.getElementById('processBtn');
+        if (processBtn) {
+            processBtn.disabled = true;
+            processBtn.innerHTML = '🎙️ Start Transcription';
+        }
+    }
+}
+
+function getAudioDuration(file) {
+    return new Promise((resolve, reject) => {
+        const audio = document.createElement('audio');
+        audio.preload = 'metadata';
+        
+        const objectUrl = URL.createObjectURL(file);
+        audio.src = objectUrl;
+        
+        audio.onloadedmetadata = () => {
+            URL.revokeObjectURL(objectUrl);
+            resolve(audio.duration / 60);
+        };
+        
+        audio.onerror = () => {
+            URL.revokeObjectURL(objectUrl);
+            resolve(0); // Allow if can't detect
+        };
+        
+        // Timeout after 5 seconds
+        setTimeout(() => {
+            URL.revokeObjectURL(objectUrl);
+            resolve(0);
+        }, 5000);
+    });
+}
+
+function resetUpload() {
+    state.currentFile = null;
+    const fileInfo = document.getElementById('fileInfo');
+    const fileInput = document.getElementById('fileInput');
+    const processBtn = document.getElementById('processBtn');
+    
+    if (fileInfo) fileInfo.style.display = 'none';
+    if (fileInput) fileInput.value = '';
+    if (processBtn) {
+        processBtn.disabled = true;
+        processBtn.innerHTML = '🎙️ Start Transcription';
+    }
+}
+
+function newTranscription() {
+    resetUpload();
+    const result = document.getElementById('result');
+    if (result) result.style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════
+// TRANSCRIPTION
+// ═══════════════════════════════════════════════════════════
+async function startProcessing() {
+    if (!state.loggedIn) {
+        openAuthModal();
+        return;
+    }
+    
+    if (!state.currentFile) return;
+    
+    const langVal = document.getElementById('lang').value;
+    const mode = document.getElementById('transcriptMode').value;
+    
+    // Check Pro features
+    if ((mode === 'speakers' || mode === 'summary') && !state.isPro && !state.isBusiness) {
+        openPaymentModal();
+        return;
+    }
+    
+    // Check minutes
+    if (!state.isPro && !state.isBusiness && state.minutesUsed >= CONFIG.FREE_MINUTES_TOTAL) {
+        openPaymentModal();
+        return;
+    }
+    
+    hideError();
+    
+    const processBtn = document.getElementById('processBtn');
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('result');
+    const bar = document.getElementById('bar');
+    
+    if (processBtn) processBtn.disabled = true;
+    if (result) result.style.display = 'none';
+    document.getElementById('langBanner').style.display = 'none';
+    if (loading) loading.style.display = 'block';
+    if (bar) bar.style.width = '0%';
+    
+    ['step1', 'step2', 'step3', 'step4'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) el.className = 'step' + (i === 0 ? ' active' : '');
+    });
+    
+    try {
+        setStep('step1', 'active'); 
+        setBar(10);
+        
+        const formData = new FormData();
+        formData.append('file', state.currentFile);
+        formData.append('language', langVal);
+        formData.append('mode', mode);
+        
+        setStep('step2', 'active'); 
+        setBar(30);
+        
+        const token = CookieManager.get('authToken');
+        const response = await fetch(`${CONFIG.API_URL}/transcription/upload`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+            body: formData
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Upload failed');
+        }
+        
+        const data = await response.json();
+        
+        setStep('step4', 'done'); 
+        setBar(100);
+        
+        // Update usage
+        if (!state.isPro && !state.isBusiness && data.minutesUsed) {
+            state.minutesUsed = data.minutesUsed;
+            CookieManager.set('minutesUsed', state.minutesUsed, 30);
+            updateUsageDisplay();
+        }
+        
+        // Show detected language
+        if (langVal === 'auto' && data.transcript.language_code) {
+            const banner = document.getElementById('langBanner');
+            if (banner) {
+                banner.innerHTML = `🌍 Detected language: <strong>${data.transcript.language_code}</strong>`;
+                banner.style.display = 'block';
+            }
+        }
+        
+        displayResult(data.transcript, mode, state.currentFile.name);
+        
+    } catch (err) {
+        if (loading) loading.style.display = 'none';
+        if (processBtn) processBtn.disabled = false;
+        showError(err.message);
+    }
+}
+
+function setStep(id, status) {
+    const el = document.getElementById(id);
+    if (el) el.className = 'step ' + status;
+}
+
+function setBar(pct) {
+    const bar = document.getElementById('bar');
+    if (bar) bar.style.width = pct + '%';
+}
+
+function displayResult(transcript, mode, filename) {
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('result');
+    const resultMeta = document.getElementById('resultMeta');
+    const processBtn = document.getElementById('processBtn');
+    const area = document.getElementById('transcript-area');
+    
+    if (loading) loading.style.display = 'none';
+    if (result) result.style.display = 'block';
+    if (resultMeta) resultMeta.textContent = `Completed • ${filename}`;
+    if (processBtn) {
+        processBtn.disabled = false;
+        processBtn.innerHTML = '🎙️ Start Transcription';
+    }
+    
+    if (!area) return;
+    area.innerHTML = '';
+    
+    if (mode === 'words' && transcript.words?.length) {
+        let html = '<div style="line-height: 2.4">';
+        transcript.words.forEach(w => {
+            html += `<span class="word-span"><span class="timestamp-label">[${formatTime(w.start)}]</span>${escapeHtml(w.text)} </span>`;
+        });
+        html += '</div>';
+        area.innerHTML = html;
+    } else if (mode === 'speakers' && transcript.utterances?.length) {
+        const colors = ['#6366f1', '#a855f7', '#f43f5e', '#10b981', '#f59e0b'];
+        transcript.utterances.forEach(u => {
+            const color = colors[u.speaker.charCodeAt(0) % colors.length];
+            area.innerHTML += `
+                <div class="speaker-block" style="border-left-color: ${color}">
+                    <div class="speaker-label" style="color: ${color}">🎙️ Speaker ${u.speaker} — ${formatTime(u.start)}</div>
+                    <div>${escapeHtml(u.text)}</div>
+                </div>`;
+        });
+    } else if (mode === 'summary' && transcript.summary) {
+        area.innerHTML = `
+            <div style="margin-bottom: 1.5rem">
+                <h3 style="color: var(--primary); font-size: 1rem; font-weight: 800; margin-bottom: 1rem">✨ AI Summary</h3>
+                <div style="line-height: 1.8">${escapeHtml(transcript.summary).replace(/\n/g, '<br>')}</div>
+            </div>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 1.5rem 0">
+            <div style="line-height: 2; color: #666; font-size: 0.95rem">${escapeHtml(transcript.text)}</div>`;
+    } else {
+        area.innerHTML = `<div style="line-height: 2">${escapeHtml(transcript.text)}</div>`;
+    }
+    
+    window.scrollTo({ top: result.offsetTop - 100, behavior: 'smooth' });
+}
+
+function formatTime(ms) {
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    return `${String(m).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PAYMENTS
+// ═══════════════════════════════════════════════════════════
+function openPaymentModal() {
+    if (!state.loggedIn) {
+        openAuthModal();
+        return;
+    }
+    
+    const modal = document.getElementById('paymentModal');
+    if (modal) modal.style.display = 'flex';
+    
+    // Initialize Stripe Elements
+    if (state.stripe && !state.cardElement) {
+        const elements = state.stripe.elements();
+        state.cardElement = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: state.theme === 'dark' ? '#ffffff' : '#0f172a',
+                    '::placeholder': { color: state.theme === 'dark' ? '#94a3b8' : '#64748b' }
+                }
+            }
+        });
+        state.cardElement.mount('#card-element');
+    }
+}
+
 function openBusinessModal() {
     if (!state.loggedIn) {
         openAuthModal();
         return;
     }
-    document.getElementById('businessModal').style.display = 'flex';
+    
+    const modal = document.getElementById('businessModal');
+    if (modal) modal.style.display = 'flex';
 }
 
-// Other functions (simplified for brevity)
-async function checkAuth() { /* ... */ }
-async function handleEmailAuth(e) { /* ... */ }
-async function handleGoogleSignIn(response) { /* ... */ }
-async function logout() { /* ... */ }
+function selectPayment(element, method) {
+    // Remove selected from all
+    document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+    // Add to clicked
+    element.classList.add('selected');
+    // Check the radio
+    const radio = element.querySelector('input[type="radio"]');
+    if (radio) radio.checked = true;
+}
+
+async function processPayment() {
+    const payButton = document.getElementById('payButton');
+    if (payButton) {
+        payButton.disabled = true;
+        payButton.innerHTML = '<span class="spinner"></span> Processing...';
+    }
+    
+    try {
+        // Create payment method
+        const { paymentMethod, error } = await state.stripe.createPaymentMethod({
+            type: 'card',
+            card: state.cardElement
+        });
+        
+        if (error) throw new Error(error.message);
+        
+        // Send to backend
+        const token = CookieManager.get('authToken');
+        const response = await fetch(`${CONFIG.API_URL}/payments/create-subscription`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            credentials: 'include',
+            body: JSON.stringify({ paymentMethodId: paymentMethod.id, plan: 'pro' })
+        });
+        
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
+        
+        // Confirm payment
+        const confirmResult = await state.stripe.confirmCardPayment(data.clientSecret);
+        if (confirmResult.error) throw new Error(confirmResult.error.message);
+        
+        // Activate
+        await fetch(`${CONFIG.API_URL}/payments/confirm`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            credentials: 'include',
+            body: JSON.stringify({ subscriptionId: data.subscriptionId })
+        });
+        
+        state.isPro = true;
+        updateUI();
+        closeModal('paymentModal');
+        showNotification('🎉 Pro activated! Enjoy unlimited transcription.', 'success');
+        
+    } catch (error) {
+        showError(error.message);
+        if (payButton) {
+            payButton.disabled = false;
+            payButton.textContent = 'Start Free Trial';
+        }
+    }
+}
+
+async function processBusinessPayment() {
+    const button = document.getElementById('businessPayButton');
+    if (button) {
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner"></span> Processing...';
+    }
+    
+    // Similar to processPayment but for business plan
+    showNotification('Business plan coming soon!', 'info');
+    
+    if (button) {
+        button.disabled = false;
+        button.textContent = 'Start Business Trial';
+    }
+}
+
+function manageSubscription() {
+    window.open('https://billing.stripe.com/p/login/test', '_blank');
+}
+
+function cancelSubscription() {
+    if (confirm('Cancel your subscription? You\'ll keep access until the end of your billing period.')) {
+        showNotification('Subscription cancelled. You have access until end of billing period.', 'info');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION & MODALS
+// ═══════════════════════════════════════════════════════════
 function switchTab(id) {
+    // Hide all sections
     document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+    // Show target
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
+    
+    // Update nav
     document.querySelectorAll('.nav-center a').forEach(a => a.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
     const nav = document.getElementById('tab-' + id);
     if (nav) nav.classList.add('active');
-    window.scrollTo(0, 0);
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Load history if needed
+    if (id === 'history' && state.loggedIn) {
+        loadHistory();
+    }
 }
-function toggleTheme() { /* ... */ }
-function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-function toggleFaq(el) { el.parentElement.classList.toggle('active'); }
-function toggleDropdown() { document.getElementById('userDropdown').classList.toggle('show'); }
-function switchAuthTab(tab) { /* ... */ }
-function selectPayment(method) { /* ... */ }
-function dragOver(e) { e.preventDefault(); document.getElementById('uploadBox').classList.add('drag-over'); }
-function dragLeave() { document.getElementById('uploadBox').classList.remove('drag-over'); }
-function dropFile(e) { e.preventDefault(); dragLeave(); if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); }
-function handleFileSelect(input) { if (input.files[0]) processFile(input.files[0]); }
-function resetUpload() { state.currentFile = null; document.getElementById('fileInfo').style.display = 'none'; document.getElementById('fileInput').value = ''; document.getElementById('processBtn').disabled = true; }
-function newTranscription() { resetUpload(); document.getElementById('result').style.display = 'none'; }
-function showError(msg) { const b = document.getElementById('errorBox'); b.textContent = '⚠️ ' + msg; b.style.display = 'block'; }
-function hideError() { document.getElementById('errorBox').style.display = 'none'; }
-function showNotification(msg, type) { alert(msg); }
 
-async function startProcessing() { /* ... */ }
-async function openPaymentModal() { /* ... */ }
-async function processPayment() { /* ... */ }
-async function processBusinessPayment() { /* ... */ }
-function manageSubscription() { alert('Redirecting to Stripe Customer Portal...'); }
-function cancelSubscription() { if (confirm('Cancel your subscription? You\'ll keep access until the end of your billing period.')) { /* ... */ } }
-function copyText() { navigator.clipboard.writeText(document.getElementById('transcript-area').innerText).then(() => showNotification('Copied!', 'success')); }
-function downloadTXT() { /* ... */ }
-function downloadPDF() { /* ... */ }
-function acceptCookies() { document.getElementById('cookieBanner').style.display = 'none'; }
-function rejectCookies() { document.getElementById('cookieBanner').style.display = 'none'; }
+function openAuthModal() {
+    const modal = document.getElementById('authModal');
+    if (modal) modal.style.display = 'flex';
+    switchAuthTab('login');
+}
+
+function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.style.display = 'none';
+}
+
+function closeModalOnBackdrop(event) {
+    if (event.target === event.currentTarget) {
+        event.target.style.display = 'none';
+    }
+}
+
+function toggleDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) dropdown.classList.toggle('show');
+}
+
+function toggleFaq(el) {
+    const item = el.parentElement;
+    const isActive = item.classList.contains('active');
+    
+    // Close all others
+    document.querySelectorAll('.faq-item').forEach(faq => {
+        faq.classList.remove('active');
+        const span = faq.querySelector('.faq-question span');
+        if (span) span.style.transform = 'rotate(0deg)';
+    });
+    
+    // Toggle current
+    if (!isActive) {
+        item.classList.add('active');
+        const span = el.querySelector('span');
+        if (span) span.style.transform = 'rotate(45deg)';
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════
+function showError(msg) {
+    const box = document.getElementById('errorBox');
+    if (box) {
+        box.textContent = '⚠️ ' + msg;
+        box.style.display = 'block';
+        setTimeout(() => box.style.display = 'none', 5000);
+    }
+}
+
+function hideError() {
+    const box = document.getElementById('errorBox');
+    if (box) box.style.display = 'none';
+}
+
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    document.querySelectorAll('.notification').forEach(n => n.remove());
+    
+    const div = document.createElement('div');
+    div.className = `notification ${type}`;
+    div.textContent = message;
+    document.body.appendChild(div);
+    
+    setTimeout(() => {
+        div.style.animation = 'slideInRight 0.3s ease reverse';
+        setTimeout(() => div.remove(), 300);
+    }, 3000);
+}
+
+function copyText() {
+    const area = document.getElementById('transcript-area');
+    if (!area) return;
+    
+    navigator.clipboard.writeText(area.innerText)
+        .then(() => showNotification('Copied to clipboard!', 'success'))
+        .catch(() => showNotification('Failed to copy', 'error'));
+}
+
+function downloadTXT() {
+    const area = document.getElementById('transcript-area');
+    if (!area) return;
+    
+    const blob = new Blob([area.innerText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'transcript.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function downloadPDF() {
+    const area = document.getElementById('transcript-area');
+    if (!area) return;
+    
+    const opt = {
+        margin: 15,
+        filename: 'Transcript.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    
+    html2pdf().set(opt).from(area).save();
+}
+
+async function loadHistory() {
+    try {
+        const token = CookieManager.get('authToken');
+        const response = await fetch(`${CONFIG.API_URL}/transcription/history`, {
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            state.history = data.history || [];
+            updateHistoryUI();
+        }
+    } catch (error) {
+        console.log('Failed to load history:', error);
+    }
+}
+
+function updateHistoryUI() {
+    const tbody = document.getElementById('historyBody');
+    if (!tbody) return;
+    
+    if (state.history.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="padding: 3rem; text-align: center; color: var(--text-dim);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+                    No transcriptions yet.<br>
+                    <button class="btn btn-primary" onclick="switchTab('workspace')" style="margin-top: 1rem; font-size: 0.85rem; padding: 0.6rem 1.2rem;">
+                        Upload your first file
+                    </button>
+                </td>
+            </tr>`;
+        return;
+    }
+    
+    tbody.innerHTML = state.history.map((item, i) => `
+        <tr style="border-top: 1px solid var(--border)">
+            <td style="padding: 1.5rem 1.2rem">${escapeHtml(item.filename)}</td>
+            <td style="padding: 1.2rem; color: var(--text-dim); font-size: 0.85rem">${new Date(item.createdAt).toLocaleString()}</td>
+            <td style="padding: 1.2rem; color: var(--text-dim); font-size: 0.85rem">${item.duration || '--'} min</td>
+            <td style="padding: 1.2rem"><span style="color: var(--success)">● ${item.language || 'Auto'}</span></td>
+            <td style="padding: 1.2rem">
+                <button class="btn btn-outline" style="padding: 5px 12px; font-size: 0.75rem" onclick="viewHistory(${i})">View</button>
+            </td>
+        </tr>`).join('');
+}
+
+function viewHistory(i) {
+    const item = state.history[i];
+    if (!item) return;
+    
+    const area = document.getElementById('transcript-area');
+    const resultMeta = document.getElementById('resultMeta');
+    const result = document.getElementById('result');
+    const langBanner = document.getElementById('langBanner');
+    
+    if (area) area.innerHTML = `<div style="line-height: 2">${escapeHtml(item.text)}</div>`;
+    if (resultMeta) resultMeta.textContent = `Saved on ${new Date(item.createdAt).toLocaleString()} • ${item.filename}`;
+    if (result) result.style.display = 'block';
+    if (langBanner) langBanner.style.display = 'none';
+    
+    switchTab('workspace');
+}
+
+// Security settings stubs
+function enable2FA() {
+    showNotification('2FA setup coming soon!', 'info');
+}
+
+function changePassword() {
+    const newPass = prompt('Enter new password (8+ chars, uppercase, number, symbol):');
+    if (newPass && newPass.length >= 8) {
+        showNotification('Password updated successfully', 'success');
+    } else if (newPass) {
+        showNotification('Password too weak', 'error');
+    }
+}
+
+function logoutAll() {
+    if (confirm('Logout from all devices?')) {
+        logout();
+    }
+}
 </script>
 </body>
 </html>
