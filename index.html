@@ -1600,12 +1600,79 @@ function downloadTXT() {
 function downloadPDF() {
     const area = document.getElementById('transcript-area');
     if (!area) return;
-    html2pdf().set({
-        margin: 15, filename: 'Transcript.pdf',
+
+    // Maak een tijdelijke div met alleen schone tekst (geen timestamps)
+    const cleanDiv = document.createElement('div');
+    cleanDiv.style.cssText = `
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.8;
+        color: #1e293b;
+        padding: 20px;
+    `;
+
+    // Haal alleen de tekst op, zonder timestamp labels
+    const words = area.querySelectorAll('.word-span');
+    if (words.length > 0) {
+        // Word-by-word modus — verwijder timestamps
+        let cleanText = '';
+        words.forEach(w => {
+            const textOnly = w.innerText.replace(/\[\d{2}:\d{2}\]/g, '').trim();
+            if (textOnly) cleanText += textOnly + ' ';
+        });
+        cleanDiv.innerHTML = `<div style="line-height: 2">${cleanText}</div>`;
+    } else {
+        // Standaard modus — gewoon de tekst overnemen
+        cleanDiv.innerHTML = area.innerHTML;
+    }
+
+    const opt = {
+        margin: 15,
+        filename: 'Transcript.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    }).from(area).save();
+    };
+
+    html2pdf().set(opt).from(cleanDiv).save();
+}function downloadPDF() {
+    const area = document.getElementById('transcript-area');
+    if (!area) return;
+
+    // Maak een tijdelijke div met alleen schone tekst (geen timestamps)
+    const cleanDiv = document.createElement('div');
+    cleanDiv.style.cssText = `
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.8;
+        color: #1e293b;
+        padding: 20px;
+    `;
+
+    // Haal alleen de tekst op, zonder timestamp labels
+    const words = area.querySelectorAll('.word-span');
+    if (words.length > 0) {
+        // Word-by-word modus — verwijder timestamps
+        let cleanText = '';
+        words.forEach(w => {
+            const textOnly = w.innerText.replace(/\[\d{2}:\d{2}\]/g, '').trim();
+            if (textOnly) cleanText += textOnly + ' ';
+        });
+        cleanDiv.innerHTML = `<div style="line-height: 2">${cleanText}</div>`;
+    } else {
+        // Standaard modus — gewoon de tekst overnemen
+        cleanDiv.innerHTML = area.innerHTML;
+    }
+
+    const opt = {
+        margin: 15,
+        filename: 'Transcript.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(cleanDiv).save();
 }
 
 async function loadHistory() {
