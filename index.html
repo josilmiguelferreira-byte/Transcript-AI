@@ -1203,57 +1203,45 @@
 /* ══════════════════════════════════════════════════════════
    CONFIG
 ══════════════════════════════════════════════════════════ */
-/* ════════════════════════════════════════════════════════════
-   !!  CONFIGURATION — FILL IN YOUR OWN VALUES BELOW  !!
-   ════════════════════════════════════════════════════════════
+// ============================================================
+// ✏️  HIER INVULLEN — ALLEEN DEZE REGELS AANPASSEN
+// ============================================================
 
-   1. API_URL
-      → Your Railway (or other) backend URL. No trailing slash.
-      → Example: 'https://your-app.up.railway.app/api'
-      → Find it in: Railway dashboard → your project → domain
-
-   2. STRIPE_KEY
-      → Your Stripe PUBLISHABLE key (starts with pk_live_ or pk_test_)
-      → Find it in: https://dashboard.stripe.com/apikeys
-      → Use pk_test_ for testing, pk_live_ for production
-      → NEVER use your secret key (sk_) here!
-
-   3. GOOGLE_CLIENT_ID
-      → Your Google OAuth 2.0 Client ID
-      → Create one at: https://console.cloud.google.com/apis/credentials
-      → Under "Authorized JavaScript origins" add your domain (e.g. https://yoursite.com)
-      → Format: XXXXXXXXXX-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-
-   4. STRIPE_BILLING_PORTAL
-      → Your Stripe Customer Portal link (for subscription management)
-      → Activate at: https://dashboard.stripe.com/settings/billing/portal
-      → Then copy the link from: https://billing.stripe.com/p/login/YOUR_ID
-
-   5. CONTACT_EMAIL
-      → Your support/contact email shown on the pricing page
-
-════════════════════════════════════════════════════════════ */
 const CFG = {
-    // ↓ REQUIRED: Your backend API base URL (no trailing slash)
-    API: 'https://transcriptai-backend-production.up.railway.app/api',  // ← CHANGE THIS
 
-    // ↓ REQUIRED: Stripe publishable key (pk_live_... or pk_test_...)
-    STRIPE_KEY: 'pk_test_51T5DoOGvOC50wJThsFXYr2euNdNIKeWOJ7Vn3OxwAOfGvDaxXLGGN1O7rGT1C2Lmg4zZBgNVt5hfuKRPVoampUtK00o0KhTrs8',  // ← CHANGE THIS
+    // 1️⃣  BACKEND URL  (jouw Railway server)
+    //     Eindigt altijd op /api  —  geen schuine streep daarna
+    //     Vind je op: railway.app → jouw project → Settings → Domains
+    API: 'https://transcriptai-backend-production.up.railway.app/api',
 
-    // ↓ REQUIRED: Google OAuth Client ID (from console.cloud.google.com)
-    GOOGLE_CLIENT_ID: '632957367846-m278vdl3ckru9ginlfcinsv5gsbp6d0p.apps.googleusercontent.com',  // ← CHANGE THIS
+    // 2️⃣  STRIPE PUBLISHABLE KEY  (begint met pk_live_ of pk_test_)
+    //     Vind je op: dashboard.stripe.com/apikeys
+    //     ⚠️  NOOIT je Secret Key (sk_...) hier invullen!
+    STRIPE_KEY: 'pk_test_51T5DoB2dH16RYdsmiZNRo9iXRAMTfk8lc0ukZiuhaCnIrX7A2vTbqTG6SETScPiJFjaIJeYTFZpSISgIDmoPq64O009O1QM8lY',
 
-    // ↓ REQUIRED: Your Stripe customer billing portal URL
-    STRIPE_BILLING_PORTAL: 'https://billing.stripe.com/p/login/test',  // ← CHANGE THIS
+    // 3️⃣  STRIPE BILLING PORTAL URL
+    //     Vind je op: dashboard.stripe.com/settings/billing/portal
+    //     Klik op "Activate" en kopieer de link
+    STRIPE_BILLING_PORTAL: 'https://billing.stripe.com/p/login/test_6oU9AMdV771q2rNaKq8EM00',
 
-    // ↓ OPTIONAL: Contact email shown on pricing page
-    CONTACT_EMAIL: 'enterprise@transcriptai.com',  // ← CHANGE THIS
+    // 4️⃣  GOOGLE CLIENT ID  (optioneel — voor inloggen met Google)
+    //     Laat leeg ('') als je dit niet wilt gebruiken
+    //     Vind je op: console.cloud.google.com/apis/credentials
+    GOOGLE_CLIENT_ID: '632957367846-m278vdl3ckru9ginlfcinsv5gsbp6d0p.apps.googleusercontent.com',
 
-    // ↓ Plan limits — adjust freely
-    FREE_TOTAL: 20,        // total free minutes per account
-    FREE_PER_FILE: 10,     // max minutes per file on free plan
-    PRO_MONTHLY: 3000,     // Pro plan: minutes per month (50 hours)
+    // 5️⃣  CONTACT E-MAILADRES  (wordt getoond op de pricing pagina)
+    CONTACT_EMAIL: 'transcriptiai@gmail.com',
+
+    // ── Limieten (hoef je niet te wijzigen) ──────────────────
+    FREE_TOTAL: 20,        // gratis minuten totaal per account
+    FREE_PER_FILE: 10,     // max minuten per bestand (gratis plan)
+    PRO_MONTHLY: 5000,     // Pro plan: minuten per maand (50 uur)
+
 };
+
+// ============================================================
+// ✅  KLAAR — de rest van de code hoef je NIET aan te passen
+// ============================================================
 
 /* ══════════════════════════════════════════════════════════
    STATE
