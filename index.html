@@ -261,6 +261,12 @@
         .tier-price { font-size: 2.8rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1; }
         .tier-price sub { font-size: 1rem; font-weight: 500; color: var(--text-dim); letter-spacing: 0; }
         .tier-billing { font-size: 0.78rem; color: var(--text-dim); margin: 0.5rem 0 1.5rem; font-weight: 500; }
+        .tier-price-was { font-size: 1.1rem; color: var(--text-dim); text-decoration: line-through; margin-bottom: 0.15rem; font-weight: 500; }
+        .tier-discount-badge { display: inline-block; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.8px; padding: 3px 9px; border-radius: 20px; margin-left: 8px; vertical-align: middle; text-transform: uppercase; }
+        .badge-current { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .btn-current { background: rgba(16,185,129,0.12); border: 1.5px solid #10b981; color: #10b981; cursor: default; font-weight: 700; }
+        .btn-current:hover { transform: none; box-shadow: none; background: rgba(16,185,129,0.12); }
+        .tier-ai-badge { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); margin-bottom: 1rem; padding: 0.45rem 0.75rem; background: var(--glass); border-radius: 8px; border: 1px solid var(--border); width: fit-content; }
         .tier-features { list-style: none; flex: 1; border-top: 1px solid var(--border); padding-top: 1.3rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.7rem; }
         .tier-features li { font-size: 0.83rem; color: var(--text-mid); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
         .tier-features li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
@@ -442,7 +448,7 @@
                 <div>
                     <div class="hero-badge"><span></span>AI-Powered • 99 Languages</div>
                     <h1 class="hero-title">Audio into text,<br><span class="gradient-text">instantly.</span></h1>
-                    <p class="hero-desc">Upload any audio or video and get a perfect transcript in seconds. Speaker detection, timestamps, summaries — powered by AssemblyAI.</p>
+                    <p class="hero-desc">Upload any audio or video and get a perfect transcript in seconds. Speaker detection, timestamps, summaries — powered by Whisper AI (free) and AssemblyAI (Pro & Business).</p>
                     <div class="hero-ctas">
                         <button class="btn btn-primary btn-xl" onclick="showPage('workspace')">🎙️ Start Transcribing — Free</button>
                         <button class="btn btn-outline btn-xl" onclick="showPage('pricing')">View Pricing</button>
@@ -478,7 +484,7 @@
                         <div style="display:flex;gap:8px;margin-top:1rem">
                             <div style="flex:1;padding:0.6rem;background:rgba(91,94,244,0.1);border-radius:10px;text-align:center;font-size:0.72rem;font-weight:700;color:var(--primary)">🎙️ 2 Speakers</div>
                             <div style="flex:1;padding:0.6rem;background:rgba(16,185,129,0.1);border-radius:10px;text-align:center;font-size:0.72rem;font-weight:700;color:var(--success)">🌍 EN Detected</div>
-                            <div style="flex:1;padding:0.6rem;background:rgba(155,93,229,0.1);border-radius:10px;text-align:center;font-size:0.72rem;font-weight:700;color:var(--secondary)">AssemblyAI Powered</div>
+                            <div style="flex:1;padding:0.6rem;background:rgba(155,93,229,0.1);border-radius:10px;text-align:center;font-size:0.72rem;font-weight:700;color:var(--secondary)">Whisper AI &amp; AssemblyAI</div>
                         </div>
                     </div>
                 </div>
@@ -494,7 +500,7 @@
             </div>
             <div class="features-grid">
                 <div class="feature-card"><div class="feat-icon">🌍</div><div class="feat-title">99 Languages</div><div class="feat-desc">Auto-detect or manually select. From English to Swahili — we've got you covered.</div></div>
-                <div class="feature-card"><div class="feat-icon">⚡</div><div class="feat-title">Lightning Fast</div><div class="feat-desc">Get transcripts in seconds, not minutes. Powered by AssemblyAI's latest models.</div></div>
+                <div class="feature-card"><div class="feat-icon">⚡</div><div class="feat-title">Lightning Fast</div><div class="feat-desc">Get transcripts in seconds, not minutes. Free plan uses Whisper AI; Pro &amp; Business use AssemblyAI's premium models for higher accuracy and speaker detection.</div></div>
                 <div class="feature-card"><div class="feat-icon">🎙️</div><div class="feat-title">Speaker Detection</div><div class="feat-desc">Automatically identify who said what. Perfect for interviews and meetings.</div></div>
                 <div class="feature-card"><div class="feat-icon">✨</div><div class="feat-title">AI Summaries</div><div class="feat-desc">Get key points and summaries extracted automatically from your recordings.</div></div>
                 <div class="feature-card"><div class="feat-icon">⏱️</div><div class="feat-title">Word Timestamps</div><div class="feat-desc">Every word is timestamped so you can jump right to the right moment.</div></div>
@@ -547,7 +553,7 @@
         <div class="card card-padded">
             <div class="workspace-header">
                 <h1>AI Neural Transcription</h1>
-                <p>Powered by AssemblyAI — supports 99 languages with auto-detection.</p>
+                <p>Free plan powered by Whisper AI. Pro &amp; Business powered by AssemblyAI — supports 99 languages, speaker detection, and summaries.</p>
             </div>
 
             <div class="config-warn" id="configWarn">⚠️ Backend not configured or unreachable. Check your CONFIG.API_URL setting.</div>
@@ -747,12 +753,13 @@
             <h1 class="section-title">Simple, transparent pricing</h1>
             <p class="section-sub">Start free, upgrade when you need more. All paid plans billed monthly.</p>
         </div>
-        <div class="pricing-grid">
+        <div class="pricing-grid" id="pricingGrid">
             <!-- FREE -->
-            <div class="tier">
-                <div class="tier-badge badge-free">LIMITED FREE</div>
+            <div class="tier" id="tierFree">
+                <div class="tier-badge badge-free" id="badgeFree">LIMITED FREE</div>
                 <div class="tier-name">Free</div>
                 <div class="tier-tagline">Perfect for trying out TranscriptAI</div>
+                <div class="tier-ai-badge">🎤 Powered by Whisper AI</div>
                 <div class="tier-price">€0<sub>/month</sub></div>
                 <div class="tier-billing">No credit card required</div>
                 <ul class="tier-features">
@@ -767,17 +774,21 @@
                     <li class="locked">Priority processing</li>
                     <li style="color:var(--text-dim);opacity:0.6">Ads shown</li>
                 </ul>
-                <button class="btn btn-outline btn-full" onclick="showPage('workspace')">Get Started Free</button>
+                <button class="btn btn-outline btn-full" id="btnFree" onclick="showPage('workspace')">Get Started Free</button>
             </div>
             <!-- PRO -->
-            <div class="tier featured">
-                <div class="tier-badge badge-popular">MOST POPULAR</div>
+            <div class="tier featured" id="tierPro">
+                <div class="tier-badge badge-popular" id="badgePro">MOST POPULAR</div>
                 <div class="tier-name">Pro</div>
                 <div class="tier-tagline">For creators, journalists, and power users</div>
-                <div class="tier-price">€12<sub>/month</sub></div>
-                <div class="tier-billing">Billed monthly • Cancel anytime</div>
+                <div class="tier-ai-badge">⚡ Powered by AssemblyAI</div>
+                <div id="proPriceWrap">
+                    <div class="tier-price-was">€19<span class="tier-discount-badge">-37%</span></div>
+                    <div class="tier-price">€12<sub>/month</sub></div>
+                </div>
+                <div class="tier-billing" id="tierBillingPro">Billed monthly • Cancel anytime</div>
                 <ul class="tier-features">
-                    <li class="highlight">3000 minutes / month (50 hours)</li>
+                    <li class="highlight">3,000 minutes / month (50 hours)</li>
                     <li>Files up to 5GB (hours long)</li>
                     <li>🎙️ Speaker Detection</li>
                     <li>✨ Auto Summary & Key Points</li>
@@ -788,15 +799,19 @@
                     <li>TXT & PDF export</li>
                     <li class="highlight">No ads</li>
                 </ul>
-                <button class="btn btn-primary btn-full" onclick="openPayModal('pro')">Upgrade to Pro</button>
+                <button class="btn btn-primary btn-full" id="btnPro" onclick="openPayModal('pro')">Upgrade to Pro</button>
             </div>
             <!-- BUSINESS -->
-            <div class="tier">
-                <div class="tier-badge badge-team">TEAMS</div>
+            <div class="tier" id="tierBusiness">
+                <div class="tier-badge badge-team" id="badgeBusiness">TEAMS</div>
                 <div class="tier-name">Business</div>
                 <div class="tier-tagline">For teams, agencies & organisations</div>
-                <div class="tier-price">€49<sub>/month</sub></div>
-                <div class="tier-billing">Billed monthly • Cancel anytime</div>
+                <div class="tier-ai-badge">⚡ Powered by AssemblyAI</div>
+                <div id="bizPriceWrap">
+                    <div class="tier-price-was">€79<span class="tier-discount-badge">-38%</span></div>
+                    <div class="tier-price">€49<sub>/month</sub></div>
+                </div>
+                <div class="tier-billing" id="tierBillingBiz">Billed monthly • Cancel anytime</div>
                 <ul class="tier-features">
                     <li class="highlight">Unlimited transcription</li>
                     <li class="highlight">5 team seats included</li>
@@ -810,7 +825,7 @@
                     <li>Dedicated account support</li>
                     <li class="highlight">No ads</li>
                 </ul>
-                <button class="btn btn-primary btn-full" style="background:linear-gradient(135deg,var(--secondary),var(--primary))" onclick="openPayModal('business')">Upgrade to Business</button>
+                <button class="btn btn-primary btn-full" id="btnBusiness" style="background:linear-gradient(135deg,var(--secondary),var(--primary))" onclick="openPayModal('business')">Upgrade to Business</button>
             </div>
         </div>
         <div style="text-align:center;margin-top:2rem;padding:1.5rem;background:var(--glass);border-radius:16px;border:1px solid var(--border)">
@@ -1727,6 +1742,7 @@ function updateUI() {
     updateModeOptions();
     updateUsageDisplay();
     updateAccountUI();
+    updatePricingUI();
 }
 
 // FIX #8: Show Pro hint when Pro-only option is selected by non-Pro user
@@ -1764,6 +1780,75 @@ function updateUsageDisplay() {
         const btn = document.getElementById('startBtn');
         if (btn) { btn.disabled = true; btn.textContent = '⬆️ Upgrade to Continue'; }
     }
+}
+
+function updatePricingUI() {
+    const plan = S.isBusiness ? 'business' : S.isPro ? 'pro' : 'free';
+
+    // Badge updates
+    const badgeFree     = document.getElementById('badgeFree');
+    const badgePro      = document.getElementById('badgePro');
+    const badgeBusiness = document.getElementById('badgeBusiness');
+    if (badgeFree)     badgeFree.textContent     = plan === 'free'     ? '✓ CURRENT PLAN' : 'LIMITED FREE';
+    if (badgePro)      badgePro.textContent       = plan === 'pro'      ? '✓ CURRENT PLAN' : 'MOST POPULAR';
+    if (badgeBusiness) badgeBusiness.textContent  = plan === 'business' ? '✓ CURRENT PLAN' : 'TEAMS';
+
+    if (badgeFree)     badgeFree.className     = plan === 'free'     ? 'tier-badge badge-current' : 'tier-badge badge-free';
+    if (badgePro)      badgePro.className       = plan === 'pro'      ? 'tier-badge badge-current' : 'tier-badge badge-popular';
+    if (badgeBusiness) badgeBusiness.className  = plan === 'business' ? 'tier-badge badge-current' : 'tier-badge badge-team';
+
+    // Button updates
+    const btnFree     = document.getElementById('btnFree');
+    const btnPro      = document.getElementById('btnPro');
+    const btnBusiness = document.getElementById('btnBusiness');
+
+    if (btnFree) {
+        if (plan === 'free') {
+            btnFree.textContent = '✓ Current Plan';
+            btnFree.className = 'btn btn-current btn-full';
+            btnFree.onclick = null;
+        } else {
+            btnFree.textContent = 'Get Started Free';
+            btnFree.className = 'btn btn-outline btn-full';
+            btnFree.onclick = () => showPage('workspace');
+        }
+    }
+    if (btnPro) {
+        if (plan === 'pro') {
+            btnPro.textContent = '✓ Current Plan';
+            btnPro.className = 'btn btn-current btn-full';
+            btnPro.onclick = null;
+        } else if (plan === 'business') {
+            btnPro.textContent = 'Downgrade to Pro';
+            btnPro.className = 'btn btn-outline btn-full';
+            btnPro.onclick = () => manageSubscription();
+        } else {
+            btnPro.textContent = 'Upgrade to Pro';
+            btnPro.className = 'btn btn-primary btn-full';
+            btnPro.onclick = () => openPayModal('pro');
+        }
+    }
+    if (btnBusiness) {
+        if (plan === 'business') {
+            btnBusiness.textContent = '✓ Current Plan';
+            btnBusiness.className = 'btn btn-current btn-full';
+            btnBusiness.style.background = '';
+            btnBusiness.onclick = null;
+        } else {
+            btnBusiness.textContent = plan === 'pro' ? 'Upgrade to Business' : 'Upgrade to Business';
+            btnBusiness.className = 'btn btn-primary btn-full';
+            btnBusiness.style.background = 'linear-gradient(135deg,var(--secondary),var(--primary))';
+            btnBusiness.onclick = () => openPayModal('business');
+        }
+    }
+
+    // Billing line: replace with "Active subscription" for current plan
+    const billingPro = document.getElementById('tierBillingPro');
+    const billingBiz = document.getElementById('tierBillingBiz');
+    if (billingPro) billingPro.textContent = plan === 'pro'      ? '✓ Active subscription' : 'Billed monthly • Cancel anytime';
+    if (billingBiz) billingBiz.textContent = plan === 'business' ? '✓ Active subscription' : 'Billed monthly • Cancel anytime';
+    if (billingPro) billingPro.style.color = plan === 'pro'      ? '#10b981' : '';
+    if (billingBiz) billingBiz.style.color = plan === 'business' ? '#10b981' : '';
 }
 
 function updateAccountUI() {
