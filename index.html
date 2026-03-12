@@ -601,7 +601,7 @@
                 <h3>Upload Audio / Video</h3>
                 <p>Drag your file here or click to browse</p>
                 <p style="margin-top:0.4rem">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC</p>
-                <div class="free-badge" id="freeLimitBadge" style="display:none">⏱️ Free plan: max 10 min per file</div>
+                <div class="free-badge" id="freeLimitBadge" style="display:none">⏱️ Free plan: max 10 min &amp; 25 MB per file</div>
             </div>
 
             <div id="fileChip" style="display:none" class="file-chip mt2">
@@ -1317,6 +1317,8 @@ const CFG = {
     CONTACT_EMAIL: 'transcriptiai@gmail.com',
     FREE_TOTAL: 20,
     FREE_PER_FILE: 10,
+    FREE_MAX_MB: 25,       // Whisper API hard limit is 25MB
+    PRO_MAX_MB: 500,       // Pro/Business: 500MB
     PRO_MONTHLY: 3000,
 };
 
@@ -1901,21 +1903,39 @@ async function handleFileObj(file) {
     const ok = allowed.some(t => file.type.startsWith(t)) || /\.(mp3|mp4|wav|m4a|webm|ogg|flac|aac|wma)$/i.test(file.name);
     if (!ok) { showErr('Unsupported file type. Please upload MP3, MP4, WAV, M4A, WEBM, OGG or FLAC.'); return; }
 
+    const fileMB = file.size / 1024 / 1024;
+
+    // File size gate — checked BEFORE duration to give a clear error immediately
     if (!S.isPro && !S.isBusiness) {
-        // FIX #11: getAudioDuration race condition fixed — use a flag
+        if (fileMB > CFG.FREE_MAX_MB) {
+            showErr(
+                `Free plan: maximum file size is ${CFG.FREE_MAX_MB} MB (Whisper AI limit). ` +
+                `Your file is ${fileMB.toFixed(1)} MB. Upgrade to Pro for files up to ${CFG.PRO_MAX_MB} MB.`
+            );
+            openPayModal('pro');
+            return;
+        }
+        // Duration check for free users
         try {
             const dur = await getAudioDuration(file);
             if (dur > 0 && dur > CFG.FREE_PER_FILE) {
                 showErr(`Free plan: max ${CFG.FREE_PER_FILE} minutes per file. This file is ${dur.toFixed(1)} min. Upgrade to Pro.`);
+                openPayModal('pro');
                 return;
             }
-        } catch (e) { /* If duration check fails, let the backend enforce */ }
+        } catch (e) { /* If duration check fails, backend enforces */ }
+    } else {
+        // Pro/Business: still enforce a hard upper limit
+        if (fileMB > CFG.PRO_MAX_MB) {
+            showErr(`Maximum file size is ${CFG.PRO_MAX_MB} MB. Your file is ${fileMB.toFixed(1)} MB.`);
+            return;
+        }
     }
 
     S.currentFile = file;
     document.getElementById('fileChip').style.display = 'flex';
     document.getElementById('chipName').textContent = file.name;
-    document.getElementById('chipSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+    document.getElementById('chipSize').textContent = fileMB.toFixed(2) + ' MB';
     hideErr();
 
     const canGo = S.isPro || S.isBusiness || S.minutesUsed < CFG.FREE_TOTAL;
@@ -1980,24 +2000,45 @@ async function startTranscription() {
     ['ps1', 'ps2', 'ps3', 'ps4'].forEach((id, i) => setPStep(id, i === 0 ? 'active' : ''));
 
     try {
-        setPStep('ps1', 'active'); setProgress(10);
+        setPStep('ps1', 'active'); setProgress(5);
         const fd = new FormData();
         fd.append('file', S.currentFile); fd.append('language', lang); fd.append('mode', mode);
 
-        setPStep('ps1', 'done'); setPStep('ps2', 'active'); setProgress(30);
+        setPStep('ps1', 'done'); setPStep('ps2', 'active'); setProgress(10);
 
         const token = C.get('authToken');
-        const headers = {};
-        if (token) headers['Authorization'] = `Bearer ${token}`;
 
-        const r = await fetch(`${CFG.API}/transcription/upload`, { method: 'POST', headers, credentials: 'include', body: fd });
-        setPStep('ps2', 'done'); setPStep('ps3', 'active'); setProgress(60);
+        // Use XHR instead of fetch so we get real upload progress on large files
+        const data = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `${CFG.API}/transcription/upload`);
+            if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            xhr.withCredentials = true;
 
-        if (!r.ok) {
-            const errData = await r.json().catch(() => ({ error: 'Server error' }));
-            throw new Error(errData.error || errData.message || 'Transcription failed');
-        }
-        const data = await r.json();
+            xhr.upload.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    // Upload phase: 10% → 50%
+                    const pct = 10 + Math.round((e.loaded / e.total) * 40);
+                    setProgress(pct);
+                    if (pct > 30) { setPStep('ps2', 'done'); setPStep('ps3', 'active'); }
+                }
+            };
+            xhr.upload.onload = () => { setPStep('ps3', 'done'); setPStep('ps4', 'active'); setProgress(60); };
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try { resolve(JSON.parse(xhr.responseText)); }
+                    catch { reject(new Error('Invalid response from server')); }
+                } else {
+                    let msg = 'Transcription failed';
+                    try { const j = JSON.parse(xhr.responseText); msg = j.error || j.message || msg; } catch {}
+                    reject(new Error(msg));
+                }
+            };
+            xhr.onerror = () => reject(new Error('Network error — check your connection and try again.'));
+            xhr.ontimeout = () => reject(new Error('Upload timed out — file may be too large or connection too slow.'));
+            xhr.timeout = 300000; // 5 min max
+            xhr.send(fd);
+        });
 
         setPStep('ps3', 'done'); setPStep('ps4', 'active'); setProgress(90);
 
