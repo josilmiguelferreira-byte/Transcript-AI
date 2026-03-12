@@ -386,6 +386,42 @@
 <div class="mesh-bg"></div>
 <!-- FIX #3: Google Translate div correctly placed in body -->
 <div id="google_translate_element" style="display:none"></div>
+<style>
+.lang-picker-wrap { position: relative; }
+.lang-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 0.4rem 0.85rem; border-radius: 50px;
+    background: var(--glass); border: 1px solid var(--border);
+    color: var(--text-dim); font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;
+    white-space: nowrap;
+}
+.lang-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(91,94,244,0.06); }
+.lang-dropdown {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 0.4rem; min-width: 160px;
+    display: none; z-index: 300;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    backdrop-filter: blur(20px);
+    animation: fadeDown 0.15s ease;
+    max-height: 320px; overflow-y: auto;
+}
+.lang-dropdown.open { display: block; }
+.lang-option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.55rem 0.75rem; border-radius: 9px;
+    font-size: 0.82rem; font-weight: 500; color: var(--text-mid);
+    cursor: pointer; transition: all 0.15s;
+}
+.lang-option:hover { background: rgba(91,94,244,0.1); color: var(--text); }
+.lang-option.active { background: rgba(91,94,244,0.15); color: var(--primary); font-weight: 700; }
+.lang-flag { font-size: 1.1rem; line-height: 1; }
+/* Hide Google's ugly toolbar */
+.goog-te-banner-frame, #goog-gt-tt, .goog-tooltip { display: none !important; }
+body { top: 0 !important; }
+.skiptranslate { display: none !important; }
+</style>
 
 <!-- COOKIE BANNER -->
 <div class="cookie-banner" id="cookieBanner">
@@ -420,6 +456,14 @@
         <a onclick="showPage('account')" id="nav-account" href="javascript:void(0)" style="display:none">Account</a>
     </nav>
     <div class="header-right">
+        <div class="lang-picker-wrap" id="langPickerWrap" style="display:none">
+            <button class="lang-btn" onclick="toggleLangDropdown()" id="langBtn">
+                <span id="langBtnFlag">🌐</span>
+                <span id="langBtnLabel">EN</span>
+                <span style="font-size:0.65rem;opacity:0.6">▼</span>
+            </button>
+            <div class="lang-dropdown" id="langDropdown"></div>
+        </div>
         <button class="btn btn-outline theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">☀️</button>
         <div id="authBtns" style="display:flex;gap:8px">
             <button class="btn btn-outline btn-sm" onclick="openModal('authModal','login')">Log In</button>
@@ -601,7 +645,7 @@
                 <h3>Upload Audio / Video</h3>
                 <p>Drag your file here or click to browse</p>
                 <p style="margin-top:0.4rem">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC</p>
-                <div class="free-badge" id="freeLimitBadge" style="display:none">⏱️ Free plan: max 10 min &amp; 25 MB per file</div>
+                <div class="free-badge" id="freeLimitBadge" style="display:none">⏱️ Free: max 25 MB · Pro: max 1 GB · Business: max 2.2 GB</div>
             </div>
 
             <div id="fileChip" style="display:none" class="file-chip mt2">
@@ -829,7 +873,7 @@
             </div>
         </div>
         <div style="text-align:center;margin-top:2rem;padding:1.5rem;background:var(--glass);border-radius:16px;border:1px solid var(--border)">
-            <p style="color:var(--text-dim);font-size:0.875rem">Need more than 5 seats or custom limits? <a href="mailto:transcriptiai@gmail.com" style="color:var(--primary);font-weight:600">Contact us</a> for Enterprise pricing.</p>
+            <p style="color:var(--text-dim);font-size:0.875rem">Need more than 5 seats or custom limits? <a href="/cdn-cgi/l/email-protection#f88c8a99968b9b8a91888c919991b89f95999194d69b9795" style="color:var(--primary);font-weight:600">Contact us</a> for Enterprise pricing.</p>
         </div>
     </div>
 </div>
@@ -848,7 +892,7 @@
                 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept?<span class="toggle">+</span></div><div class="faq-a">We accept all major credit and debit cards (Visa, Mastercard, Amex), iDEAL (Dutch bank transfer), Google Pay, and Klarna (pay later). All payments are securely processed by Stripe.</div></div>
                 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What's the difference between Pro and Business?<span class="toggle">+</span></div><div class="faq-a">Pro is for individual users with 3000 min/month. Business gives your entire team unlimited transcription, priority processing, advanced analytics, and dedicated support — ideal for agencies and research teams.</div></div>
                 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is my data secure?<span class="toggle">+</span></div><div class="faq-a">Absolutely. All uploads use SSL encryption. Files are automatically deleted after processing. We never store your payment details — that's handled securely by Stripe. We are GDPR compliant.</div></div>
-                <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What audio/video formats are supported?<span class="toggle">+</span></div><div class="faq-a">We support MP3, MP4, WAV, M4A, WEBM, OGG, FLAC, AAC, and most other common audio and video formats. Files can be up to 500MB.</div></div>
+                <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What audio/video formats are supported?<span class="toggle">+</span></div><div class="faq-a">We support MP3, MP4, WAV, M4A, WEBM, OGG, FLAC, AAC, and most other common audio and video formats. Free plan: up to 25 MB. Pro: up to 1 GB. Business: up to 2.2 GB per file.</div></div>
                 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do you have a free trial?<span class="toggle">+</span></div><div class="faq-a">Yes! Every new account gets 20 free minutes with no credit card required. Pro and Business plans also include a 7-day free trial.</div></div>
             </div>
         </div>
@@ -868,7 +912,7 @@
                         <div class="account-avatar" id="acctAvatar">U</div>
                         <div>
                             <h2 style="font-size:1.3rem;font-weight:800" id="acctName">User</h2>
-                            <p style="color:var(--text-dim);font-size:0.875rem;margin-top:2px" id="acctEmail">user@example.com</p>
+                            <p style="color:var(--text-dim);font-size:0.875rem;margin-top:2px" id="acctEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bbcec8dec9fbdec3dad6cbd7de95d8d4d6">[email&#160;protected]</a></p>
                             <div class="verified-badge">✓ Email Verified</div>
                         </div>
                     </div>
@@ -946,7 +990,7 @@
                 <div><h3 style="color:var(--text);margin-bottom:0.5rem">4. Payment data</h3><p>Payments are handled by Stripe. We never store credit card details on our servers.</p></div>
                 <div><h3 style="color:var(--text);margin-bottom:0.5rem">5. Cookies</h3><p>We use cookies only for authentication and preferences. No tracking or advertising cookies.</p></div>
                 <div><h3 style="color:var(--text);margin-bottom:0.5rem">6. Your GDPR rights</h3><p>You can access, correct, or delete your data at any time by contacting us.</p></div>
-                <div><h3 style="color:var(--text);margin-bottom:0.5rem">7. Contact</h3><p>Questions? Email <a href="mailto:privacy@transcriptai.com" style="color:var(--primary)">privacy@transcriptai.com</a></p></div>
+                <div><h3 style="color:var(--text);margin-bottom:0.5rem">7. Contact</h3><p>Questions? Email <a href="/cdn-cgi/l/email-protection#6e1e1c07180f0d172e1a1c0f001d0d1c071e1a0f07400d0103" style="color:var(--primary)"><span class="__cf_email__" data-cfemail="deaeacb7a8bfbda79eaaacbfb0adbdacb7aeaabfb7f0bdb1b3">[email&#160;protected]</span></a></p></div>
             </div>
         </div>
     </div>
@@ -967,7 +1011,7 @@
                     <p style="margin:0;font-size:0.88rem">Please read these Terms of Service carefully before using TranscriptAI. By accessing or using our service, you agree to be bound by these terms.</p>
                 </div>
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">1. Definitions</h2><p><strong style="color:var(--text)">"Service"</strong> refers to the TranscriptAI platform at transcriptai-1hj.pages.dev.</p><p style="margin-top:0.75rem"><strong style="color:var(--text)">"User"</strong> refers to any individual or entity that accesses or uses the Service.</p><p style="margin-top:0.75rem"><strong style="color:var(--text)">"We", "us", "our"</strong> refers to TranscriptAI and its operators.</p></div>
-                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">2. Eligibility & Account Registration</h2><p>You must be at least 16 years of age to use the Service. You are responsible for maintaining the confidentiality of your login credentials. Notify us immediately at transcriptiai@gmail.com if you suspect unauthorised access.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">2. Eligibility & Account Registration</h2><p>You must be at least 16 years of age to use the Service. You are responsible for maintaining the confidentiality of your login credentials. Notify us immediately at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0e7a7c6f607d6d7c677e7a676f674e69636f6762206d6163">[email&#160;protected]</a> if you suspect unauthorised access.</p></div>
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">3. Service Plans & Features</h2>
                     <div style="margin-top:1rem;display:flex;flex-direction:column;gap:0.75rem">
                         <div style="padding:0.875rem 1rem;border:1px solid var(--border);border-radius:10px"><strong style="color:var(--text)">Free Plan</strong> — 20 minutes lifetime. Supports standard transcription.</div>
@@ -983,7 +1027,7 @@
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">9. Disclaimer & Limitation of Liability</h2><p>Service provided "as is". We are not liable for indirect or consequential damages. Total liability limited to amounts paid in the preceding 30 days.</p></div>
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">10. Governing Law</h2><p>Governed by Dutch law. Disputes subject to courts of the Netherlands. EU consumers may use the <a href="https://ec.europa.eu/consumers/odr" target="_blank" style="color:var(--primary)">EU ODR platform</a>.</p></div>
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">11. Contact</h2>
-                    <div style="padding:1rem 1.25rem;border:1px solid var(--border);border-radius:10px;background:var(--glass)"><p style="margin:0"><strong style="color:var(--text)">TranscriptAI</strong><br>Email: <a href="mailto:transcriptiai@gmail.com" style="color:var(--primary)">transcriptiai@gmail.com</a></p></div>
+                    <div style="padding:1rem 1.25rem;border:1px solid var(--border);border-radius:10px;background:var(--glass)"><p style="margin:0"><strong style="color:var(--text)">TranscriptAI</strong><br>Email: <a href="/cdn-cgi/l/email-protection#cabeb8aba4b9a9b8a3babea3aba38aada7aba3a6e4a9a5a7" style="color:var(--primary)"><span class="__cf_email__" data-cfemail="295d5b48475a4a5b40595d404840694e44484045074a4644">[email&#160;protected]</span></a></p></div>
                 </div>
             </div>
         </div>
@@ -1288,11 +1332,11 @@
         <h2 class="modal-title">Contact Us</h2>
         <p class="modal-sub">Have a question or issue? We're here to help.</p>
         <div style="display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem">
-            <a href="mailto:transcriptiai@gmail.com" style="display:flex;align-items:center;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);transition:all 0.2s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='rgba(91,94,244,0.06)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+            <a href="/cdn-cgi/l/email-protection#9febedfef1ecfcedf6efebf6fef6dff8f2fef6f3b1fcf0f2" style="display:flex;align-items:center;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);transition:all 0.2s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='rgba(91,94,244,0.06)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
                 <span style="font-size:1.5rem">📧</span>
                 <div>
                     <p style="font-weight:600;margin:0;font-size:0.9rem">Email Support</p>
-                    <p style="color:var(--text-dim);margin:0;font-size:0.82rem">transcriptiai@gmail.com</p>
+                    <p style="color:var(--text-dim);margin:0;font-size:0.82rem"><span class="__cf_email__" data-cfemail="f58187949b8696879c85819c949cb59298949c99db969a98">[email&#160;protected]</span></p>
                 </div>
             </a>
             <div style="padding:1rem;border:1px solid var(--border);border-radius:12px;background:var(--glass)">
@@ -1305,7 +1349,7 @@
 <!-- ════════════════════════════════════════
      JAVASCRIPT
 ════════════════════════════════════════ -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ══════════════════════════════════════════════════════════
    CONFIG
 ══════════════════════════════════════════════════════════ */
@@ -1318,7 +1362,8 @@ const CFG = {
     FREE_TOTAL: 20,
     FREE_PER_FILE: 10,
     FREE_MAX_MB: 25,       // Whisper API hard limit is 25MB
-    PRO_MAX_MB: 500,       // Pro/Business: 500MB
+    PRO_MAX_MB: 1024,      // Pro: 1 GB
+    BUSINESS_MAX_MB: 2200, // Business: 2.2 GB (AssemblyAI upload limit)
     PRO_MONTHLY: 3000,
 };
 
@@ -1417,35 +1462,125 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ══════════════════════════════════════════════════════════
-   GOOGLE TRANSLATE  (FIX #14: async, non-blocking)
+   GOOGLE TRANSLATE  — Modern custom picker (replaces ugly widget)
 ══════════════════════════════════════════════════════════ */
+const LANGS = [
+    { code: 'en',    label: 'English',    flag: '🇬🇧' },
+    { code: 'nl',    label: 'Nederlands', flag: '🇳🇱' },
+    { code: 'de',    label: 'Deutsch',    flag: '🇩🇪' },
+    { code: 'fr',    label: 'Français',   flag: '🇫🇷' },
+    { code: 'es',    label: 'Español',    flag: '🇪🇸' },
+    { code: 'pt',    label: 'Português',  flag: '🇵🇹' },
+    { code: 'it',    label: 'Italiano',   flag: '🇮🇹' },
+    { code: 'pl',    label: 'Polski',     flag: '🇵🇱' },
+    { code: 'sv',    label: 'Svenska',    flag: '🇸🇪' },
+    { code: 'da',    label: 'Dansk',      flag: '🇩🇰' },
+    { code: 'fi',    label: 'Suomi',      flag: '🇫🇮' },
+    { code: 'no',    label: 'Norsk',      flag: '🇳🇴' },
+    { code: 'tr',    label: 'Türkçe',     flag: '🇹🇷' },
+    { code: 'ar',    label: 'العربية',    flag: '🇸🇦' },
+    { code: 'zh-CN', label: '中文',        flag: '🇨🇳' },
+    { code: 'ja',    label: '日本語',      flag: '🇯🇵' },
+    { code: 'ko',    label: '한국어',      flag: '🇰🇷' },
+    { code: 'ru',    label: 'Русский',    flag: '🇷🇺' },
+    { code: 'hi',    label: 'हिंदी',       flag: '🇮🇳' },
+];
+let _currentLang = 'en';
+let _gtReady = false;
+
 function initGoogleTranslate() {
-    const lang = (navigator.language || 'en').split('-')[0];
-    const supported = ['nl','de','fr','es','pt','it','pl','sv','da','fi','no','tr','ar','zh','ja','ko','ru','hi'];
-    if (lang !== 'en' && supported.includes(lang)) {
-        window._translateLang = lang;
-        const s = document.createElement('script');
-        s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateInit';
-        s.async = true;
-        s.onerror = () => console.warn('Google Translate failed to load');
-        document.body.appendChild(s);
-    }
+    // Load Google Translate script silently
+    const s = document.createElement('script');
+    s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateInit';
+    s.async = true;
+    s.onerror = () => console.warn('Google Translate failed to load');
+    document.body.appendChild(s);
 }
+
 window.googleTranslateInit = function() {
     if (typeof google === 'undefined' || !google.translate) return;
     new google.translate.TranslateElement({
         pageLanguage: 'en',
-        includedLanguages: 'nl,de,fr,es,pt,it,pl,sv,da,fi,no,tr,ar,zh-CN,ja,ko,ru,hi',
-        autoDisplay: true
+        includedLanguages: LANGS.filter(l => l.code !== 'en').map(l => l.code).join(','),
+        autoDisplay: false
     }, 'google_translate_element');
-    setTimeout(() => {
-        const sel = document.querySelector('.goog-te-combo');
-        if (sel && window._translateLang) {
-            sel.value = window._translateLang === 'zh' ? 'zh-CN' : window._translateLang;
-            sel.dispatchEvent(new Event('change'));
-        }
-    }, 800);
+    _gtReady = true;
+
+    // Build the dropdown
+    const dd = document.getElementById('langDropdown');
+    if (dd) {
+        dd.innerHTML = LANGS.map(l => `
+            <div class="lang-option${l.code === 'en' ? ' active' : ''}" onclick="setLang('${l.code}','${l.flag}','${l.label}')">
+                <span class="lang-flag">${l.flag}</span>
+                <span>${l.label}</span>
+            </div>`).join('');
+    }
+
+    // Show the picker in header
+    const wrap = document.getElementById('langPickerWrap');
+    if (wrap) wrap.style.display = 'flex';
+
+    // Auto-detect browser language
+    const browserLang = (navigator.language || 'en').split('-')[0];
+    const match = LANGS.find(l => l.code === browserLang || l.code.startsWith(browserLang));
+    if (match && match.code !== 'en') {
+        setTimeout(() => setLang(match.code, match.flag, match.label), 600);
+    }
 };
+
+function setLang(code, flag, label) {
+    _currentLang = code;
+    // Update button label
+    const btnFlag = document.getElementById('langBtnFlag');
+    const btnLabel = document.getElementById('langBtnLabel');
+    if (btnFlag) btnFlag.textContent = flag;
+    if (btnLabel) btnLabel.textContent = code === 'en' ? 'EN' : code.toUpperCase().slice(0,2);
+
+    // Update active state in dropdown
+    document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
+    event?.target?.closest('.lang-option')?.classList.add('active');
+
+    // Close dropdown
+    document.getElementById('langDropdown')?.classList.remove('open');
+
+    if (code === 'en') {
+        // Restore original English
+        const frame = document.querySelector('.goog-te-menu-frame');
+        if (frame) {
+            const restore = frame.contentDocument?.querySelector('a[href*="restore"]');
+            if (restore) restore.click();
+        }
+        // Use cookie method to reset
+        document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        document.cookie = 'googtrans=; path=/; domain=' + location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        location.reload();
+        return;
+    }
+
+    // Trigger translation via hidden combo
+    const sel = document.querySelector('.goog-te-combo');
+    if (sel) {
+        sel.value = code;
+        sel.dispatchEvent(new Event('change'));
+    } else {
+        // Fallback: set cookie and reload
+        document.cookie = `googtrans=/en/${code}; path=/`;
+        document.cookie = `googtrans=/en/${code}; path=/; domain=${location.hostname}`;
+        location.reload();
+    }
+}
+
+function toggleLangDropdown() {
+    const dd = document.getElementById('langDropdown');
+    if (dd) dd.classList.toggle('open');
+}
+
+// Close lang dropdown on outside click
+document.addEventListener('click', e => {
+    if (!e.target.closest('.lang-picker-wrap')) {
+        document.getElementById('langDropdown')?.classList.remove('open');
+    }
+});
 
 /* ══════════════════════════════════════════════════════════
    THEME
@@ -1479,9 +1614,10 @@ function handleCookies(type) {
    NAVIGATION
 ══════════════════════════════════════════════════════════ */
 function showPage(id) {
-    // GATE: block all navigation until terms are accepted
+    // GATE: if terms not accepted, show the consent modal instead of blocking silently
     if (!localStorage.getItem('terms_accepted')) {
-        console.warn('Terms not accepted — navigation blocked');
+        const m = document.getElementById('termsConsentModal');
+        if (m) m.style.display = 'flex';
         return;
     }
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1910,7 +2046,7 @@ async function handleFileObj(file) {
         if (fileMB > CFG.FREE_MAX_MB) {
             showErr(
                 `Free plan: maximum file size is ${CFG.FREE_MAX_MB} MB (Whisper AI limit). ` +
-                `Your file is ${fileMB.toFixed(1)} MB. Upgrade to Pro for files up to ${CFG.PRO_MAX_MB} MB.`
+                `Your file is ${fileMB.toFixed(1)} MB. Upgrade to Pro for files up to ${CFG.PRO_MAX_MB} MB, or Business for up to ${CFG.BUSINESS_MAX_MB} MB.`
             );
             openPayModal('pro');
             return;
@@ -1924,10 +2060,17 @@ async function handleFileObj(file) {
                 return;
             }
         } catch (e) { /* If duration check fails, backend enforces */ }
-    } else {
-        // Pro/Business: still enforce a hard upper limit
+    } else if (S.isPro && !S.isBusiness) {
+        // Pro: 1 GB limit
         if (fileMB > CFG.PRO_MAX_MB) {
-            showErr(`Maximum file size is ${CFG.PRO_MAX_MB} MB. Your file is ${fileMB.toFixed(1)} MB.`);
+            showErr(`Pro plan: maximum file size is ${CFG.PRO_MAX_MB} MB. Your file is ${fileMB.toFixed(1)} MB. Upgrade to Business for up to ${CFG.BUSINESS_MAX_MB} MB.`);
+            openPayModal('business');
+            return;
+        }
+    } else if (S.isBusiness) {
+        // Business: 2.2 GB limit
+        if (fileMB > CFG.BUSINESS_MAX_MB) {
+            showErr(`Maximum file size is ${CFG.BUSINESS_MAX_MB} MB. Your file is ${fileMB.toFixed(1)} MB.`);
             return;
         }
     }
@@ -2569,7 +2712,6 @@ function declineTerms() {
    CONTACT
 ══════════════════════════════════════════════════════════ */
 function openContactModal() { openModal('contactModal'); }
-
 /* ══════════════════════════════════════════════════════════
    HEALTH CHECK  (FIX #16: retry on failure, don't show banner for temporary errors)
 ══════════════════════════════════════════════════════════ */
