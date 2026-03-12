@@ -370,7 +370,9 @@
         .gradient-text { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .mt1{margin-top:0.5rem} .mt2{margin-top:1rem} .mt3{margin-top:1.5rem} .mt4{margin-top:2rem}
         .mb2{margin-bottom:1rem} .mb3{margin-bottom:1.5rem}
-        @media (max-width: 600px) { nav { display: none; } .container { padding: 0 1rem; } }
+        /* Hide desktop nav on small screens — desktop-only rule */
+        @media (max-width: 600px) { nav { display: none; } }
+
 
         /* PRO LOCK OVERLAY on select options */
         select option[data-pro="true"] { color: #9b5de5; }
@@ -380,6 +382,290 @@
         .terms-modal-header { padding: 1.5rem 1.75rem 1rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
         .terms-modal-body { overflow-y: auto; flex: 1; padding: 1.25rem 1.75rem; line-height: 1.75; color: var(--text-mid); font-size: 0.85rem; }
         .terms-modal-footer { padding: 1.25rem 1.75rem; border-top: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+
+        /* ═══════════════════════════════════════════════════════════════
+           MOBILE CSS — alle telefoons
+           412px  Samsung S25 Ultra / Pixel 9
+           430px  iPhone 16 Pro Max
+           393px  iPhone 16 / 15 Pro
+           375px  iPhone SE (2e/3e gen)
+           360px  Samsung Galaxy A, Moto G
+           320px  iPhone SE (1e gen), kleine Androids
+        ═══════════════════════════════════════════════════════════════ */
+
+        /* ── Gedeelde mobiele basis (≤ 768px) ─────────────────────── */
+        @media (max-width: 768px) {
+
+            /* Voorkom horizontaal scrollen op elke telefoon */
+            html, body { overflow-x: hidden; max-width: 100vw; }
+
+            /* ── Header ────────────────────────────────────────────── */
+            header { padding: 0 1rem; height: 58px; }
+            .logo { font-size: 1.05rem; gap: 8px; }
+            .logo-icon { width: 30px; height: 30px; border-radius: 8px; }
+            .header-right { gap: 6px; }
+            .theme-btn { width: 32px; height: 32px; font-size: 0.85rem; padding: 0; }
+            .lang-btn { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+            #langBtnLabel { display: none; }
+            .lang-dropdown { min-width: 150px; max-height: 260px; right: 0; }
+            .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.78rem; min-height: 38px; }
+            nav { display: none; }
+
+            /* ── Container & cards ──────────────────────────────────── */
+            .container { padding: 0 1.1rem; }
+            .card-padded { padding: 1.4rem; }
+            .section { padding: 2.5rem 0; }
+            .section-title { font-size: clamp(1.4rem, 5vw, 1.9rem); letter-spacing: -0.5px; }
+            .section-sub { font-size: 0.875rem; }
+            .section-label { font-size: 0.7rem; }
+
+            /* Minimale tap target (WCAG 2.5.5) */
+            .btn     { min-height: 44px; }
+            .btn-xl  { min-height: 50px; font-size: 0.9rem; }
+            .btn-sm  { min-height: 38px; }
+
+            /* ── Bottom navigatie bar ───────────────────────────────── */
+            .mobile-nav-bar {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                z-index: 250;
+                background: var(--card);
+                border-top: 1px solid var(--border);
+                backdrop-filter: blur(24px) saturate(1.5);
+                -webkit-backdrop-filter: blur(24px) saturate(1.5);
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom, 0px));
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+            }
+            .mobile-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 3px;
+                flex: 1;
+                padding: 0.35rem 0.5rem;
+                border-radius: 10px;
+                color: var(--text-dim);
+                font-size: 0.6rem;
+                font-weight: 600;
+                letter-spacing: 0.2px;
+                transition: color 0.2s;
+                border: none;
+                background: none;
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                cursor: pointer;
+                min-width: 48px;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .mobile-nav-item .nav-icon { font-size: 1.3rem; line-height: 1; }
+            .mobile-nav-item.active { color: var(--primary); }
+            .mobile-nav-item.active .nav-icon { filter: drop-shadow(0 0 5px rgba(91,94,244,0.5)); }
+            /* Pagina-inhoud boven de bottom bar duwen */
+            body { padding-bottom: calc(66px + env(safe-area-inset-bottom, 0px)); }
+
+            /* ── Hero ───────────────────────────────────────────────── */
+            .landing-hero { min-height: auto; padding: 2rem 0 2.5rem; align-items: flex-start; }
+            .hero-grid { grid-template-columns: 1fr; gap: 0; }
+            .hero-visual { display: none; }
+            .hero-badge { font-size: 0.72rem; padding: 0.35rem 0.8rem; margin-bottom: 1rem; }
+            .hero-title { font-size: clamp(1.9rem, 7.5vw, 2.6rem); letter-spacing: -1px; margin-bottom: 1rem; }
+            .hero-desc { font-size: 0.9rem; margin-bottom: 1.8rem; max-width: 100%; }
+            .hero-ctas { flex-direction: column; gap: 10px; }
+            .hero-ctas .btn-xl { width: 100%; justify-content: center; }
+            .hero-stats { gap: 1rem; margin-top: 1.5rem; padding-top: 1.2rem; flex-wrap: wrap; }
+            .stat-num { font-size: 1.4rem; }
+            .stat-label { font-size: 0.72rem; }
+
+            /* ── Feature / step / testimonial grids ─────────────────── */
+            .features-grid  { grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-top: 2rem; }
+            .steps-grid     { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2rem; }
+            .testimonials   { grid-template-columns: 1fr; max-width: 100%; margin-top: 2rem; }
+            .feature-card   { padding: 1.25rem; border-radius: 16px; }
+            .feat-icon      { width: 38px; height: 38px; font-size: 1.05rem; margin-bottom: 0.9rem; }
+            .feat-title     { font-size: 0.9rem; }
+            .feat-desc      { font-size: 0.82rem; }
+
+            /* ── CTA blok onderaan landing ───────────────────────────── */
+            .section > div[style*="border-radius:28px"] {
+                padding: 2rem 1.25rem;
+                border-radius: 20px;
+            }
+
+            /* ── Workspace ──────────────────────────────────────────── */
+            .workspace-header { margin-bottom: 1.5rem; }
+            .workspace-header h1 { font-size: 1.4rem; letter-spacing: -0.5px; }
+            .workspace-header p { font-size: 0.82rem; }
+            .upload-zone { padding: 2rem 1.2rem; border-radius: 16px; }
+            .upload-zone-icon { font-size: 2.4rem; margin-bottom: 0.8rem; }
+            .upload-zone h3 { font-size: 0.95rem; }
+            .upload-zone p { font-size: 0.78rem; }
+            .controls-row { grid-template-columns: 1fr; gap: 1rem; margin-top: 1.4rem; }
+            .form-group select, .form-group input { padding: 0.75rem 0.9rem; font-size: 0.875rem; }
+            #startBtn { height: 50px; font-size: 0.9rem; border-radius: 12px; }
+            .result-header { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+            .result-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+            .result-actions .btn { justify-content: center; font-size: 0.75rem; padding: 0.45rem 0.4rem; }
+            .transcript-output { padding: 1.1rem; font-size: 0.875rem; border-radius: 12px; }
+            .usage-card { padding: 1rem 1.1rem; }
+            .pro-banner { padding: 0.9rem 1.1rem; flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+            .file-chip { padding: 0.85rem 1rem; }
+
+            /* ── Pricing ────────────────────────────────────────────── */
+            .pricing-hero { padding: 1.5rem 0 0; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 100%; margin-top: 2rem; gap: 1.2rem; }
+            .tier { padding: 1.6rem; border-radius: 20px; }
+            .tier-price { font-size: 2.4rem; }
+            .tier-features li { font-size: 0.82rem; }
+
+            /* ── FAQ ────────────────────────────────────────────────── */
+            .faq-list { margin-top: 2rem; }
+            .faq-q { padding: 1rem 1.2rem; font-size: 0.9rem; gap: 0.75rem; }
+            .faq-a { padding: 0 1.2rem; font-size: 0.875rem; }
+            .faq-item.open .faq-a { padding-bottom: 1.1rem; }
+
+            /* ── History ────────────────────────────────────────────── */
+            .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .table-wrap { border-radius: 14px; }
+            .history-table th:nth-child(3), .history-table td:nth-child(3),
+            .history-table th:nth-child(4), .history-table td:nth-child(4) { display: none; }
+            .history-table td, .history-table th { padding: 0.75rem 0.9rem; font-size: 0.82rem; }
+
+            /* ── Account ────────────────────────────────────────────── */
+            .account-grid   { grid-template-columns: 1fr; gap: 1.2rem; }
+            .account-profile { gap: 1rem; margin-bottom: 1.5rem; }
+            .account-avatar  { width: 54px; height: 54px; font-size: 1.25rem; }
+            .security-row   { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+            .security-row .btn { align-self: flex-start; }
+
+            /* ── Modals — slide omhoog vanuit onderkant ──────────────── */
+            .modal-overlay {
+                padding: 0;
+                align-items: flex-end;
+            }
+            .modal-box {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                border-radius: 24px 24px 0 0;
+                padding: 1.75rem 1.4rem calc(1.75rem + env(safe-area-inset-bottom, 0px));
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            .modal-box.modal-lg { max-width: 100%; }
+            .modal-title { font-size: 1.25rem; }
+            .modal-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+            .pay-method { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .payment-summary { padding: 1rem; }
+
+            /* ── Terms modal ────────────────────────────────────────── */
+            .terms-modal-inner {
+                width: calc(100% - 1rem);
+                border-radius: 20px;
+                max-height: 94vh;
+            }
+            .terms-modal-header { padding: 1.1rem 1.2rem 0.75rem; }
+            .terms-modal-body  { padding: 0.9rem 1.2rem; font-size: 0.83rem; }
+            .terms-modal-footer { padding: 0.9rem 1.2rem calc(0.9rem + env(safe-area-inset-bottom, 0px)); gap: 0.65rem; }
+
+            /* ── Cookie banner ──────────────────────────────────────── */
+            .cookie-banner { padding: 0.9rem 1.1rem; }
+            .cookie-content { flex-direction: column; gap: 0.75rem; }
+            .cookie-actions { gap: 8px; }
+            .cookie-actions .btn { flex: 1; justify-content: center; }
+
+            /* ── Notificaties ───────────────────────────────────────── */
+            .notif {
+                left: 0.75rem;
+                right: 0.75rem;
+                top: 66px;
+                max-width: 100%;
+                font-size: 0.82rem;
+                padding: 0.8rem 1.1rem;
+                border-radius: 12px;
+            }
+
+            /* ── Footer ─────────────────────────────────────────────── */
+            footer { padding: 2rem 1rem; }
+            footer > div > div:first-child { flex-direction: column; gap: 1rem; }
+            footer > div > div:last-child  { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        }
+
+        /* ── Desktop: verberg mobile nav ────────────────────────────── */
+        @media (min-width: 769px) {
+            .mobile-nav-bar { display: none !important; }
+            body { padding-bottom: 0; }
+        }
+
+        /* ── Normale telefoons: 320px–480px ─────────────────────────── */
+        @media (max-width: 480px) {
+            .container { padding: 0 0.9rem; }
+            .card-padded { padding: 1.25rem 1rem; }
+            .section { padding: 2.2rem 0; }
+
+            /* Header: logo tekst verbergen, Log In knop verbergen */
+            header { padding: 0 0.85rem; height: 56px; }
+            .logo span:last-child { display: none; }
+            #authBtns .btn-outline { display: none; }
+            .theme-btn { width: 32px; height: 32px; }
+
+            /* Bottom nav iets compacter */
+            .mobile-nav-item { font-size: 0.58rem; min-width: 44px; }
+            .mobile-nav-item .nav-icon { font-size: 1.25rem; }
+
+            /* Hero */
+            .hero-title { font-size: clamp(1.8rem, 8.5vw, 2.2rem); letter-spacing: -0.8px; }
+            .hero-stats { gap: 0.9rem; }
+            .stat-num { font-size: 1.3rem; }
+
+            /* Features: 1 kolom op kleine schermen */
+            .features-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+
+            /* Workspace */
+            .workspace-header h1 { font-size: 1.3rem; }
+            .upload-zone { padding: 1.75rem 1rem; }
+            .result-actions { grid-template-columns: 1fr 1fr; }
+            .result-actions .btn:last-child { grid-column: 1 / -1; }
+
+            /* Pricing */
+            .pricing-grid { max-width: 100%; }
+            .tier-price { font-size: 2rem; }
+
+            /* History */
+            .history-table th:nth-child(5), .history-table td:nth-child(5) { display: none; }
+            .history-table td, .history-table th { padding: 0.65rem 0.7rem; font-size: 0.76rem; }
+
+            /* Modals */
+            .modal-box { padding: 1.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px)); }
+            .input-group input { padding: 0.8rem 0.9rem; font-size: 0.88rem; }
+            .auth-tab { font-size: 0.82rem; padding: 0.55rem; }
+        }
+
+        /* ── Compacte telefoons: ≤ 360px (Galaxy A, Moto G) ─────────── */
+        @media (max-width: 360px) {
+            .container { padding: 0 0.75rem; }
+            .card-padded { padding: 1rem 0.875rem; }
+            .hero-title { font-size: 1.75rem; letter-spacing: -0.8px; }
+            .hero-ctas .btn-xl { font-size: 0.88rem; }
+            .mobile-nav-item { min-width: 40px; font-size: 0.54rem; gap: 2px; }
+            .mobile-nav-item .nav-icon { font-size: 1.15rem; }
+            .tier { padding: 1.3rem; }
+            .tier-price { font-size: 1.9rem; }
+            .faq-q { font-size: 0.87rem; padding: 0.9rem 1rem; }
+            .modal-box { padding: 1.25rem 0.875rem calc(1.25rem + env(safe-area-inset-bottom, 0px)); }
+        }
+
+        /* ── Kleine telefoons: ≤ 320px (iPhone SE 1e gen, oude Androids) */
+        @media (max-width: 320px) {
+            .hero-title { font-size: 1.55rem; letter-spacing: -0.5px; }
+            .card-padded { padding: 0.9rem 0.75rem; }
+            .btn-xl { font-size: 0.85rem; }
+            .tier { padding: 1.1rem; }
+            /* Verberg labels in bottom nav — alleen icoontjes */
+            .mobile-nav-item span:not(.nav-icon) { display: none; }
+        }
+
     </style>
 </head>
 <body data-theme="dark">
@@ -481,6 +767,25 @@ body { top: 0 !important; }
         </div>
     </div>
 </header>
+
+<!-- MOBILE BOTTOM NAV BAR -->
+<nav class="mobile-nav-bar" id="mobileNav">
+    <button class="mobile-nav-item active" id="mnav-landing" onclick="showPage('landing')">
+        <span class="nav-icon">🏠</span>Home
+    </button>
+    <button class="mobile-nav-item" id="mnav-workspace" onclick="showPage('workspace')">
+        <span class="nav-icon">🎙️</span>Transcribe
+    </button>
+    <button class="mobile-nav-item" id="mnav-history" onclick="showPage('history')">
+        <span class="nav-icon">📜</span>History
+    </button>
+    <button class="mobile-nav-item" id="mnav-pricing" onclick="showPage('pricing')">
+        <span class="nav-icon">💎</span>Pricing
+    </button>
+    <button class="mobile-nav-item" id="mnav-account" onclick="showPage('account')">
+        <span class="nav-icon">👤</span>Account
+    </button>
+</nav>
 
 <!-- ════════════════════════════════════════
      LANDING PAGE
@@ -1639,10 +1944,14 @@ function showPage(id) {
     }
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    // Also update mobile bottom nav
+    document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
     const pg = document.getElementById('page-' + id);
     const nav = document.getElementById('nav-' + id);
+    const mNav = document.getElementById('mnav-' + id);
     if (pg) pg.classList.add('active');
     if (nav) nav.classList.add('active');
+    if (mNav) mNav.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (id === 'history') {
         if (S.loggedIn) loadHistory();
