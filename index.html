@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1506,64 +1506,81 @@ window.googleTranslateInit = function() {
     }, 'google_translate_element');
     _gtReady = true;
 
-    // Build the dropdown
+    // Build the custom dropdown
     const dd = document.getElementById('langDropdown');
     if (dd) {
         dd.innerHTML = LANGS.map(l => `
-            <div class="lang-option${l.code === 'en' ? ' active' : ''}" onclick="setLang('${l.code}','${l.flag}','${l.label}')">
+            <div class="lang-option" data-code="${l.code}" onclick="setLang('${l.code}','${l.flag}','${l.label}')">
                 <span class="lang-flag">${l.flag}</span>
                 <span>${l.label}</span>
             </div>`).join('');
+        // Mark English as active by default
+        const enOption = dd.querySelector('[data-code="en"]');
+        if (enOption) enOption.classList.add('active');
     }
 
     // Show the picker in header
     const wrap = document.getElementById('langPickerWrap');
     if (wrap) wrap.style.display = 'flex';
 
-    // Auto-detect browser language
-    const browserLang = (navigator.language || 'en').split('-')[0];
-    const match = LANGS.find(l => l.code === browserLang || l.code.startsWith(browserLang));
-    if (match && match.code !== 'en') {
-        setTimeout(() => setLang(match.code, match.flag, match.label), 600);
+    // Check if googtrans cookie is already set (user previously selected a language)
+    const existingCookie = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith('googtrans='));
+    if (existingCookie) {
+        const parts = existingCookie.split('/');
+        const savedCode = parts[parts.length - 1];
+        if (savedCode && savedCode !== 'en') {
+            const savedLang = LANGS.find(l => l.code === savedCode);
+            if (savedLang) {
+                // Update UI to reflect current language without triggering re-translate
+                _updateLangUI(savedLang.code, savedLang.flag, savedLang.label);
+                return; // Google Translate will auto-apply from cookie
+            }
+        }
     }
+    // Do NOT auto-detect browser language — only translate when user explicitly chooses
 };
 
-function setLang(code, flag, label) {
+function _updateLangUI(code, flag, label) {
     _currentLang = code;
-    // Update button label
     const btnFlag = document.getElementById('langBtnFlag');
     const btnLabel = document.getElementById('langBtnLabel');
     if (btnFlag) btnFlag.textContent = flag;
     if (btnLabel) btnLabel.textContent = code === 'en' ? 'EN' : code.toUpperCase().slice(0,2);
+    document.querySelectorAll('.lang-option').forEach(el => {
+        el.classList.toggle('active', el.getAttribute('data-code') === code);
+    });
+}
 
-    // Update active state in dropdown
-    document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
-    event?.target?.closest('.lang-option')?.classList.add('active');
-
-    // Close dropdown
+function setLang(code, flag, label) {
+    // Close dropdown first
     document.getElementById('langDropdown')?.classList.remove('open');
 
+    // Update UI
+    _updateLangUI(code, flag, label);
+
     if (code === 'en') {
-        // Restore original English
-        const frame = document.querySelector('.goog-te-menu-frame');
-        if (frame) {
-            const restore = frame.contentDocument?.querySelector('a[href*="restore"]');
-            if (restore) restore.click();
-        }
-        // Use cookie method to reset
-        document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-        document.cookie = 'googtrans=; path=/; domain=' + location.hostname + '; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+        // Reset to English: clear googtrans cookies and reload once
+        const alreadyEn = !document.cookie.split(';').some(c => c.trim().startsWith('googtrans=/en/'));
+        if (alreadyEn) return; // Already English, no reload needed
+
+        // Clear cookies on both root and subdomain
+        const clearCookie = (domain) => {
+            document.cookie = `googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC${domain ? '; domain=' + domain : ''}`;
+        };
+        clearCookie('');
+        clearCookie(location.hostname);
+        clearCookie('.' + location.hostname);
         location.reload();
         return;
     }
 
-    // Trigger translation via hidden combo
+    // Translate to selected language
     const sel = document.querySelector('.goog-te-combo');
     if (sel) {
         sel.value = code;
         sel.dispatchEvent(new Event('change'));
     } else {
-        // Fallback: set cookie and reload
+        // Fallback: set cookie and reload (Google Translate picks it up on load)
         document.cookie = `googtrans=/en/${code}; path=/`;
         document.cookie = `googtrans=/en/${code}; path=/; domain=${location.hostname}`;
         location.reload();
