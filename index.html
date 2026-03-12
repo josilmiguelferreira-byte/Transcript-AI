@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +12,9 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://transcriptai.nl/">
     <meta property="og:image" content="https://transcriptai.nl/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TranscriptAI — AI Transcription">
+    <meta name="twitter:description" content="Transcribe audio and video in 99 languages. Free to start.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="TranscriptAI | Premium Audio & Video Transcriptie">
     <meta name="twitter:description" content="Transcribeer audio en video automatisch met AI. Gratis proberen.">
@@ -370,153 +373,9 @@
         .gradient-text { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .mt1{margin-top:0.5rem} .mt2{margin-top:1rem} .mt3{margin-top:1.5rem} .mt4{margin-top:2rem}
         .mb2{margin-bottom:1rem} .mb3{margin-bottom:1.5rem}
-        /* ═══════════════════════════════════════
-           MOBILE OPTIMIZATIONS
-        ═══════════════════════════════════════ */
+        /* Hide desktop nav on small screens — desktop-only rule */
+        @media (max-width: 600px) { nav { display: none; } }
 
-        /* Bottom navigation bar for mobile */
-        .mobile-bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: var(--bg2);
-            border-top: 1px solid var(--border);
-            z-index: 200;
-            padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom));
-            backdrop-filter: blur(20px);
-        }
-        .mobile-bottom-nav-inner {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-        .mobile-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            padding: 0.4rem 0.75rem;
-            border-radius: 12px;
-            cursor: pointer;
-            color: var(--text-dim);
-            font-size: 0.65rem;
-            font-weight: 600;
-            border: none;
-            background: none;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            transition: all 0.2s;
-            min-width: 52px;
-        }
-        .mobile-nav-item .nav-icon { font-size: 1.25rem; line-height: 1; }
-        .mobile-nav-item.active { color: var(--primary); }
-        .mobile-nav-item.active .nav-icon { transform: scale(1.1); }
-
-        @media (max-width: 600px) {
-            /* Hide desktop nav, show mobile nav */
-            nav { display: none !important; }
-            .mobile-bottom-nav { display: block; }
-
-            /* Add bottom padding so content isn't hidden behind nav */
-            body { padding-bottom: 70px; }
-
-            /* Container padding */
-            .container { padding: 0 1rem; }
-
-            /* Header: smaller, tighter */
-            header { padding: 0 1rem; height: 56px; }
-            .logo { font-size: 1.1rem; }
-            .logo-icon { width: 28px; height: 28px; }
-            .logo-icon svg { width: 14px; height: 14px; }
-
-            /* Hide login/signup text on very small screens, keep icons */
-            .header-right .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.75rem; }
-            #authBtns { gap: 6px; }
-
-            /* Cards: less padding on mobile */
-            .card-padded { padding: 1.25rem; }
-
-            /* Hero section */
-            .landing-hero { min-height: auto; padding: 2rem 0 1.5rem; }
-            .hero-title { font-size: clamp(1.9rem, 7vw, 2.8rem); letter-spacing: -1px; }
-            .hero-desc { font-size: 0.92rem; margin-bottom: 1.5rem; }
-            .hero-stats { gap: 1.2rem; margin-top: 1.5rem; padding-top: 1.5rem; }
-            .stat-num { font-size: 1.4rem; }
-            .hero-cta { display: flex; flex-direction: column; gap: 0.75rem; }
-            .hero-cta .btn-xl { width: 100%; }
-            .btn-xl { height: 50px; font-size: 0.95rem; }
-
-            /* Upload zone: bigger tap target */
-            .upload-zone { padding: 2rem 1rem; border-radius: 16px; }
-            .upload-zone-icon { font-size: 2.5rem; }
-            .upload-zone h3 { font-size: 1rem; }
-            .upload-zone p { font-size: 0.82rem; }
-
-            /* Controls row already single column — just fix spacing */
-            .controls-row { margin-top: 1.25rem; gap: 0.875rem; }
-
-            /* Form elements bigger for touch */
-            select, input[type="text"], input[type="email"], input[type="password"], textarea {
-                font-size: 16px !important; /* Prevents iOS zoom on focus */
-                min-height: 44px;
-            }
-
-            /* Pricing grid */
-            .pricing-grid { max-width: 100% !important; gap: 0.875rem; }
-            .pricing-card { padding: 1.5rem; }
-
-            /* Account grid already 1col — fix padding */
-            .account-grid { gap: 1rem; }
-
-            /* History list */
-            .history-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 0.875rem; }
-            .history-actions { align-self: flex-end; }
-
-            /* Transcript output */
-            .transcript-output { font-size: 0.88rem; padding: 1rem; }
-
-            /* Footer: stack vertically */
-            footer > div > div:first-child { flex-direction: column; gap: 1.5rem; }
-            footer .footer-links { flex-direction: column; gap: 1.5rem; }
-
-            /* Section titles */
-            .section-title { font-size: clamp(1.5rem, 5vw, 2rem); }
-            .section-sub { font-size: 0.9rem; }
-
-            /* Features grid: force single column on tiny screens */
-            .features-grid { grid-template-columns: 1fr !important; }
-
-            /* Steps */
-            .steps-grid { gap: 1rem; }
-
-            /* Modals: full screen on mobile */
-            .modal { border-radius: 20px 20px 0 0 !important; max-height: 92vh; margin-bottom: 0; }
-            .modal-overlay { align-items: flex-end !important; padding: 0 !important; }
-            .terms-modal-inner { border-radius: 20px 20px 0 0 !important; max-height: 92vh; }
-
-            /* Cookie banner */
-            .cookie-content { flex-direction: column; gap: 0.75rem; }
-            .cookie-actions { width: 100%; display: flex; gap: 0.5rem; }
-            .cookie-actions .btn { flex: 1; }
-
-            /* Result action buttons: wrap */
-            .result-actions { flex-wrap: wrap; }
-            .result-actions .btn { flex: 1; min-width: 120px; }
-
-            /* Pro/feature badges: smaller */
-            .hero-badge { font-size: 0.72rem; padding: 0.35rem 0.8rem; }
-
-            /* Testimonials */
-            .testimonials { grid-template-columns: 1fr !important; }
-
-            /* Section spacing */
-            .section { padding: 3rem 0; }
-        }
-
-        /* Medium screens (tablets) */
-        @media (max-width: 768px) and (min-width: 601px) {
-            .card-padded { padding: 1.75rem; }
-            .pricing-grid { grid-template-columns: 1fr !important; max-width: 420px !important; }
-        }
 
         /* PRO LOCK OVERLAY on select options */
         select option[data-pro="true"] { color: #9b5de5; }
@@ -526,12 +385,332 @@
         .terms-modal-header { padding: 1.5rem 1.75rem 1rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
         .terms-modal-body { overflow-y: auto; flex: 1; padding: 1.25rem 1.75rem; line-height: 1.75; color: var(--text-mid); font-size: 0.85rem; }
         .terms-modal-footer { padding: 1.25rem 1.75rem; border-top: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+
+        /* ═══════════════════════════════════════════════════════════════
+           MOBILE CSS — alle telefoons
+           412px  Samsung S25 Ultra / Pixel 9
+           430px  iPhone 16 Pro Max
+           393px  iPhone 16 / 15 Pro
+           375px  iPhone SE (2e/3e gen)
+           360px  Samsung Galaxy A, Moto G
+           320px  iPhone SE (1e gen), kleine Androids
+        ═══════════════════════════════════════════════════════════════ */
+
+        /* ── Gedeelde mobiele basis (≤ 768px) ─────────────────────── */
+        @media (max-width: 768px) {
+
+            /* Voorkom horizontaal scrollen op elke telefoon */
+            html, body { overflow-x: hidden; max-width: 100vw; }
+
+            /* ── Header ────────────────────────────────────────────── */
+            header { padding: 0 1rem; height: 58px; }
+            .logo { font-size: 1.05rem; gap: 8px; }
+            .logo-icon { width: 30px; height: 30px; border-radius: 8px; }
+            .header-right { gap: 6px; }
+            .theme-btn { width: 32px; height: 32px; font-size: 0.85rem; padding: 0; }
+            .lang-btn { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+            #langBtnLabel { display: none; }
+            .lang-dropdown { min-width: 150px; max-height: 260px; right: 0; }
+            .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.78rem; min-height: 38px; }
+            nav { display: none; }
+
+            /* ── Container & cards ──────────────────────────────────── */
+            .container { padding: 0 1.1rem; }
+            .card-padded { padding: 1.4rem; }
+            .section { padding: 2.5rem 0; }
+            .section-title { font-size: clamp(1.4rem, 5vw, 1.9rem); letter-spacing: -0.5px; }
+            .section-sub { font-size: 0.875rem; }
+            .section-label { font-size: 0.7rem; }
+
+            /* Minimale tap target (WCAG 2.5.5) */
+            .btn     { min-height: 44px; }
+            .btn-xl  { min-height: 50px; font-size: 0.9rem; }
+            .btn-sm  { min-height: 38px; }
+
+            /* ── Bottom navigatie bar ───────────────────────────────── */
+            .mobile-nav-bar {
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                z-index: 250;
+                background: var(--card);
+                border-top: 1px solid var(--border);
+                backdrop-filter: blur(24px) saturate(1.5);
+                -webkit-backdrop-filter: blur(24px) saturate(1.5);
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom, 0px));
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+            }
+            .mobile-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 3px;
+                flex: 1;
+                padding: 0.35rem 0.5rem;
+                border-radius: 10px;
+                color: var(--text-dim);
+                font-size: 0.6rem;
+                font-weight: 600;
+                letter-spacing: 0.2px;
+                transition: color 0.2s;
+                border: none;
+                background: none;
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                cursor: pointer;
+                min-width: 48px;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .mobile-nav-item .nav-icon { font-size: 1.3rem; line-height: 1; }
+            .mobile-nav-item.active { color: var(--primary); }
+            .mobile-nav-item.active .nav-icon { filter: drop-shadow(0 0 5px rgba(91,94,244,0.5)); }
+            /* Pagina-inhoud boven de bottom bar duwen */
+            body { padding-bottom: calc(66px + env(safe-area-inset-bottom, 0px)); }
+
+            /* ── Hero ───────────────────────────────────────────────── */
+            .landing-hero { min-height: auto; padding: 2rem 0 2.5rem; align-items: flex-start; }
+            .hero-grid { grid-template-columns: 1fr; gap: 0; }
+            .hero-visual { display: none; }
+            .hero-badge { font-size: 0.72rem; padding: 0.35rem 0.8rem; margin-bottom: 1rem; }
+            .hero-title { font-size: clamp(1.9rem, 7.5vw, 2.6rem); letter-spacing: -1px; margin-bottom: 1rem; }
+            .hero-desc { font-size: 0.9rem; margin-bottom: 1.8rem; max-width: 100%; }
+            .hero-ctas { flex-direction: column; gap: 10px; }
+            .hero-ctas .btn-xl { width: 100%; justify-content: center; }
+            .hero-stats { gap: 1rem; margin-top: 1.5rem; padding-top: 1.2rem; flex-wrap: wrap; }
+            .stat-num { font-size: 1.4rem; }
+            .stat-label { font-size: 0.72rem; }
+
+            /* ── Feature / step / testimonial grids ─────────────────── */
+            .features-grid  { grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-top: 2rem; }
+            .steps-grid     { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2rem; }
+            .testimonials   { grid-template-columns: 1fr; max-width: 100%; margin-top: 2rem; }
+            .feature-card   { padding: 1.25rem; border-radius: 16px; }
+            .feat-icon      { width: 38px; height: 38px; font-size: 1.05rem; margin-bottom: 0.9rem; }
+            .feat-title     { font-size: 0.9rem; }
+            .feat-desc      { font-size: 0.82rem; }
+
+            /* ── CTA blok onderaan landing ───────────────────────────── */
+            .section > div[style*="border-radius:28px"] {
+                padding: 2rem 1.25rem;
+                border-radius: 20px;
+            }
+
+            /* ── Workspace ──────────────────────────────────────────── */
+            .workspace-header { margin-bottom: 1.5rem; }
+            .workspace-header h1 { font-size: 1.4rem; letter-spacing: -0.5px; }
+            .workspace-header p { font-size: 0.82rem; }
+            .upload-zone { padding: 2rem 1.2rem; border-radius: 16px; }
+            .upload-zone-icon { font-size: 2.4rem; margin-bottom: 0.8rem; }
+            .upload-zone h3 { font-size: 0.95rem; }
+            .upload-zone p { font-size: 0.78rem; }
+            .controls-row { grid-template-columns: 1fr; gap: 1rem; margin-top: 1.4rem; }
+            .form-group select, .form-group input { padding: 0.75rem 0.9rem; font-size: 0.875rem; }
+            #startBtn { height: 50px; font-size: 0.9rem; border-radius: 12px; }
+            .result-header { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+            .result-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+            .result-actions .btn { justify-content: center; font-size: 0.75rem; padding: 0.45rem 0.4rem; }
+            .transcript-output { padding: 1.1rem; font-size: 0.875rem; border-radius: 12px; }
+            .usage-card { padding: 1rem 1.1rem; }
+            .pro-banner { padding: 0.9rem 1.1rem; flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+            .file-chip { padding: 0.85rem 1rem; }
+
+            /* ── Pricing ────────────────────────────────────────────── */
+            .pricing-hero { padding: 1.5rem 0 0; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 100%; margin-top: 2rem; gap: 1.2rem; }
+            .tier { padding: 1.6rem; border-radius: 20px; }
+            .tier-price { font-size: 2.4rem; }
+            .tier-features li { font-size: 0.82rem; }
+
+            /* ── FAQ ────────────────────────────────────────────────── */
+            .faq-list { margin-top: 2rem; }
+            .faq-q { padding: 1rem 1.2rem; font-size: 0.9rem; gap: 0.75rem; }
+            .faq-a { padding: 0 1.2rem; font-size: 0.875rem; }
+            .faq-item.open .faq-a { padding-bottom: 1.1rem; }
+
+            /* ── History ────────────────────────────────────────────── */
+            .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .table-wrap { border-radius: 14px; }
+            .history-table th:nth-child(3), .history-table td:nth-child(3),
+            .history-table th:nth-child(4), .history-table td:nth-child(4) { display: none; }
+            .history-table td, .history-table th { padding: 0.75rem 0.9rem; font-size: 0.82rem; }
+
+            /* ── Account ────────────────────────────────────────────── */
+            .account-grid   { grid-template-columns: 1fr; gap: 1.2rem; }
+            .account-profile { gap: 1rem; margin-bottom: 1.5rem; }
+            .account-avatar  { width: 54px; height: 54px; font-size: 1.25rem; }
+            .security-row   { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+            .security-row .btn { align-self: flex-start; }
+
+            /* ── Modals — slide omhoog vanuit onderkant ──────────────── */
+            .modal-overlay {
+                padding: 0;
+                align-items: flex-end;
+            }
+            .modal-box {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                border-radius: 24px 24px 0 0;
+                padding: 1.75rem 1.4rem calc(1.75rem + env(safe-area-inset-bottom, 0px));
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            .modal-box.modal-lg { max-width: 100%; }
+            .modal-title { font-size: 1.25rem; }
+            .modal-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+            .pay-method { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .payment-summary { padding: 1rem; }
+
+            /* ── Terms modal ────────────────────────────────────────── */
+            .terms-modal-inner {
+                width: calc(100% - 1rem);
+                border-radius: 20px;
+                max-height: 94vh;
+            }
+            .terms-modal-header { padding: 1.1rem 1.2rem 0.75rem; }
+            .terms-modal-body  { padding: 0.9rem 1.2rem; font-size: 0.83rem; }
+            .terms-modal-footer { padding: 0.9rem 1.2rem calc(0.9rem + env(safe-area-inset-bottom, 0px)); gap: 0.65rem; }
+
+            /* ── Cookie banner ──────────────────────────────────────── */
+            .cookie-banner { padding: 0.9rem 1.1rem; }
+            .cookie-content { flex-direction: column; gap: 0.75rem; }
+            .cookie-actions { gap: 8px; }
+            .cookie-actions .btn { flex: 1; justify-content: center; }
+
+            /* ── Notificaties ───────────────────────────────────────── */
+            .notif {
+                left: 0.75rem;
+                right: 0.75rem;
+                top: 66px;
+                max-width: 100%;
+                font-size: 0.82rem;
+                padding: 0.8rem 1.1rem;
+                border-radius: 12px;
+            }
+
+            /* ── Footer ─────────────────────────────────────────────── */
+            footer { padding: 2rem 1rem; }
+            footer > div > div:first-child { flex-direction: column; gap: 1rem; }
+            footer > div > div:last-child  { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+        }
+
+        /* ── Desktop: verberg mobile nav ────────────────────────────── */
+        @media (min-width: 769px) {
+            .mobile-nav-bar { display: none !important; }
+            body { padding-bottom: 0; }
+        }
+
+        /* ── Normale telefoons: 320px–480px ─────────────────────────── */
+        @media (max-width: 480px) {
+            .container { padding: 0 0.9rem; }
+            .card-padded { padding: 1.25rem 1rem; }
+            .section { padding: 2.2rem 0; }
+
+            /* Header: logo tekst verbergen, Log In knop verbergen */
+            header { padding: 0 0.85rem; height: 56px; }
+            .logo span:last-child { display: none; }
+            #authBtns .btn-outline { display: none; }
+            .theme-btn { width: 32px; height: 32px; }
+
+            /* Bottom nav iets compacter */
+            .mobile-nav-item { font-size: 0.58rem; min-width: 44px; }
+            .mobile-nav-item .nav-icon { font-size: 1.25rem; }
+
+            /* Hero */
+            .hero-title { font-size: clamp(1.8rem, 8.5vw, 2.2rem); letter-spacing: -0.8px; }
+            .hero-stats { gap: 0.9rem; }
+            .stat-num { font-size: 1.3rem; }
+
+            /* Features: 1 kolom op kleine schermen */
+            .features-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+
+            /* Workspace */
+            .workspace-header h1 { font-size: 1.3rem; }
+            .upload-zone { padding: 1.75rem 1rem; }
+            .result-actions { grid-template-columns: 1fr 1fr; }
+            .result-actions .btn:last-child { grid-column: 1 / -1; }
+
+            /* Pricing */
+            .pricing-grid { max-width: 100%; }
+            .tier-price { font-size: 2rem; }
+
+            /* History */
+            .history-table th:nth-child(5), .history-table td:nth-child(5) { display: none; }
+            .history-table td, .history-table th { padding: 0.65rem 0.7rem; font-size: 0.76rem; }
+
+            /* Modals */
+            .modal-box { padding: 1.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px)); }
+            .input-group input { padding: 0.8rem 0.9rem; font-size: 0.88rem; }
+            .auth-tab { font-size: 0.82rem; padding: 0.55rem; }
+        }
+
+        /* ── Compacte telefoons: ≤ 360px (Galaxy A, Moto G) ─────────── */
+        @media (max-width: 360px) {
+            .container { padding: 0 0.75rem; }
+            .card-padded { padding: 1rem 0.875rem; }
+            .hero-title { font-size: 1.75rem; letter-spacing: -0.8px; }
+            .hero-ctas .btn-xl { font-size: 0.88rem; }
+            .mobile-nav-item { min-width: 40px; font-size: 0.54rem; gap: 2px; }
+            .mobile-nav-item .nav-icon { font-size: 1.15rem; }
+            .tier { padding: 1.3rem; }
+            .tier-price { font-size: 1.9rem; }
+            .faq-q { font-size: 0.87rem; padding: 0.9rem 1rem; }
+            .modal-box { padding: 1.25rem 0.875rem calc(1.25rem + env(safe-area-inset-bottom, 0px)); }
+        }
+
+        /* ── Kleine telefoons: ≤ 320px (iPhone SE 1e gen, oude Androids) */
+        @media (max-width: 320px) {
+            .hero-title { font-size: 1.55rem; letter-spacing: -0.5px; }
+            .card-padded { padding: 0.9rem 0.75rem; }
+            .btn-xl { font-size: 0.85rem; }
+            .tier { padding: 1.1rem; }
+            /* Verberg labels in bottom nav — alleen icoontjes */
+            .mobile-nav-item span:not(.nav-icon) { display: none; }
+        }
+
     </style>
 </head>
 <body data-theme="dark">
 <div class="mesh-bg"></div>
 <!-- FIX #3: Google Translate div correctly placed in body -->
 <div id="google_translate_element" style="display:none"></div>
+<style>
+.lang-picker-wrap { position: relative; }
+.lang-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 0.4rem 0.85rem; border-radius: 50px;
+    background: var(--glass); border: 1px solid var(--border);
+    color: var(--text-dim); font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;
+    white-space: nowrap;
+}
+.lang-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(91,94,244,0.06); }
+.lang-dropdown {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 0.4rem; min-width: 160px;
+    display: none; z-index: 300;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    backdrop-filter: blur(20px);
+    animation: fadeDown 0.15s ease;
+    max-height: 320px; overflow-y: auto;
+}
+.lang-dropdown.open { display: block; }
+.lang-option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.55rem 0.75rem; border-radius: 9px;
+    font-size: 0.82rem; font-weight: 500; color: var(--text-mid);
+    cursor: pointer; transition: all 0.15s;
+}
+.lang-option:hover { background: rgba(91,94,244,0.1); color: var(--text); }
+.lang-option.active { background: rgba(91,94,244,0.15); color: var(--primary); font-weight: 700; }
+.lang-flag { font-size: 1.1rem; line-height: 1; }
+/* Hide Google's ugly toolbar */
+.goog-te-banner-frame, #goog-gt-tt, .goog-tooltip { display: none !important; }
+body { top: 0 !important; }
+.skiptranslate { display: none !important; }
+</style>
 
 <!-- COOKIE BANNER -->
 <div class="cookie-banner" id="cookieBanner">
@@ -566,6 +745,14 @@
         <a onclick="showPage('account')" id="nav-account" href="javascript:void(0)" style="display:none">Account</a>
     </nav>
     <div class="header-right">
+        <div class="lang-picker-wrap" id="langPickerWrap" style="display:none">
+            <button class="lang-btn" onclick="toggleLangDropdown()" id="langBtn">
+                <span id="langBtnFlag">🌐</span>
+                <span id="langBtnLabel">EN</span>
+                <span style="font-size:0.65rem;opacity:0.6">▼</span>
+            </button>
+            <div class="lang-dropdown" id="langDropdown"></div>
+        </div>
         <button class="btn btn-outline theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">☀️</button>
         <div id="authBtns" style="display:flex;gap:8px">
             <button class="btn btn-outline btn-sm" onclick="openModal('authModal','login')">Log In</button>
@@ -584,25 +771,23 @@
     </div>
 </header>
 
-<!-- MOBILE BOTTOM NAV -->
-<nav class="mobile-bottom-nav" id="mobileBottomNav">
-    <div class="mobile-bottom-nav-inner">
-        <button class="mobile-nav-item active" id="mnav-landing" onclick="showPage('landing')">
-            <span class="nav-icon">🏠</span>Home
-        </button>
-        <button class="mobile-nav-item" id="mnav-workspace" onclick="showPage('workspace')">
-            <span class="nav-icon">🎙️</span>Transcribe
-        </button>
-        <button class="mobile-nav-item" id="mnav-history" onclick="showPage('history')">
-            <span class="nav-icon">📜</span>History
-        </button>
-        <button class="mobile-nav-item" id="mnav-pricing" onclick="showPage('pricing')">
-            <span class="nav-icon">💎</span>Pricing
-        </button>
-        <button class="mobile-nav-item" id="mnav-account" onclick="showPage('account')">
-            <span class="nav-icon">👤</span>Account
-        </button>
-    </div>
+<!-- MOBILE BOTTOM NAV BAR -->
+<nav class="mobile-nav-bar" id="mobileNav">
+    <button class="mobile-nav-item active" id="mnav-landing" onclick="showPage('landing')">
+        <span class="nav-icon">🏠</span>Home
+    </button>
+    <button class="mobile-nav-item" id="mnav-workspace" onclick="showPage('workspace')">
+        <span class="nav-icon">🎙️</span>Transcribe
+    </button>
+    <button class="mobile-nav-item" id="mnav-history" onclick="showPage('history')">
+        <span class="nav-icon">📜</span>History
+    </button>
+    <button class="mobile-nav-item" id="mnav-pricing" onclick="showPage('pricing')">
+        <span class="nav-icon">💎</span>Pricing
+    </button>
+    <button class="mobile-nav-item" id="mnav-account" onclick="showPage('account')">
+        <span class="nav-icon">👤</span>Account
+    </button>
 </nav>
 
 <!-- ════════════════════════════════════════
@@ -616,7 +801,7 @@
                     <div class="hero-badge"><span></span>AI-Powered • 99 Languages</div>
                     <h1 class="hero-title">Audio into text,<br><span class="gradient-text">instantly.</span></h1>
                     <p class="hero-desc">Upload any audio or video and get a perfect transcript in seconds. Speaker detection, timestamps, summaries — powered by Whisper AI (free) and AssemblyAI (Pro & Business).</p>
-                    <div class="hero-ctas hero-cta">
+                    <div class="hero-ctas">
                         <button class="btn btn-primary btn-xl" onclick="showPage('workspace')">🎙️ Start Transcribing — Free</button>
                         <button class="btn btn-outline btn-xl" onclick="showPage('pricing')">View Pricing</button>
                     </div>
@@ -694,10 +879,13 @@
                 <div class="section-label">Loved by users</div>
                 <h2 class="section-title">What people are saying</h2>
             </div>
-            <div class="testimonials">
-                <div class="testimonial"><div class="stars">★★★★★</div><div class="testimonial-text">"I transcribe all my podcast interviews with TranscriptAI. The speaker detection is incredibly accurate — saves me hours every week."</div><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#5b5ef4,#9b5de5)">SV</div><div><div class="author-name">Sarah van der Berg</div><div class="author-role">Podcast Host</div></div></div></div>
-                <div class="testimonial"><div class="stars">★★★★★</div><div class="testimonial-text">"As a journalist, accurate transcription is non-negotiable. TranscriptAI handles Dutch perfectly, even with accents. Pro is absolutely worth it."</div><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#f72585,#9b5de5)">MJ</div><div><div class="author-name">Marc Janssen</div><div class="author-role">Journalist, NRC</div></div></div></div>
-                <div class="testimonial"><div class="stars">★★★★★</div><div class="testimonial-text">"Our entire research team uses Business. The collaboration features and unlimited transcription make it a no-brainer at $49/month."</div><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#10b981,#5b5ef4)">LP</div><div><div class="author-name">Lisa Peeters</div><div class="author-role">Research Director, UvA</div></div></div></div>
+            <div class="testimonials" style="display:flex;flex-wrap:wrap;justify-content:center;gap:1.2rem;margin-top:3rem">
+                <div style="text-align:center;padding:3rem 2rem;background:var(--card);border:1px dashed var(--border);border-radius:20px;max-width:560px;width:100%">
+                    <div style="font-size:2.5rem;margin-bottom:1rem">⭐</div>
+                    <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;color:var(--text)">Be among the first to review TranscriptAI</h3>
+                    <p style="color:var(--text-dim);font-size:0.88rem;line-height:1.6">We just launched! Try it free and share your experience.</p>
+                    <button class="btn btn-primary" style="margin-top:1.25rem" onclick="showPage('workspace')">🎙️ Try It Free</button>
+                </div>
             </div>
         </div>
 
@@ -768,7 +956,7 @@
                 <h3>Upload Audio / Video</h3>
                 <p>Drag your file here or click to browse</p>
                 <p style="margin-top:0.4rem">MP3, MP4, WAV, M4A, WEBM, OGG, FLAC</p>
-                <div class="free-badge" id="freeLimitBadge" style="display:none">⏱️ Free plan: max 10 min &amp; 25 MB per file</div>
+                <div class="free-badge" id="freeLimitBadge" style="display:none">⏱️ Free: max 25 MB · Pro: max 1 GB · Business: max 2.2 GB</div>
             </div>
 
             <div id="fileChip" style="display:none" class="file-chip mt2">
@@ -996,7 +1184,7 @@
             </div>
         </div>
         <div style="text-align:center;margin-top:2rem;padding:1.5rem;background:var(--glass);border-radius:16px;border:1px solid var(--border)">
-            <p style="color:var(--text-dim);font-size:0.875rem">Need more than 5 seats or custom limits? <a href="/cdn-cgi/l/email-protection#67131506091404150e17130e060e27000a060e0b4904080a" style="color:var(--primary);font-weight:600">Contact us</a> for Enterprise pricing.</p>
+            <p style="color:var(--text-dim);font-size:0.875rem">Need more than 5 seats or custom limits? <a href="/cdn-cgi/l/email-protection#f88c8a99968b9b8a91888c919991b89f95999194d69b9795" style="color:var(--primary);font-weight:600">Contact us</a> for Enterprise pricing.</p>
         </div>
     </div>
 </div>
@@ -1015,7 +1203,7 @@
                 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept?<span class="toggle">+</span></div><div class="faq-a">We accept all major credit and debit cards (Visa, Mastercard, Amex), iDEAL (Dutch bank transfer), Google Pay, and Klarna (pay later). All payments are securely processed by Stripe.</div></div>
                 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What's the difference between Pro and Business?<span class="toggle">+</span></div><div class="faq-a">Pro is for individual users with 3000 min/month. Business gives your entire team unlimited transcription, priority processing, advanced analytics, and dedicated support — ideal for agencies and research teams.</div></div>
                 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is my data secure?<span class="toggle">+</span></div><div class="faq-a">Absolutely. All uploads use SSL encryption. Files are automatically deleted after processing. We never store your payment details — that's handled securely by Stripe. We are GDPR compliant.</div></div>
-                <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What audio/video formats are supported?<span class="toggle">+</span></div><div class="faq-a">We support MP3, MP4, WAV, M4A, WEBM, OGG, FLAC, AAC, and most other common audio and video formats. Files can be up to 500MB.</div></div>
+                <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What audio/video formats are supported?<span class="toggle">+</span></div><div class="faq-a">We support MP3, MP4, WAV, M4A, WEBM, OGG, FLAC, AAC, and most other common audio and video formats. Free plan: up to 25 MB. Pro: up to 1 GB. Business: up to 2.2 GB per file.</div></div>
                 <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Do you have a free trial?<span class="toggle">+</span></div><div class="faq-a">Yes! Every new account gets 20 free minutes with no credit card required. Pro and Business plans also include a 7-day free trial.</div></div>
             </div>
         </div>
@@ -1035,7 +1223,7 @@
                         <div class="account-avatar" id="acctAvatar">U</div>
                         <div>
                             <h2 style="font-size:1.3rem;font-weight:800" id="acctName">User</h2>
-                            <p style="color:var(--text-dim);font-size:0.875rem;margin-top:2px" id="acctEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a8dddbcddae8cdd0c9c5d8c4cd86cbc7c5">[email&#160;protected]</a></p>
+                            <p style="color:var(--text-dim);font-size:0.875rem;margin-top:2px" id="acctEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bbcec8dec9fbdec3dad6cbd7de95d8d4d6">[email&#160;protected]</a></p>
                             <div class="verified-badge">✓ Email Verified</div>
                         </div>
                     </div>
@@ -1113,7 +1301,7 @@
                 <div><h3 style="color:var(--text);margin-bottom:0.5rem">4. Payment data</h3><p>Payments are handled by Stripe. We never store credit card details on our servers.</p></div>
                 <div><h3 style="color:var(--text);margin-bottom:0.5rem">5. Cookies</h3><p>We use cookies only for authentication and preferences. No tracking or advertising cookies.</p></div>
                 <div><h3 style="color:var(--text);margin-bottom:0.5rem">6. Your GDPR rights</h3><p>You can access, correct, or delete your data at any time by contacting us.</p></div>
-                <div><h3 style="color:var(--text);margin-bottom:0.5rem">7. Contact</h3><p>Questions? Email <a href="/cdn-cgi/l/email-protection#1c6c6e756a7d7f655c686e7d726f7f6e756c687d75327f7371" style="color:var(--primary)"><span class="__cf_email__" data-cfemail="3a4a48534c5b59437a4e485b54495948534a4e5b5314595557">[email&#160;protected]</span></a></p></div>
+                <div><h3 style="color:var(--text);margin-bottom:0.5rem">7. Contact</h3><p>Questions? Email <a href="/cdn-cgi/l/email-protection#6e1e1c07180f0d172e1a1c0f001d0d1c071e1a0f07400d0103" style="color:var(--primary)"><span class="__cf_email__" data-cfemail="deaeacb7a8bfbda79eaaacbfb0adbdacb7aeaabfb7f0bdb1b3">[email&#160;protected]</span></a></p></div>
             </div>
         </div>
     </div>
@@ -1134,7 +1322,7 @@
                     <p style="margin:0;font-size:0.88rem">Please read these Terms of Service carefully before using TranscriptAI. By accessing or using our service, you agree to be bound by these terms.</p>
                 </div>
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">1. Definitions</h2><p><strong style="color:var(--text)">"Service"</strong> refers to the TranscriptAI platform at transcriptai.nl.</p><p style="margin-top:0.75rem"><strong style="color:var(--text)">"User"</strong> refers to any individual or entity that accesses or uses the Service.</p><p style="margin-top:0.75rem"><strong style="color:var(--text)">"We", "us", "our"</strong> refers to TranscriptAI and its operators.</p></div>
-                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">2. Eligibility & Account Registration</h2><p>You must be at least 16 years of age to use the Service. You are responsible for maintaining the confidentiality of your login credentials. Notify us immediately at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7e0a0c1f100d1d0c170e0a171f173e19131f1712501d1113">[email&#160;protected]</a> if you suspect unauthorised access.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">2. Eligibility & Account Registration</h2><p>You must be at least 16 years of age to use the Service. You are responsible for maintaining the confidentiality of your login credentials. Notify us immediately at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0e7a7c6f607d6d7c677e7a676f674e69636f6762206d6163">[email&#160;protected]</a> if you suspect unauthorised access.</p></div>
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">3. Service Plans & Features</h2>
                     <div style="margin-top:1rem;display:flex;flex-direction:column;gap:0.75rem">
                         <div style="padding:0.875rem 1rem;border:1px solid var(--border);border-radius:10px"><strong style="color:var(--text)">Free Plan</strong> — 20 minutes lifetime. Supports standard transcription.</div>
@@ -1150,7 +1338,7 @@
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">9. Disclaimer & Limitation of Liability</h2><p>Service provided "as is". We are not liable for indirect or consequential damages. Total liability limited to amounts paid in the preceding 30 days.</p></div>
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">10. Governing Law</h2><p>Governed by Dutch law. Disputes subject to courts of the Netherlands. EU consumers may use the <a href="https://ec.europa.eu/consumers/odr" target="_blank" style="color:var(--primary)">EU ODR platform</a>.</p></div>
                 <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">11. Contact</h2>
-                    <div style="padding:1rem 1.25rem;border:1px solid var(--border);border-radius:10px;background:var(--glass)"><p style="margin:0"><strong style="color:var(--text)">TranscriptAI</strong><br>Email: <a href="/cdn-cgi/l/email-protection#750107141b0616071c05011c141c351218141c195b161a18" style="color:var(--primary)"><span class="__cf_email__" data-cfemail="b6c2c4d7d8c5d5c4dfc6c2dfd7dff6d1dbd7dfda98d5d9db">[email&#160;protected]</span></a></p></div>
+                    <div style="padding:1rem 1.25rem;border:1px solid var(--border);border-radius:10px;background:var(--glass)"><p style="margin:0"><strong style="color:var(--text)">TranscriptAI</strong><br>Email: <a href="/cdn-cgi/l/email-protection#cabeb8aba4b9a9b8a3babea3aba38aada7aba3a6e4a9a5a7" style="color:var(--primary)"><span class="__cf_email__" data-cfemail="295d5b48475a4a5b40595d404840694e44484045074a4644">[email&#160;protected]</span></a></p></div>
                 </div>
             </div>
         </div>
@@ -1455,11 +1643,11 @@
         <h2 class="modal-title">Contact Us</h2>
         <p class="modal-sub">Have a question or issue? We're here to help.</p>
         <div style="display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem">
-            <a href="/cdn-cgi/l/email-protection#4c383e2d223f2f3e253c38252d250c2b212d2520622f2321" style="display:flex;align-items:center;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);transition:all 0.2s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='rgba(91,94,244,0.06)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+            <a href="/cdn-cgi/l/email-protection#9febedfef1ecfcedf6efebf6fef6dff8f2fef6f3b1fcf0f2" style="display:flex;align-items:center;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:12px;text-decoration:none;color:var(--text);transition:all 0.2s" onmouseover="this.style.borderColor='var(--primary)';this.style.background='rgba(91,94,244,0.06)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
                 <span style="font-size:1.5rem">📧</span>
                 <div>
                     <p style="font-weight:600;margin:0;font-size:0.9rem">Email Support</p>
-                    <p style="color:var(--text-dim);margin:0;font-size:0.82rem"><span class="__cf_email__" data-cfemail="7f0b0d1e110c1c0d160f0b161e163f18121e1613511c1012">[email&#160;protected]</span></p>
+                    <p style="color:var(--text-dim);margin:0;font-size:0.82rem"><span class="__cf_email__" data-cfemail="f58187949b8696879c85819c949cb59298949c99db969a98">[email&#160;protected]</span></p>
                 </div>
             </a>
             <div style="padding:1rem;border:1px solid var(--border);border-radius:12px;background:var(--glass)">
@@ -1478,14 +1666,15 @@
 ══════════════════════════════════════════════════════════ */
 const CFG = {
     API: 'https://transcriptai-backend-production.up.railway.app/api',
-    STRIPE_KEY: 'pk_test_51T5DoB2dH16RYdsmiZNRo9iXRAMTfk8lc0ukZiuhaCnIrX7A2vTbqTG6SETScPiJFjaIJeYTFZpSISgIDmoPq64O009O1QM8lY',
-    STRIPE_BILLING_PORTAL: 'https://billing.stripe.com/p/login/test_6oU9AMdV771q2rNaKq8EM00',
+    STRIPE_KEY: 'pk_test_51T5DoB2dH16RYdsmiZNRo9iXRAMTfk8lc0ukZiuhaCnIrX7A2vTbqTG6SETScPiJFjaIJeYTFZpSISgIDmoPq64O009O1QM8lY' /* TODO: replace with pk_live_... before publishing */,
+    STRIPE_BILLING_PORTAL: 'https://billing.stripe.com/p/login/test_6oU9AMdV771q2rNaKq8EM00' /* TODO: replace with live portal URL */,
     GOOGLE_CLIENT_ID: '632957367846-m278vdl3ckru9ginlfcinsv5gsbp6d0p.apps.googleusercontent.com',
     CONTACT_EMAIL: 'support@transcriptai.nl',
     FREE_TOTAL: 20,
     FREE_PER_FILE: 10,
     FREE_MAX_MB: 25,       // Whisper API hard limit is 25MB
-    PRO_MAX_MB: 500,       // Pro/Business: 500MB
+    PRO_MAX_MB: 1024,      // Pro: 1 GB
+    BUSINESS_MAX_MB: 2200, // Business: 2.2 GB (AssemblyAI upload limit)
     PRO_MONTHLY: 3000,
 };
 
@@ -1584,32 +1773,34 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ══════════════════════════════════════════════════════════
-   GOOGLE TRANSLATE  — Custom language picker
+   GOOGLE TRANSLATE  — Modern custom picker (replaces ugly widget)
 ══════════════════════════════════════════════════════════ */
 const LANGS = [
-    { code: 'en',    label: 'English',    flag: '\u{1F1EC}\u{1F1E7}' },
-    { code: 'nl',    label: 'Nederlands', flag: '\u{1F1F3}\u{1F1F1}' },
-    { code: 'de',    label: 'Deutsch',    flag: '\u{1F1E9}\u{1F1EA}' },
-    { code: 'fr',    label: 'Francais',   flag: '\u{1F1EB}\u{1F1F7}' },
-    { code: 'es',    label: 'Espanol',    flag: '\u{1F1EA}\u{1F1F8}' },
-    { code: 'pt',    label: 'Portugues',  flag: '\u{1F1F5}\u{1F1F9}' },
-    { code: 'it',    label: 'Italiano',   flag: '\u{1F1EE}\u{1F1F9}' },
-    { code: 'pl',    label: 'Polski',     flag: '\u{1F1F5}\u{1F1F1}' },
-    { code: 'sv',    label: 'Svenska',    flag: '\u{1F1F8}\u{1F1EA}' },
-    { code: 'da',    label: 'Dansk',      flag: '\u{1F1E9}\u{1F1F0}' },
-    { code: 'fi',    label: 'Suomi',      flag: '\u{1F1EB}\u{1F1EE}' },
-    { code: 'no',    label: 'Norsk',      flag: '\u{1F1F3}\u{1F1F4}' },
-    { code: 'tr',    label: 'Turkce',     flag: '\u{1F1F9}\u{1F1F7}' },
-    { code: 'ar',    label: 'Arabic',     flag: '\u{1F1F8}\u{1F1E6}' },
-    { code: 'zh-CN', label: 'Chinese',    flag: '\u{1F1E8}\u{1F1F3}' },
-    { code: 'ja',    label: 'Japanese',   flag: '\u{1F1EF}\u{1F1F5}' },
-    { code: 'ko',    label: 'Korean',     flag: '\u{1F1F0}\u{1F1F7}' },
-    { code: 'ru',    label: 'Russian',    flag: '\u{1F1F7}\u{1F1FA}' },
-    { code: 'hi',    label: 'Hindi',      flag: '\u{1F1EE}\u{1F1F3}' },
+    { code: 'en',    label: 'English',    flag: '🇬🇧' },
+    { code: 'nl',    label: 'Nederlands', flag: '🇳🇱' },
+    { code: 'de',    label: 'Deutsch',    flag: '🇩🇪' },
+    { code: 'fr',    label: 'Français',   flag: '🇫🇷' },
+    { code: 'es',    label: 'Español',    flag: '🇪🇸' },
+    { code: 'pt',    label: 'Português',  flag: '🇵🇹' },
+    { code: 'it',    label: 'Italiano',   flag: '🇮🇹' },
+    { code: 'pl',    label: 'Polski',     flag: '🇵🇱' },
+    { code: 'sv',    label: 'Svenska',    flag: '🇸🇪' },
+    { code: 'da',    label: 'Dansk',      flag: '🇩🇰' },
+    { code: 'fi',    label: 'Suomi',      flag: '🇫🇮' },
+    { code: 'no',    label: 'Norsk',      flag: '🇳🇴' },
+    { code: 'tr',    label: 'Türkçe',     flag: '🇹🇷' },
+    { code: 'ar',    label: 'العربية',    flag: '🇸🇦' },
+    { code: 'zh-CN', label: '中文',        flag: '🇨🇳' },
+    { code: 'ja',    label: '日本語',      flag: '🇯🇵' },
+    { code: 'ko',    label: '한국어',      flag: '🇰🇷' },
+    { code: 'ru',    label: 'Русский',    flag: '🇷🇺' },
+    { code: 'hi',    label: 'हिंदी',       flag: '🇮🇳' },
 ];
 let _currentLang = 'en';
+let _gtReady = false;
 
 function initGoogleTranslate() {
+    // Load Google Translate script silently
     const s = document.createElement('script');
     s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateInit';
     s.async = true;
@@ -1624,21 +1815,40 @@ window.googleTranslateInit = function() {
         includedLanguages: LANGS.filter(l => l.code !== 'en').map(l => l.code).join(','),
         autoDisplay: false
     }, 'google_translate_element');
+    _gtReady = true;
 
     // Build the custom dropdown
     const dd = document.getElementById('langDropdown');
     if (dd) {
-        dd.innerHTML = LANGS.map(l =>
-            '<div class="lang-option" data-code="' + l.code + '" onclick="setLang(\'' + l.code + '\',\'' + l.flag + '\',\'' + l.label + '\')">' +
-            '<span class="lang-flag">' + l.flag + '</span>' +
-            '<span>' + l.label + '</span></div>'
-        ).join('');
-        const enOpt = dd.querySelector('[data-code="en"]');
-        if (enOpt) enOpt.classList.add('active');
+        dd.innerHTML = LANGS.map(l => `
+            <div class="lang-option" data-code="${l.code}" onclick="setLang('${l.code}','${l.flag}','${l.label}')">
+                <span class="lang-flag">${l.flag}</span>
+                <span>${l.label}</span>
+            </div>`).join('');
+        // Mark English as active by default
+        const enOption = dd.querySelector('[data-code="en"]');
+        if (enOption) enOption.classList.add('active');
     }
 
+    // Show the picker in header
     const wrap = document.getElementById('langPickerWrap');
     if (wrap) wrap.style.display = 'flex';
+
+    // Check if googtrans cookie is already set (user previously selected a language)
+    const existingCookie = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith('googtrans='));
+    if (existingCookie) {
+        const parts = existingCookie.split('/');
+        const savedCode = parts[parts.length - 1];
+        if (savedCode && savedCode !== 'en') {
+            const savedLang = LANGS.find(l => l.code === savedCode);
+            if (savedLang) {
+                // Update UI to reflect current language without triggering re-translate
+                _updateLangUI(savedLang.code, savedLang.flag, savedLang.label);
+                return; // Google Translate will auto-apply from cookie
+            }
+        }
+    }
+    // Do NOT auto-detect browser language — only translate when user explicitly chooses
 };
 
 function _updateLangUI(code, flag, label) {
@@ -1653,24 +1863,37 @@ function _updateLangUI(code, flag, label) {
 }
 
 function setLang(code, flag, label) {
+    // Close dropdown first
     document.getElementById('langDropdown')?.classList.remove('open');
+
+    // Update UI
     _updateLangUI(code, flag, label);
+
     if (code === 'en') {
+        // Reset to English: clear googtrans cookies and reload once
         const alreadyEn = !document.cookie.split(';').some(c => c.trim().startsWith('googtrans=/en/'));
-        if (alreadyEn) return;
-        ['', location.hostname, '.' + location.hostname].forEach(domain => {
-            document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC' + (domain ? '; domain=' + domain : '');
-        });
+        if (alreadyEn) return; // Already English, no reload needed
+
+        // Clear cookies on both root and subdomain
+        const clearCookie = (domain) => {
+            document.cookie = `googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC${domain ? '; domain=' + domain : ''}`;
+        };
+        clearCookie('');
+        clearCookie(location.hostname);
+        clearCookie('.' + location.hostname);
         location.reload();
         return;
     }
+
+    // Translate to selected language
     const sel = document.querySelector('.goog-te-combo');
     if (sel) {
         sel.value = code;
         sel.dispatchEvent(new Event('change'));
     } else {
-        document.cookie = 'googtrans=/en/' + code + '; path=/';
-        document.cookie = 'googtrans=/en/' + code + '; path=/; domain=' + location.hostname;
+        // Fallback: set cookie and reload (Google Translate picks it up on load)
+        document.cookie = `googtrans=/en/${code}; path=/`;
+        document.cookie = `googtrans=/en/${code}; path=/; domain=${location.hostname}`;
         location.reload();
     }
 }
@@ -1679,6 +1902,13 @@ function toggleLangDropdown() {
     const dd = document.getElementById('langDropdown');
     if (dd) dd.classList.toggle('open');
 }
+
+// Close lang dropdown on outside click
+document.addEventListener('click', e => {
+    if (!e.target.closest('.lang-picker-wrap')) {
+        document.getElementById('langDropdown')?.classList.remove('open');
+    }
+});
 
 /* ══════════════════════════════════════════════════════════
    THEME
@@ -1712,7 +1942,7 @@ function handleCookies(type) {
    NAVIGATION
 ══════════════════════════════════════════════════════════ */
 function showPage(id) {
-    // GATE: if terms not accepted, show consent modal instead of blocking
+    // GATE: if terms not accepted, show the consent modal instead of blocking silently
     if (!localStorage.getItem('terms_accepted')) {
         const m = document.getElementById('termsConsentModal');
         if (m) m.style.display = 'flex';
@@ -1720,6 +1950,7 @@ function showPage(id) {
     }
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    // Also update mobile bottom nav
     document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
     const pg = document.getElementById('page-' + id);
     const nav = document.getElementById('nav-' + id);
@@ -2147,7 +2378,7 @@ async function handleFileObj(file) {
         if (fileMB > CFG.FREE_MAX_MB) {
             showErr(
                 `Free plan: maximum file size is ${CFG.FREE_MAX_MB} MB (Whisper AI limit). ` +
-                `Your file is ${fileMB.toFixed(1)} MB. Upgrade to Pro for files up to ${CFG.PRO_MAX_MB} MB.`
+                `Your file is ${fileMB.toFixed(1)} MB. Upgrade to Pro for files up to ${CFG.PRO_MAX_MB} MB, or Business for up to ${CFG.BUSINESS_MAX_MB} MB.`
             );
             openPayModal('pro');
             return;
@@ -2161,10 +2392,17 @@ async function handleFileObj(file) {
                 return;
             }
         } catch (e) { /* If duration check fails, backend enforces */ }
-    } else {
-        // Pro/Business: still enforce a hard upper limit
+    } else if (S.isPro && !S.isBusiness) {
+        // Pro: 1 GB limit
         if (fileMB > CFG.PRO_MAX_MB) {
-            showErr(`Maximum file size is ${CFG.PRO_MAX_MB} MB. Your file is ${fileMB.toFixed(1)} MB.`);
+            showErr(`Pro plan: maximum file size is ${CFG.PRO_MAX_MB} MB. Your file is ${fileMB.toFixed(1)} MB. Upgrade to Business for up to ${CFG.BUSINESS_MAX_MB} MB.`);
+            openPayModal('business');
+            return;
+        }
+    } else if (S.isBusiness) {
+        // Business: 2.2 GB limit
+        if (fileMB > CFG.BUSINESS_MAX_MB) {
+            showErr(`Maximum file size is ${CFG.BUSINESS_MAX_MB} MB. Your file is ${fileMB.toFixed(1)} MB.`);
             return;
         }
     }
@@ -2284,6 +2522,11 @@ async function startTranscription() {
             C.set('minutesUsed', S.minutesUsed, 30);
             updateUsageDisplay();
         }
+        if (S.isPro && data.proMinUsed != null) {
+            S.proMinUsed = data.proMinUsed;
+            C.set('proMinUsed', S.proMinUsed, 30);
+            updateUsageDisplay();
+        }
 
         if (lang === 'auto' && data.transcript?.language_code) {
             const b = document.getElementById('langBanner');
@@ -2298,7 +2541,15 @@ async function startTranscription() {
     } catch (e) {
         document.getElementById('progressWrap').style.display = 'none';
         btn.disabled = false; btn.textContent = '🎙️ Start Transcription';
-        showErr('Transcription failed: ' + e.message);
+        // Show upgrade prompt for limit errors, generic error for others
+        const msg = e.message || '';
+        if (msg.toLowerCase().includes('limit') || msg.toLowerCase().includes('upgrade') || msg.toLowerCase().includes('plan')) {
+            showErr(msg);
+            // Show upgrade banner
+            setTimeout(() => openPayModal('pro'), 800);
+        } else {
+            showErr('Transcription failed: ' + msg);
+        }
     }
 }
 
@@ -2689,7 +2940,7 @@ function openInlineDoc(which) {
                 <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">4. Payment data</h3><p>Payments are handled by Stripe. We never store credit card details on our servers.</p></div>
                 <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">5. Cookies</h3><p>We use cookies only for authentication and preferences. No tracking or advertising cookies.</p></div>
                 <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">6. Your GDPR rights</h3><p>You can access, correct, or delete your data at any time by contacting us.</p></div>
-                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">7. Contact</h3><p>Questions? Email <a href="mailto:privacy@transcriptai.com" style="color:#5b5ef4">privacy@transcriptai.com</a></p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">7. Contact</h3><p>Questions? Email <a href="mailto:support@transcriptai.nl" style="color:#5b5ef4">support@transcriptai.nl</a></p></div>
             </div>`;
     } else {
         content.innerHTML = `
@@ -2806,25 +3057,30 @@ function declineTerms() {
    CONTACT
 ══════════════════════════════════════════════════════════ */
 function openContactModal() { openModal('contactModal'); }
-
-/* health check */
+/* ══════════════════════════════════════════════════════════
+   HEALTH CHECK  (FIX #16: retry on failure, don't show banner for temporary errors)
+══════════════════════════════════════════════════════════ */
 let _healthRetries = 0;
 async function healthCheck() {
     try {
         const c = new AbortController();
         const t = setTimeout(() => c.abort(), 5000);
-        const r = await fetch(CFG.API + '/health', { signal: c.signal });
+        const r = await fetch(`${CFG.API}/health`, { signal: c.signal });
         clearTimeout(t);
         if (r.ok) {
             document.getElementById('configWarn').style.display = 'none';
             _healthRetries = 0;
-        } else { throw new Error('Non-OK'); }
+        } else {
+            throw new Error('Non-OK response');
+        }
     } catch (e) {
         _healthRetries++;
+        // FIX #16: Only show warning after 2 failed attempts (handles transient errors)
         if (_healthRetries >= 2) {
-            const w = document.getElementById('configWarn');
-            if (w) w.style.display = 'block';
-        } else { setTimeout(healthCheck, 3000); }
+            document.getElementById('configWarn').style.display = 'block';
+        } else {
+            setTimeout(healthCheck, 3000);
+        }
     }
 }
 </script>
