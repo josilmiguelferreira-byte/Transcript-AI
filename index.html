@@ -4,62 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TranscriptAI | Premium Audio & Video Transcriptie</title>
-    <!-- Auto-translate based on browser language -->
-    <script>
-    (function() {
-        // Map browser language to Google Translate language code
-        const lang = (navigator.language || navigator.userLanguage || 'en').split('-')[0];
-        const supported = ['nl','de','fr','es','pt','it','pl','sv','da','fi','no','tr','ar','zh','ja','ko','ru','hi'];
-        if (lang !== 'en' && supported.includes(lang)) {
-            // Load Google Translate
-            window._translateLang = lang;
-            const s = document.createElement('script');
-            s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateInit';
-            document.head.appendChild(s);
-        }
-    })();
-    function googleTranslateInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'nl,de,fr,es,pt,it,pl,sv,da,fi,no,tr,ar,zh-CN,ja,ko,ru,hi',
-            autoDisplay: true,
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-        }, 'google_translate_element');
-        // Auto-select user language
-        setTimeout(function() {
-            const sel = document.querySelector('.goog-te-combo');
-            if (sel && window._translateLang) {
-                sel.value = window._translateLang === 'zh' ? 'zh-CN' : window._translateLang;
-                sel.dispatchEvent(new Event('change'));
-            }
-        }, 800);
-    }
-    </script>
-    <div id="google_translate_element" style="display:none"></div>
     <meta name="description" content="Transcribeer audio en video automatisch met AI. Ondersteunt 99 talen, sprekerdetectie en samenvattingen. Gratis proberen — geen creditcard vereist.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://transcriptai-1hj.pages.dev/">
-
-    <!-- Open Graph (voor delen op social media) -->
     <meta property="og:title" content="TranscriptAI | Premium Audio & Video Transcriptie">
     <meta property="og:description" content="Transcribeer audio en video automatisch met AI. 99 talen, sprekerdetectie, samenvattingen. Gratis proberen.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://transcriptai-1hj.pages.dev/">
     <meta property="og:image" content="https://transcriptai-1hj.pages.dev/og-image.png">
-
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="TranscriptAI | Premium Audio & Video Transcriptie">
     <meta name="twitter:description" content="Transcribeer audio en video automatisch met AI. Gratis proberen.">
-
-    <!-- Favicon -->
+    <!-- FIX #3: favicon blijft, Google Translate script naar body verplaatst -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%235b5ef4'/%3E%3Cstop offset='100%25' stop-color='%239b5de5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Cpath d='M18 50v1M35 38v24M52 22v56M69 38v24M86 50v1' stroke='white' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%235b5ef4'/%3E%3Cstop offset='100%25' stop-color='%239b5de5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Cpath d='M18 50v1M35 38v24M52 22v56M69 38v24M86 50v1' stroke='white' stroke-width='9' stroke-linecap='round'/%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://accounts.google.com/gsi/client"></script>
-    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
             --primary: #5b5ef4;
@@ -93,8 +54,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
         h1,h2,h3,h4,h5 { font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        /* NOISE TEXTURE OVERLAY */
         body::before {
             content: '';
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -111,9 +70,7 @@
             background: radial-gradient(ellipse 80% 50% at 20% 10%, rgba(91,94,244,0.06) 0, transparent 60%),
                         radial-gradient(ellipse 60% 40% at 80% 80%, rgba(155,93,229,0.05) 0, transparent 50%);
         }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 5px; } 
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
 
@@ -128,15 +85,12 @@
             transition: background 0.3s;
         }
         [data-theme="light"] header { background: rgba(244,245,255,0.85); }
-        
         .logo { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.35rem; font-weight: 800; display: flex; align-items: center; gap: 10px; cursor: pointer; letter-spacing: -0.3px; color: var(--text); text-decoration: none; }
         .logo-icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 9px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(91,94,244,0.4); }
-        
         nav { display: flex; align-items: center; gap: 0.3rem; background: var(--glass); border: 1px solid var(--border); border-radius: 50px; padding: 0.35rem 0.6rem; }
         nav a { font-size: 0.82rem; font-weight: 500; color: var(--text-dim); padding: 0.45rem 1rem; border-radius: 50px; cursor: pointer; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
         nav a:hover { color: var(--text); }
         nav a.active { background: var(--primary); color: white; font-weight: 600; }
-        
         .header-right { display: flex; align-items: center; gap: 10px; }
 
         /* BUTTONS */
@@ -153,8 +107,6 @@
         .btn-full { width: 100%; }
         .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
         .btn-sm { padding: 0.4rem 0.9rem; font-size: 0.78rem; border-radius: 8px; }
-
-        /* THEME TOGGLE */
         .theme-btn { width: 38px; height: 38px; border-radius: 50%; padding: 0; font-size: 1rem; }
 
         /* USER MENU */
@@ -167,10 +119,8 @@
         .dropdown-item:hover { background: var(--glass); color: var(--text); }
         .dropdown-sep { height: 1px; background: var(--border); margin: 0.4rem 0; }
 
-        /* CONTAINER */
+        /* CONTAINER / PAGES */
         .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
-
-        /* PAGE SECTIONS */
         .page { display: none; animation: fadeUp 0.4s ease; }
         .page.active { display: block; }
         @keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
@@ -180,67 +130,52 @@
         .card-padded { padding: 2.5rem; }
         .card:hover { border-color: var(--border-hover); }
 
-        /* ══════════════════════════════
-           LANDING PAGE
-        ══════════════════════════════ */
+        /* LANDING */
         .landing-hero { min-height: calc(100vh - 70px); display: flex; align-items: center; padding: 5rem 0; }
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
         @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
-        
         .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(91,94,244,0.12); border: 1px solid rgba(91,94,244,0.25); color: var(--primary); padding: 0.45rem 1rem; border-radius: 50px; font-size: 0.78rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 0.3px; }
         .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); animation: ping 2s infinite; }
         @keyframes ping { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
-        
         .hero-title { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -2px; margin-bottom: 1.5rem; }
         .hero-title .gradient-text { background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        
         .hero-desc { font-size: 1.05rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 2.5rem; max-width: 480px; }
-        
         .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-        
         .hero-stats { display: flex; gap: 2rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
-        .stat { }
         .stat-num { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--text); }
         .stat-label { font-size: 0.78rem; color: var(--text-dim); font-weight: 500; margin-top: 2px; }
 
-        /* WAVEFORM ANIMATION */
+        /* WAVEFORM */
         .hero-visual { position: relative; }
         .hero-card { background: var(--card); border: 1px solid var(--border); border-radius: 28px; padding: 2rem; backdrop-filter: blur(20px); box-shadow: 0 30px 80px rgba(0,0,0,0.4); }
         .waveform { display: flex; align-items: center; gap: 3px; height: 70px; margin: 1.5rem 0; }
         .wave-bar { flex: 1; background: linear-gradient(to top, var(--primary), var(--secondary)); border-radius: 3px; animation: wave 1.2s ease-in-out infinite; }
         @keyframes wave { 0%,100%{height:20%} 50%{height:100%} }
         .wave-bar:nth-child(2n){animation-delay:0.1s} .wave-bar:nth-child(3n){animation-delay:0.2s} .wave-bar:nth-child(4n){animation-delay:0.3s} .wave-bar:nth-child(5n){animation-delay:0.4s} .wave-bar:nth-child(6n){animation-delay:0.5s} .wave-bar:nth-child(7n){animation-delay:0.15s} .wave-bar:nth-child(8n){animation-delay:0.25s} .wave-bar:nth-child(9n){animation-delay:0.35s} .wave-bar:nth-child(10n){animation-delay:0.45s}
-
         .transcript-preview { background: var(--glass); border-radius: 14px; padding: 1.2rem; font-size: 0.82rem; line-height: 1.8; color: var(--text-mid); border: 1px solid var(--border); }
         .transcript-preview .highlight { color: var(--text); font-weight: 500; }
         .typing-cursor { display: inline-block; width: 2px; height: 1em; background: var(--primary); animation: blink 1s infinite; vertical-align: text-bottom; margin-left: 2px; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-        /* FEATURES SECTION */
+        /* SECTIONS */
         .section { padding: 6rem 0; }
         .section-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 1rem; }
         .section-title { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; line-height: 1.2; }
         .section-sub { color: var(--text-dim); font-size: 1rem; line-height: 1.7; max-width: 520px; margin: 0 auto; }
-        
         .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-top: 4rem; }
         @media (max-width: 900px) { .features-grid { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 600px) { .features-grid { grid-template-columns: 1fr; } }
-        
         .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 1.8rem; transition: all 0.3s; }
         .feature-card:hover { border-color: var(--border-hover); transform: translateY(-3px); box-shadow: 0 15px 40px rgba(91,94,244,0.1); }
         .feat-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(91,94,244,0.12); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1.2rem; }
-        .feat-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .feat-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
         .feat-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
-
-        /* HOW IT WORKS */
         .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 4rem; }
         @media (max-width: 700px) { .steps-grid { grid-template-columns: 1fr; } }
         .step-card { text-align: center; }
-        .step-num { width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; box-shadow: 0 8px 20px rgba(91,94,244,0.3); }
-        .step-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .step-num { width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; box-shadow: 0 8px 20px rgba(91,94,244,0.3); }
+        .step-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
         .step-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
-
-        /* SOCIAL PROOF */
         .testimonials { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; margin-top: 4rem; }
         @media (max-width: 900px) { .testimonials { grid-template-columns: 1fr; max-width: 500px; margin-left: auto; margin-right: auto; } }
         .testimonial { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 1.8rem; }
@@ -255,23 +190,19 @@
         .workspace-header { margin-bottom: 2.5rem; }
         .workspace-header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
         .workspace-header p { color: var(--text-dim); margin-top: 0.4rem; font-size: 0.9rem; }
-
         .upload-zone { border: 2px dashed var(--border); border-radius: 20px; padding: 3.5rem 2rem; text-align: center; cursor: pointer; transition: all 0.25s; background: var(--glass); position: relative; }
         .upload-zone:hover, .upload-zone.drag-over { border-color: var(--primary); background: rgba(91,94,244,0.06); }
         .upload-zone-icon { font-size: 3rem; margin-bottom: 1rem; line-height: 1; }
-        .upload-zone h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .upload-zone h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
         .upload-zone p { font-size: 0.82rem; color: var(--text-dim); }
         .free-badge { display: inline-block; background: rgba(245,158,11,0.15); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; margin-top: 0.7rem; }
-
         .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.8rem; }
         @media (max-width: 600px) { .controls-row { grid-template-columns: 1fr; } }
-
         .form-group label { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 0.6rem; }
         .form-group select, .form-group input { width: 100%; padding: 0.85rem 1rem; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 0.9rem; outline: none; transition: border-color 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; }
         .form-group select:focus, .form-group input:focus { border-color: var(--primary); }
         select option { background: #0d0f1c; color: white; }
         [data-theme="light"] select option { background: white; color: #0d0f1c; }
-
         .file-chip { display: flex; align-items: center; gap: 12px; padding: 1rem 1.2rem; background: rgba(91,94,244,0.08); border: 1px solid rgba(91,94,244,0.25); border-radius: 14px; margin-top: 1rem; }
         .file-chip-info { flex: 1; }
         .file-chip-name { font-weight: 600; font-size: 0.9rem; }
@@ -300,33 +231,24 @@
         .word-ts:hover { background: rgba(91,94,244,0.1); }
         .ts-label { font-size: 0.65rem; color: #5b5ef4; font-weight: 700; margin-right: 2px; font-family: monospace; }
         .speaker-seg { margin-bottom: 1.5rem; padding: 1rem 1.4rem; border-radius: 14px; background: #f8f9ff; border-left: 3px solid var(--primary); }
-        [data-theme="light"] .speaker-seg { background: #f1f3ff; }
         .speaker-name { font-size: 0.68rem; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
         .lang-banner { background: rgba(16,185,129,0.1); border: 1px solid var(--success); border-radius: 10px; padding: 0.7rem 1.1rem; margin-bottom: 1.2rem; font-size: 0.82rem; color: var(--success); font-weight: 700; display: none; }
 
-        /* USAGE BAR */
+        /* USAGE / BANNERS */
         .usage-card { padding: 1.2rem 1.4rem; background: var(--glass); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 1.8rem; }
         .usage-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; font-size: 0.85rem; font-weight: 600; }
         .usage-mini-bar { height: 6px; background: var(--border); border-radius: 6px; overflow: hidden; }
         .usage-mini-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--accent)); border-radius: 6px; transition: width 0.3s; }
-
-        /* PRO BANNER */
         .pro-banner { display: none; padding: 1rem 1.4rem; background: linear-gradient(135deg, rgba(91,94,244,0.12), rgba(155,93,229,0.12)); border: 1px solid rgba(91,94,244,0.3); border-radius: 14px; margin-bottom: 1.8rem; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-
-        /* AD PLACEHOLDER */
         .ad-slot { background: var(--glass); border: 1px dashed var(--border); border-radius: 14px; padding: 1.5rem; text-align: center; margin: 1.5rem 0; }
         .ad-slot p { font-size: 0.75rem; color: var(--text-dim); }
-
-        /* ERROR BOX */
         .error-box { background: rgba(247,37,133,0.08); border: 1px solid rgba(247,37,133,0.3); border-radius: 12px; padding: 1rem 1.2rem; font-size: 0.875rem; color: var(--accent); display: none; margin-top: 1.2rem; }
+        .config-warn { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; padding: 0.9rem 1.2rem; font-size: 0.82rem; color: var(--gold); font-weight: 600; display: none; margin-bottom: 1.5rem; }
 
-        /* ══════════════════════════════
-           PRICING
-        ══════════════════════════════ */
+        /* PRICING */
         .pricing-hero { text-align: center; padding: 4rem 0 0; }
         .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; margin-top: 3rem; }
         @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; } }
-        
         .tier { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 2rem; position: relative; display: flex; flex-direction: column; transition: all 0.3s; }
         .tier:hover { border-color: var(--border-hover); transform: translateY(-4px); }
         .tier.featured { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary), 0 20px 50px rgba(91,94,244,0.2); }
@@ -334,21 +256,19 @@
         .badge-popular { background: var(--primary); color: white; }
         .badge-free { background: var(--gold); color: #000; }
         .badge-team { background: var(--secondary); color: white; }
-        .tier-name { font-size: 1.1rem; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: 0.3rem; }
+        .tier-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
         .tier-tagline { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 1.2rem; min-height: 36px; }
-        .tier-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.8rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1; }
+        .tier-price { font-size: 2.8rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1; }
         .tier-price sub { font-size: 1rem; font-weight: 500; color: var(--text-dim); letter-spacing: 0; }
         .tier-billing { font-size: 0.78rem; color: var(--text-dim); margin: 0.5rem 0 1.5rem; font-weight: 500; }
         .tier-features { list-style: none; flex: 1; border-top: 1px solid var(--border); padding-top: 1.3rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.7rem; }
         .tier-features li { font-size: 0.83rem; color: var(--text-mid); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
-        .tier-features li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; margin-top: 0px; }
+        .tier-features li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
         .tier-features li.locked { color: var(--text-dim); opacity: 0.5; }
         .tier-features li.locked::before { content: '🔒'; }
         .tier-features li.highlight { color: var(--text); font-weight: 600; }
 
-        /* ══════════════════════════════
-           FAQ
-        ══════════════════════════════ */
+        /* FAQ */
         .faq-list { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 3rem; }
         .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
         .faq-q { padding: 1.3rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.95rem; color: var(--text); transition: color 0.2s; gap: 1rem; }
@@ -358,30 +278,24 @@
         .faq-a { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: all 0.3s ease; font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; }
         .faq-item.open .faq-a { max-height: 300px; padding-bottom: 1.3rem; }
 
-        /* ══════════════════════════════
-           ACCOUNT
-        ══════════════════════════════ */
+        /* ACCOUNT */
         .account-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         @media (max-width: 800px) { .account-grid { grid-template-columns: 1fr; } }
         .account-profile { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 2rem; }
-        .account-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .account-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; font-weight: 800; }
         .verified-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(16,185,129,0.1); color: var(--success); padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.72rem; font-weight: 700; margin-top: 0.4rem; }
         .security-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--glass); border-radius: 12px; flex-wrap: wrap; gap: 0.8rem; }
         .security-title { font-weight: 600; font-size: 0.875rem; }
         .security-sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 2px; }
 
-        /* ══════════════════════════════
-           HISTORY
-        ══════════════════════════════ */
+        /* HISTORY */
         .history-table { width: 100%; border-collapse: collapse; min-width: 560px; }
         .history-table th { padding: 1rem 1.2rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); text-align: left; background: var(--glass); font-weight: 700; }
-        .history-table td { padding: 1.1rem 1.2rem; font-size: 0.875rem; border-top: 1px solid var(--border); }
+        .history-table td { padding: 1.1rem 1.2rem; font-size: 0.875rem; border-top: 1px solid var(--border); vertical-align: middle; }
         .table-wrap { border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
         .table-scroll { overflow-x: auto; }
 
-        /* ══════════════════════════════
-           MODALS
-        ══════════════════════════════ */
+        /* MODALS */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 500; padding: 1rem; }
         .modal-overlay.open { display: flex; animation: overlayIn 0.2s ease; }
         @keyframes overlayIn { from{opacity:0} to{opacity:1} }
@@ -389,20 +303,17 @@
         .modal-box.modal-lg { max-width: 520px; }
         .modal-close { position: absolute; top: 1.2rem; right: 1.2rem; width: 34px; height: 34px; border-radius: 50%; background: var(--glass); border: 1px solid var(--border); color: var(--text-dim); font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .modal-close:hover { background: rgba(247,37,133,0.1); color: var(--accent); border-color: var(--accent); }
-        
         .modal-icon { font-size: 2.5rem; margin-bottom: 1rem; }
         .modal-title { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.3rem; }
         .modal-sub { font-size: 0.875rem; color: var(--text-dim); margin-bottom: 1.5rem; }
-        
-        /* AUTH TABS */
+
+        /* AUTH */
         .auth-tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; background: var(--glass); padding: 4px; border-radius: 12px; border: 1px solid var(--border); }
         .auth-tab { flex: 1; padding: 0.6rem; border-radius: 9px; border: none; background: transparent; color: var(--text-dim); font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; }
         .auth-tab.active { background: var(--primary); color: white; }
-
         .divider { position: relative; text-align: center; margin: 1.2rem 0; }
         .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
         .divider span { background: var(--bg2); padding: 0 1rem; position: relative; font-size: 0.78rem; color: var(--text-dim); }
-
         .input-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
         .input-group input { padding: 0.9rem 1.1rem; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 0.9rem; outline: none; transition: border-color 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; width: 100%; }
         .input-group input:focus { border-color: var(--primary); }
@@ -413,20 +324,16 @@
         .pay-row { display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.4rem; }
         .pay-row:last-child { margin: 0; padding-top: 0.6rem; border-top: 1px solid var(--border); font-weight: 700; font-size: 0.95rem; }
         .trial-badge { font-size: 0.75rem; color: var(--success); font-weight: 700; background: rgba(16,185,129,0.1); padding: 0.2rem 0.6rem; border-radius: 6px; }
-        
         .pay-methods { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.2rem; }
         .pay-method { display: flex; align-items: center; gap: 12px; padding: 0.9rem 1.1rem; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.2s; background: transparent; color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.875rem; font-weight: 500; text-align: left; width: 100%; }
         .pay-method:hover, .pay-method.selected { border-color: var(--primary); background: rgba(91,94,244,0.06); }
         .pay-method .pm-icon { width: 32px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; background: white; flex-shrink: 0; }
         .pay-method .pm-label { font-weight: 600; flex: 1; }
-        .pay-method .check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; }
+        .pay-method .check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; flex-shrink: 0; }
         .pay-method.selected .check { background: var(--primary); border-color: var(--primary); color: white; }
-        
         .card-field-wrap { background: var(--glass); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; }
         .card-errors { color: var(--accent); font-size: 0.82rem; margin-top: 0.4rem; min-height: 20px; }
-        
-        .ideal-logos, .klarna-info, .gpay-info { display: none; background: var(--glass); border-radius: 10px; padding: 1rem; margin-bottom: 0.8rem; font-size: 0.82rem; color: var(--text-dim); text-align: center; }
-        
+        .ideal-info, .klarna-info, .gpay-info { display: none; background: var(--glass); border-radius: 10px; padding: 1rem; margin-bottom: 0.8rem; font-size: 0.82rem; color: var(--text-dim); text-align: center; border: 1px solid var(--border); }
         .secure-note { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-dim); justify-content: center; margin-top: 0.8rem; }
 
         /* PASSWORD RECOVERY */
@@ -443,40 +350,43 @@
         .notif.info { background: var(--primary); color: white; }
 
         /* SPINNER */
-        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; }
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; flex-shrink: 0; }
         @keyframes spin { to{transform:rotate(360deg)} }
 
-        /* COOKIE BANNER */
+        /* COOKIE */
         .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); padding: 1.2rem 2rem; z-index: 300; display: none; backdrop-filter: blur(20px); }
         .cookie-content { max-width: 1140px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
         .cookie-text { font-size: 0.85rem; color: var(--text-dim); }
         .cookie-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
-        /* CONFIG WARNING */
-        .config-warn { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; padding: 0.9rem 1.2rem; font-size: 0.82rem; color: var(--gold); font-weight: 600; display: none; margin-bottom: 1.5rem; }
-
         /* MISC */
         .text-center { text-align: center; }
-        .text-dim { color: var(--text-dim); }
-        .font-bold { font-weight: 700; }
         .gradient-text { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .mt1 { margin-top: 0.5rem; } .mt2 { margin-top: 1rem; } .mt3 { margin-top: 1.5rem; } .mt4 { margin-top: 2rem; }
-        .mb2 { margin-bottom: 1rem; } .mb3 { margin-bottom: 1.5rem; }
-        .gap2 { gap: 1rem; } .gap3 { gap: 1.5rem; }
-        .flex { display: flex; } .flex-col { flex-direction: column; } .items-center { align-items: center; } .justify-between { justify-content: space-between; } .flex-wrap { flex-wrap: wrap; }
-        
+        .mt1{margin-top:0.5rem} .mt2{margin-top:1rem} .mt3{margin-top:1.5rem} .mt4{margin-top:2rem}
+        .mb2{margin-bottom:1rem} .mb3{margin-bottom:1.5rem}
         @media (max-width: 600px) { nav { display: none; } .container { padding: 0 1rem; } }
+
+        /* PRO LOCK OVERLAY on select options */
+        select option[data-pro="true"] { color: #9b5de5; }
+
+        /* Terms consent modal special layout */
+        .terms-modal-inner { max-width: 620px; width: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: 28px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; }
+        .terms-modal-header { padding: 1.5rem 1.75rem 1rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .terms-modal-body { overflow-y: auto; flex: 1; padding: 1.25rem 1.75rem; line-height: 1.75; color: var(--text-mid); font-size: 0.85rem; }
+        .terms-modal-footer { padding: 1.25rem 1.75rem; border-top: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 0.75rem; }
     </style>
 </head>
 <body data-theme="dark">
 <div class="mesh-bg"></div>
+<!-- FIX #3: Google Translate div correctly placed in body -->
+<div id="google_translate_element" style="display:none"></div>
 
 <!-- COOKIE BANNER -->
 <div class="cookie-banner" id="cookieBanner">
     <div class="cookie-content">
         <div class="cookie-text">
             <strong>🍪 We value your privacy</strong><br>
-            We use cookies for authentication and preferences. <a href="#" style="color:var(--primary);">More info</a>
+            We use cookies for authentication and preferences. <a href="#" style="color:var(--primary)">More info</a>
         </div>
         <div class="cookie-actions">
             <button class="btn btn-outline btn-sm" onclick="handleCookies('essential')">Essential Only</button>
@@ -487,7 +397,7 @@
 
 <!-- HEADER -->
 <header>
-    <a class="logo" onclick="showPage('landing')">
+    <a class="logo" onclick="showPage('landing')" href="javascript:void(0)">
         <div class="logo-icon">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M3 9V9.01M6 7V11M9 4V14M12 7V11M15 9V9.01" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -496,12 +406,12 @@
         TranscriptAI
     </a>
     <nav id="mainNav">
-        <a onclick="showPage('landing')" id="nav-landing" class="active">Home</a>
-        <a onclick="showPage('workspace')" id="nav-workspace">Workspace</a>
-        <a onclick="showPage('history')" id="nav-history">History</a>
-        <a onclick="showPage('pricing')" id="nav-pricing">Pricing</a>
-        <a onclick="showPage('faq')" id="nav-faq">FAQ</a>
-        <a onclick="showPage('account')" id="nav-account" style="display:none">Account</a>
+        <a onclick="showPage('landing')" id="nav-landing" class="active" href="javascript:void(0)">Home</a>
+        <a onclick="showPage('workspace')" id="nav-workspace" href="javascript:void(0)">Workspace</a>
+        <a onclick="showPage('history')" id="nav-history" href="javascript:void(0)">History</a>
+        <a onclick="showPage('pricing')" id="nav-pricing" href="javascript:void(0)">Pricing</a>
+        <a onclick="showPage('faq')" id="nav-faq" href="javascript:void(0)">FAQ</a>
+        <a onclick="showPage('account')" id="nav-account" href="javascript:void(0)" style="display:none">Account</a>
     </nav>
     <div class="header-right">
         <button class="btn btn-outline theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">☀️</button>
@@ -527,28 +437,15 @@
 ════════════════════════════════════════ -->
 <div id="page-landing" class="page active">
     <div class="container">
-        <!-- HERO -->
         <div class="landing-hero">
             <div class="hero-grid">
                 <div>
-                    <div class="hero-badge">
-                        <span></span>
-                        AI-Powered • 99 Languages
-                    </div>
-                    <h1 class="hero-title">
-                        Audio into text,<br>
-                        <span class="gradient-text">instantly.</span>
-                    </h1>
-                    <p class="hero-desc">
-                        Upload any audio or video and get a perfect transcript in seconds. Speaker detection, timestamps, summaries — powered by AssemblyAI.
-                    </p>
+                    <div class="hero-badge"><span></span>AI-Powered • 99 Languages</div>
+                    <h1 class="hero-title">Audio into text,<br><span class="gradient-text">instantly.</span></h1>
+                    <p class="hero-desc">Upload any audio or video and get a perfect transcript in seconds. Speaker detection, timestamps, summaries — powered by AssemblyAI.</p>
                     <div class="hero-ctas">
-                        <button class="btn btn-primary btn-xl" onclick="showPage('workspace')">
-                            🎙️ Start Transcribing — Free
-                        </button>
-                        <button class="btn btn-outline btn-xl" onclick="showPage('pricing')">
-                            View Pricing
-                        </button>
+                        <button class="btn btn-primary btn-xl" onclick="showPage('workspace')">🎙️ Start Transcribing — Free</button>
+                        <button class="btn btn-outline btn-xl" onclick="showPage('pricing')">View Pricing</button>
                     </div>
                     <div class="hero-stats">
                         <div class="stat"><div class="stat-num">99+</div><div class="stat-label">Languages</div></div>
@@ -564,7 +461,7 @@
                             <span style="width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;box-shadow:0 0 8px var(--success)"></span>
                         </div>
                         <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:0.5rem">interview_final.mp3 — 24:13</p>
-                        <div class="waveform" id="heroWave">
+                        <div class="waveform">
                             <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
                             <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
                             <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
@@ -575,7 +472,7 @@
                             <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
                             <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
                         </div>
-                        <div class="transcript-preview" id="livePreview">
+                        <div class="transcript-preview">
                             <span class="highlight">Speaker A:</span> So what we're seeing in the data is really interesting — the conversion rate jumped by <span class="highlight">34 percent</span> after we implemented the new onboarding flow.<span class="typing-cursor"></span>
                         </div>
                         <div style="display:flex;gap:8px;margin-top:1rem">
@@ -596,36 +493,12 @@
                 <p class="section-sub">Built for journalists, podcasters, researchers, and anyone who works with audio.</p>
             </div>
             <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feat-icon">🌍</div>
-                    <div class="feat-title">99 Languages</div>
-                    <div class="feat-desc">Auto-detect or manually select. From English to Swahili — we've got you covered.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feat-icon">⚡</div>
-                    <div class="feat-title">Lightning Fast</div>
-                    <div class="feat-desc">Get transcripts in seconds, not minutes. Powered by AssemblyAI's latest models.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feat-icon">🎙️</div>
-                    <div class="feat-title">Speaker Detection</div>
-                    <div class="feat-desc">Automatically identify who said what. Perfect for interviews and meetings.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feat-icon">✨</div>
-                    <div class="feat-title">AI Summaries</div>
-                    <div class="feat-desc">Get key points and summaries extracted automatically from your recordings.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feat-icon">⏱️</div>
-                    <div class="feat-title">Word Timestamps</div>
-                    <div class="feat-desc">Every word is timestamped so you can jump right to the right moment.</div>
-                </div>
-                <div class="feature-card">
-                    <div class="feat-icon">🔒</div>
-                    <div class="feat-title">Secure & Private</div>
-                    <div class="feat-desc">Bank-level encryption. Files deleted after processing. GDPR compliant.</div>
-                </div>
+                <div class="feature-card"><div class="feat-icon">🌍</div><div class="feat-title">99 Languages</div><div class="feat-desc">Auto-detect or manually select. From English to Swahili — we've got you covered.</div></div>
+                <div class="feature-card"><div class="feat-icon">⚡</div><div class="feat-title">Lightning Fast</div><div class="feat-desc">Get transcripts in seconds, not minutes. Powered by AssemblyAI's latest models.</div></div>
+                <div class="feature-card"><div class="feat-icon">🎙️</div><div class="feat-title">Speaker Detection</div><div class="feat-desc">Automatically identify who said what. Perfect for interviews and meetings.</div></div>
+                <div class="feature-card"><div class="feat-icon">✨</div><div class="feat-title">AI Summaries</div><div class="feat-desc">Get key points and summaries extracted automatically from your recordings.</div></div>
+                <div class="feature-card"><div class="feat-icon">⏱️</div><div class="feat-title">Word Timestamps</div><div class="feat-desc">Every word is timestamped so you can jump right to the right moment.</div></div>
+                <div class="feature-card"><div class="feat-icon">🔒</div><div class="feat-title">Secure & Private</div><div class="feat-desc">Bank-level encryption. Files deleted after processing. GDPR compliant.</div></div>
             </div>
         </div>
 
@@ -636,21 +509,9 @@
                 <h2 class="section-title">Three steps to your transcript</h2>
             </div>
             <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-num">1</div>
-                    <div class="step-title">Upload Your File</div>
-                    <div class="step-desc">Drag and drop any MP3, MP4, WAV, FLAC, or other audio/video file.</div>
-                </div>
-                <div class="step-card">
-                    <div class="step-num">2</div>
-                    <div class="step-title">AI Processes It</div>
-                    <div class="step-desc">Our AI engine transcribes, detects speakers, and generates timestamps.</div>
-                </div>
-                <div class="step-card">
-                    <div class="step-num">3</div>
-                    <div class="step-title">Download & Use</div>
-                    <div class="step-desc">Copy, export as TXT or PDF. Your transcript is ready in seconds.</div>
-                </div>
+                <div class="step-card"><div class="step-num">1</div><div class="step-title">Upload Your File</div><div class="step-desc">Drag and drop any MP3, MP4, WAV, FLAC, or other audio/video file.</div></div>
+                <div class="step-card"><div class="step-num">2</div><div class="step-title">AI Processes It</div><div class="step-desc">Our AI engine transcribes, detects speakers, and generates timestamps.</div></div>
+                <div class="step-card"><div class="step-num">3</div><div class="step-title">Download & Use</div><div class="step-desc">Copy, export as TXT or PDF. Your transcript is ready in seconds.</div></div>
             </div>
         </div>
 
@@ -661,41 +522,18 @@
                 <h2 class="section-title">What people are saying</h2>
             </div>
             <div class="testimonials">
-                <div class="testimonial">
-                    <div class="stars">★★★★★</div>
-                    <div class="testimonial-text">"I transcribe all my podcast interviews with TranscriptAI. The speaker detection is incredibly accurate — saves me hours every week."</div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar" style="background:linear-gradient(135deg,#5b5ef4,#9b5de5)">SV</div>
-                        <div><div class="author-name">Sarah van der Berg</div><div class="author-role">Podcast Host</div></div>
-                    </div>
-                </div>
-                <div class="testimonial">
-                    <div class="stars">★★★★★</div>
-                    <div class="testimonial-text">"As a journalist, accurate transcription is non-negotiable. TranscriptAI handles Dutch perfectly, even with accents. Pro is absolutely worth it."</div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar" style="background:linear-gradient(135deg,#f72585,#9b5de5)">MJ</div>
-                        <div><div class="author-name">Marc Janssen</div><div class="author-role">Journalist, NRC</div></div>
-                    </div>
-                </div>
-                <div class="testimonial">
-                    <div class="stars">★★★★★</div>
-                    <div class="testimonial-text">"Our entire research team uses Business. The collaboration features and unlimited transcription make it a no-brainer at $49/month."</div>
-                    <div class="testimonial-author">
-                        <div class="author-avatar" style="background:linear-gradient(135deg,#10b981,#5b5ef4)">LP</div>
-                        <div><div class="author-name">Lisa Peeters</div><div class="author-role">Research Director, UvA</div></div>
-                    </div>
-                </div>
+                <div class="testimonial"><div class="stars">★★★★★</div><div class="testimonial-text">"I transcribe all my podcast interviews with TranscriptAI. The speaker detection is incredibly accurate — saves me hours every week."</div><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#5b5ef4,#9b5de5)">SV</div><div><div class="author-name">Sarah van der Berg</div><div class="author-role">Podcast Host</div></div></div></div>
+                <div class="testimonial"><div class="stars">★★★★★</div><div class="testimonial-text">"As a journalist, accurate transcription is non-negotiable. TranscriptAI handles Dutch perfectly, even with accents. Pro is absolutely worth it."</div><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#f72585,#9b5de5)">MJ</div><div><div class="author-name">Marc Janssen</div><div class="author-role">Journalist, NRC</div></div></div></div>
+                <div class="testimonial"><div class="stars">★★★★★</div><div class="testimonial-text">"Our entire research team uses Business. The collaboration features and unlimited transcription make it a no-brainer at $49/month."</div><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#10b981,#5b5ef4)">LP</div><div><div class="author-name">Lisa Peeters</div><div class="author-role">Research Director, UvA</div></div></div></div>
             </div>
         </div>
 
-        <!-- CTA SECTION -->
+        <!-- CTA -->
         <div class="section" style="padding-top:0;padding-bottom:5rem">
             <div style="background:linear-gradient(135deg,rgba(91,94,244,0.12),rgba(155,93,229,0.12));border:1px solid rgba(91,94,244,0.25);border-radius:28px;padding:3.5rem;text-align:center">
                 <h2 style="font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;letter-spacing:-1px;margin-bottom:1rem">Start transcribing for free</h2>
                 <p style="color:var(--text-dim);margin-bottom:2rem;font-size:0.95rem">No credit card needed. 20 free minutes to get started.</p>
-                <button class="btn btn-primary btn-xl" onclick="showPage('workspace')">
-                    🎙️ Try It Free Now
-                </button>
+                <button class="btn btn-primary btn-xl" onclick="showPage('workspace')">🎙️ Try It Free Now</button>
             </div>
         </div>
     </div>
@@ -712,9 +550,7 @@
                 <p>Powered by AssemblyAI — supports 99 languages with auto-detection.</p>
             </div>
 
-            <div class="config-warn" id="configWarn">
-                ⚠️ Backend not configured or unreachable. Check your CONFIG.API_URL setting.
-            </div>
+            <div class="config-warn" id="configWarn">⚠️ Backend not configured or unreachable. Check your CONFIG.API_URL setting.</div>
 
             <!-- FREE USAGE BAR -->
             <div class="usage-card" id="freeUsageCard" style="display:none">
@@ -724,7 +560,7 @@
                 </div>
                 <div class="usage-mini-bar"><div class="usage-mini-fill" id="usageFill" style="width:0%"></div></div>
                 <p style="font-size:0.78rem;color:var(--text-dim);margin-top:0.5rem">
-                    <a href="#" onclick="showPage('pricing');return false" style="color:var(--primary);font-weight:600">Upgrade to Pro</a> for 3000 min/month
+                    <a href="javascript:void(0)" onclick="showPage('pricing')" style="color:var(--primary);font-weight:600">Upgrade to Pro</a> for 3000 min/month
                 </p>
             </div>
 
@@ -746,10 +582,9 @@
                 <button class="btn btn-primary btn-sm" onclick="showPage('pricing')">Upgrade to Pro — €12/month</button>
             </div>
 
-            <!-- AD SLOT (free users) -->
+            <!-- AD SLOT (free users only) -->
             <div class="ad-slot" id="adSlot" style="display:none">
-                <p>📢 Advertisement — <a href="#" onclick="showPage('pricing');return false" style="color:var(--primary);font-weight:600">Upgrade to Pro</a> to remove ads</p>
-                <!-- Place your ad code here -->
+                <p>📢 Advertisement — <a href="javascript:void(0)" onclick="showPage('pricing')" style="color:var(--primary);font-weight:600">Upgrade to Pro</a> to remove ads</p>
                 <div style="height:90px;display:flex;align-items:center;justify-content:center;margin-top:0.5rem;background:var(--border);border-radius:8px;color:var(--text-dim);font-size:0.78rem">[ Ad Space 728×90 ]</div>
             </div>
 
@@ -808,14 +643,16 @@
                         <option value="ca">🏴 Català (Catalan)</option>
                     </select>
                 </div>
+                <!-- FIX #8: PRO options visually marked, JS will disable them for free users -->
                 <div class="form-group">
                     <label>Transcription Mode</label>
-                    <select id="modeSelect">
+                    <select id="modeSelect" onchange="checkModeAccess(this)">
                         <option value="standard">📝 Standard — Full text</option>
                         <option value="words">🔤 Word by Word — with timestamps</option>
-                        <option value="speakers">🎙️ Speaker Detection — Who said what [PRO]</option>
-                        <option value="summary">✨ Auto Summary — Key points [PRO]</option>
+                        <option value="speakers" data-pro="true">🎙️ Speaker Detection — Who said what [PRO]</option>
+                        <option value="summary" data-pro="true">✨ Auto Summary — Key points [PRO]</option>
                     </select>
+                    <p id="proModeHint" style="display:none;font-size:0.75rem;color:var(--secondary);margin-top:0.4rem;font-weight:600">⚡ This feature requires a Pro plan</p>
                 </div>
             </div>
 
@@ -852,6 +689,49 @@
                 <div class="lang-banner" id="langBanner"></div>
                 <div class="transcript-output" id="transcriptArea"></div>
                 <button class="btn btn-outline mt3" onclick="newTranscription()" style="color:var(--primary)">+ New File</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     HISTORY  (FIX #1: this page was missing)
+════════════════════════════════════════ -->
+<div id="page-history" class="page">
+    <div class="container" style="padding-top:3rem;padding-bottom:5rem">
+        <div class="card card-padded">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+                <div>
+                    <h1 style="font-size:2rem;font-weight:800;letter-spacing:-1px">Transcription History</h1>
+                    <p style="color:var(--text-dim);margin-top:0.4rem;font-size:0.9rem">All your previous transcriptions</p>
+                </div>
+                <div style="display:flex;gap:8px">
+                    <button class="btn btn-outline btn-sm" onclick="clearHistory()" style="color:var(--accent);border-color:rgba(247,37,133,0.3)">🗑️ Clear All</button>
+                    <button class="btn btn-primary btn-sm" onclick="showPage('workspace')">+ New Transcription</button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <div class="table-scroll">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Date</th>
+                                <th>Duration</th>
+                                <th>Language</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody">
+                            <tr><td colspan="6" style="padding:3rem;text-align:center;color:var(--text-dim)">
+                                <div style="font-size:3rem;margin-bottom:1rem">📭</div>
+                                No transcriptions yet.<br>
+                                <button class="btn btn-primary btn-sm" onclick="showPage('workspace')" style="margin-top:1rem">Upload your first file</button>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -934,7 +814,7 @@
             </div>
         </div>
         <div style="text-align:center;margin-top:2rem;padding:1.5rem;background:var(--glass);border-radius:16px;border:1px solid var(--border)">
-            <p style="color:var(--text-dim);font-size:0.875rem">Need more than 5 seats or custom limits? <a href="/cdn-cgi/l/email-protection#e7828993829597958e9482a7939586899484958e9793868ec984888a" style="color:var(--primary);font-weight:600">Contact us</a> for Enterprise pricing.</p>
+            <p style="color:var(--text-dim);font-size:0.875rem">Need more than 5 seats or custom limits? <a href="mailto:transcriptiai@gmail.com" style="color:var(--primary);font-weight:600">Contact us</a> for Enterprise pricing.</p>
         </div>
     </div>
 </div>
@@ -973,7 +853,7 @@
                         <div class="account-avatar" id="acctAvatar">U</div>
                         <div>
                             <h2 style="font-size:1.3rem;font-weight:800" id="acctName">User</h2>
-                            <p style="color:var(--text-dim);font-size:0.875rem;margin-top:2px" id="acctEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0a7f796f784a6f726b677a666f24696567">[email&#160;protected]</a></p>
+                            <p style="color:var(--text-dim);font-size:0.875rem;margin-top:2px" id="acctEmail">user@example.com</p>
                             <div class="verified-badge">✓ Email Verified</div>
                         </div>
                     </div>
@@ -1021,6 +901,7 @@
                             </div>
                             <div class="security-row">
                                 <div><div class="security-title">Change Password</div><div class="security-sub">Update your login password</div></div>
+                                <!-- FIX #6: recoveryModal now exists in HTML below -->
                                 <button class="btn btn-outline btn-sm" onclick="openModal('recoveryModal','change')">Update</button>
                             </div>
                             <div class="security-row">
@@ -1036,9 +917,8 @@
 </div>
 
 <!-- ════════════════════════════════════════
-     HISTORY
+     PRIVACY POLICY
 ════════════════════════════════════════ -->
-<!-- PRIVACY POLICY PAGE -->
 <div id="page-privacy" class="page">
     <div class="container" style="padding-top:3rem;padding-bottom:5rem;max-width:800px">
         <div class="card card-padded">
@@ -1057,7 +937,9 @@
     </div>
 </div>
 
-<!-- TERMS OF SERVICE PAGE -->
+<!-- ════════════════════════════════════════
+     TERMS OF SERVICE
+════════════════════════════════════════ -->
 <div id="page-terms" class="page">
     <div class="container" style="padding-top:3rem;padding-bottom:5rem;max-width:860px">
         <div class="card card-padded">
@@ -1065,127 +947,29 @@
                 <h1 style="font-size:2rem;font-weight:800;letter-spacing:-1px;margin-bottom:0.4rem">Terms of Service</h1>
                 <p style="color:var(--text-dim);font-size:0.9rem">Last updated: March 12, 2026 &nbsp;·&nbsp; Effective date: March 12, 2026</p>
             </div>
-
             <div style="line-height:1.85;color:var(--text-mid);display:flex;flex-direction:column;gap:2rem">
-
                 <div style="padding:1rem 1.25rem;background:rgba(91,94,244,0.07);border-left:3px solid var(--primary);border-radius:0 8px 8px 0">
-                    <p style="margin:0;font-size:0.88rem">Please read these Terms of Service carefully before using TranscriptAI. By accessing or using our service, you agree to be bound by these terms. If you do not agree, you may not use the service.</p>
+                    <p style="margin:0;font-size:0.88rem">Please read these Terms of Service carefully before using TranscriptAI. By accessing or using our service, you agree to be bound by these terms.</p>
                 </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">1. Definitions</h2>
-                    <p><strong style="color:var(--text)">"Service"</strong> refers to the TranscriptAI platform, including the website, web application, and all related services accessible at transcriptai-1hj.pages.dev.</p>
-                    <p style="margin-top:0.75rem"><strong style="color:var(--text)">"User", "you", "your"</strong> refers to any individual or entity that accesses or uses the Service.</p>
-                    <p style="margin-top:0.75rem"><strong style="color:var(--text)">"Content"</strong> refers to any audio, video, text, or other material uploaded to or generated by the Service.</p>
-                    <p style="margin-top:0.75rem"><strong style="color:var(--text)">"Transcription"</strong> refers to the text output generated by processing your audio or video files using AI models.</p>
-                    <p style="margin-top:0.75rem"><strong style="color:var(--text)">"We", "us", "our"</strong> refers to TranscriptAI and its operators.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">2. Eligibility & Account Registration</h2>
-                    <p>You must be at least 16 years of age to use the Service. By creating an account, you represent that all information you provide is accurate and complete.</p>
-                    <p style="margin-top:0.75rem">You are responsible for maintaining the confidentiality of your login credentials. You must notify us immediately at transcriptiai@gmail.com if you suspect unauthorised access to your account.</p>
-                    <p style="margin-top:0.75rem">We reserve the right to suspend or terminate accounts that violate these Terms or that we reasonably believe are being used fraudulently.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">3. Service Plans & Features</h2>
-                    <p>TranscriptAI offers the following plans:</p>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">1. Definitions</h2><p><strong style="color:var(--text)">"Service"</strong> refers to the TranscriptAI platform at transcriptai-1hj.pages.dev.</p><p style="margin-top:0.75rem"><strong style="color:var(--text)">"User"</strong> refers to any individual or entity that accesses or uses the Service.</p><p style="margin-top:0.75rem"><strong style="color:var(--text)">"We", "us", "our"</strong> refers to TranscriptAI and its operators.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">2. Eligibility & Account Registration</h2><p>You must be at least 16 years of age to use the Service. You are responsible for maintaining the confidentiality of your login credentials. Notify us immediately at transcriptiai@gmail.com if you suspect unauthorised access.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">3. Service Plans & Features</h2>
                     <div style="margin-top:1rem;display:flex;flex-direction:column;gap:0.75rem">
-                        <div style="padding:0.875rem 1rem;border:1px solid var(--border);border-radius:10px">
-                            <strong style="color:var(--text)">Free Plan</strong> — 20 minutes of transcription per account lifetime. Supports standard transcription with automatic language detection.
-                        </div>
-                        <div style="padding:0.875rem 1rem;border:1px solid var(--primary);border-radius:10px;background:rgba(91,94,244,0.04)">
-                            <strong style="color:var(--text)">Pro Plan (€12/month)</strong> — 3,000 minutes of transcription per calendar month. Includes speaker detection, summaries, word-level timestamps, and priority processing. Minutes reset on your billing date and do not roll over.
-                        </div>
-                        <div style="padding:0.875rem 1rem;border:1px solid var(--border);border-radius:10px">
-                            <strong style="color:var(--text)">Business Plan (€49/month)</strong> — Unlimited transcription. Includes all Pro features plus priority support.
-                        </div>
-                    </div>
-                    <p style="margin-top:1rem">We reserve the right to modify plan features and pricing with at least 14 days advance notice to existing subscribers.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">4. Billing, Payments & Refunds</h2>
-                    <p>All paid plans are billed monthly in advance. Payments are processed securely by Stripe. By subscribing, you authorise us to charge your payment method on a recurring monthly basis.</p>
-                    <p style="margin-top:0.75rem"><strong style="color:var(--text)">Free Trial:</strong> All paid plans include a 7-day free trial. You will not be charged until the trial period ends. You may cancel at any time during the trial without charge.</p>
-                    <p style="margin-top:0.75rem"><strong style="color:var(--text)">Cancellation:</strong> You may cancel your subscription at any time through your account settings or by contacting us. Upon cancellation, you retain access to your paid plan until the end of your current billing period. No partial refunds are issued for unused time within a billing period.</p>
-                    <p style="margin-top:0.75rem"><strong style="color:var(--text)">Refunds:</strong> We offer refunds at our discretion within 7 days of a charge if you have not used more than 10% of your monthly minutes. To request a refund, contact us at transcriptiai@gmail.com.</p>
-                    <p style="margin-top:0.75rem"><strong style="color:var(--text)">Failed Payments:</strong> If a payment fails, we will retry the charge. If payment cannot be collected, your account will be downgraded to the Free plan.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">5. Acceptable Use Policy</h2>
-                    <p>You agree not to use the Service to upload, transcribe, or process content that:</p>
-                    <ul style="margin-top:0.75rem;padding-left:1.5rem;display:flex;flex-direction:column;gap:0.4rem">
-                        <li>Is illegal, defamatory, harassing, or violates the rights of any third party</li>
-                        <li>Infringes on any copyright, trademark, or intellectual property rights</li>
-                        <li>Contains personal data of others without their consent</li>
-                        <li>Is intended for surveillance, stalking, or unlawful monitoring of individuals</li>
-                        <li>Constitutes spam or unauthorised bulk processing</li>
-                    </ul>
-                    <p style="margin-top:0.75rem">Violation of this policy may result in immediate account suspension without refund.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">6. Intellectual Property & Your Content</h2>
-                    <p>You retain full ownership of all audio, video, and text content you upload to the Service, as well as the transcriptions generated from your content.</p>
-                    <p style="margin-top:0.75rem">By using the Service, you grant us a limited, non-exclusive, royalty-free licence to process your content solely for the purpose of providing the transcription service. We do not use your content to train AI models.</p>
-                    <p style="margin-top:0.75rem">The TranscriptAI platform, including its design, code, branding, and AI models, is our intellectual property and may not be copied, modified, or reverse-engineered.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">7. Data Processing & Privacy</h2>
-                    <p>Your use of the Service is also governed by our <a onclick="showPage('privacy')" style="color:var(--primary);cursor:pointer">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
-                    <p style="margin-top:0.75rem">Audio and video files are processed in real time and deleted from our servers immediately after transcription is complete. We do not permanently store your uploaded media files.</p>
-                    <p style="margin-top:0.75rem">We are compliant with the EU General Data Protection Regulation (GDPR). If you are located in the European Economic Area, you have the rights described in our Privacy Policy.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">8. Transcription Accuracy</h2>
-                    <p>TranscriptAI uses AI-powered speech recognition to generate transcriptions. While we strive for high accuracy, we do not guarantee that transcriptions will be error-free. Accuracy may vary depending on audio quality, accents, background noise, and technical terminology.</p>
-                    <p style="margin-top:0.75rem">You are responsible for reviewing and verifying transcriptions before using them in any professional, legal, medical, or other context where accuracy is critical.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">9. Disclaimer of Warranties</h2>
-                    <p>The Service is provided on an <strong style="color:var(--text)">"as is"</strong> and <strong style="color:var(--text)">"as available"</strong> basis without any warranties of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
-                    <p style="margin-top:0.75rem">We do not warrant that the Service will be uninterrupted, error-free, or free of viruses or other harmful components.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">10. Limitation of Liability</h2>
-                    <p>To the maximum extent permitted by applicable law, TranscriptAI and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of data, loss of profits, or business interruption.</p>
-                    <p style="margin-top:0.75rem">Our total liability to you for any claim arising out of or relating to these Terms or the Service shall not exceed the total amount you paid us in the 30 days preceding the claim.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">11. Service Availability & Modifications</h2>
-                    <p>We reserve the right to modify, suspend, or discontinue any part of the Service at any time. We will provide reasonable notice for significant changes that affect paid subscribers.</p>
-                    <p style="margin-top:0.75rem">We may perform scheduled maintenance and will endeavour to minimise disruption to the Service. We are not liable for any downtime or service interruptions.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">12. Governing Law & Disputes</h2>
-                    <p>These Terms shall be governed by and construed in accordance with the laws of the Netherlands, without regard to its conflict of law provisions.</p>
-                    <p style="margin-top:0.75rem">Any disputes arising from these Terms or your use of the Service shall first be attempted to be resolved through good-faith negotiation. If a dispute cannot be resolved informally, it shall be subject to the jurisdiction of the courts of the Netherlands.</p>
-                    <p style="margin-top:0.75rem">If you are a consumer in the European Union, you may also have access to the EU Online Dispute Resolution platform at <a href="https://ec.europa.eu/consumers/odr" target="_blank" style="color:var(--primary)">ec.europa.eu/consumers/odr</a>.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">13. Changes to These Terms</h2>
-                    <p>We may update these Terms from time to time. When we make material changes, we will notify you by email or by displaying a prominent notice in the Service. Your continued use of the Service after the changes take effect constitutes your acceptance of the revised Terms.</p>
-                </div>
-
-                <div>
-                    <h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">14. Contact</h2>
-                    <p>If you have any questions about these Terms, please contact us:</p>
-                    <div style="margin-top:1rem;padding:1rem 1.25rem;border:1px solid var(--border);border-radius:10px;background:var(--glass)">
-                        <p style="margin:0"><strong style="color:var(--text)">TranscriptAI</strong><br>
-                        Email: <a href="mailto:transcriptiai@gmail.com" style="color:var(--primary)">transcriptiai@gmail.com</a></p>
+                        <div style="padding:0.875rem 1rem;border:1px solid var(--border);border-radius:10px"><strong style="color:var(--text)">Free Plan</strong> — 20 minutes lifetime. Supports standard transcription.</div>
+                        <div style="padding:0.875rem 1rem;border:1px solid var(--primary);border-radius:10px;background:rgba(91,94,244,0.04)"><strong style="color:var(--text)">Pro Plan (€12/month)</strong> — 3,000 minutes/month. Includes speaker detection, summaries, timestamps, priority processing. Minutes do not roll over.</div>
+                        <div style="padding:0.875rem 1rem;border:1px solid var(--border);border-radius:10px"><strong style="color:var(--text)">Business Plan (€49/month)</strong> — Unlimited transcription. All Pro features plus priority support.</div>
                     </div>
                 </div>
-
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">4. Billing, Payments & Refunds</h2><p>All paid plans billed monthly in advance via Stripe. 7-day free trial on all paid plans. Cancel anytime; access continues to end of billing period. Refunds within 7 days if less than 10% of monthly minutes used.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">5. Acceptable Use</h2><p>Do not upload illegal, defamatory content or content that violates third-party rights. No surveillance or stalking use. Violations result in immediate account suspension.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">6. Intellectual Property</h2><p>You retain full ownership of all content you upload. We process it solely to provide transcription. We do not use your content to train AI models.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">7. Data Processing & Privacy</h2><p>Governed by our <a onclick="showPage('privacy')" style="color:var(--primary);cursor:pointer">Privacy Policy</a>. Audio/video files are deleted immediately after transcription. GDPR compliant.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">8. Transcription Accuracy</h2><p>AI-generated transcriptions may contain errors. You are responsible for reviewing before professional or legal use.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">9. Disclaimer & Limitation of Liability</h2><p>Service provided "as is". We are not liable for indirect or consequential damages. Total liability limited to amounts paid in the preceding 30 days.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">10. Governing Law</h2><p>Governed by Dutch law. Disputes subject to courts of the Netherlands. EU consumers may use the <a href="https://ec.europa.eu/consumers/odr" target="_blank" style="color:var(--primary)">EU ODR platform</a>.</p></div>
+                <div><h2 style="color:var(--text);font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)">11. Contact</h2>
+                    <div style="padding:1rem 1.25rem;border:1px solid var(--border);border-radius:10px;background:var(--glass)"><p style="margin:0"><strong style="color:var(--text)">TranscriptAI</strong><br>Email: <a href="mailto:transcriptiai@gmail.com" style="color:var(--primary)">transcriptiai@gmail.com</a></p></div>
+                </div>
             </div>
         </div>
     </div>
@@ -1203,17 +987,17 @@
                 <div>
                     <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:0.75rem">Product</p>
                     <div style="display:flex;flex-direction:column;gap:0.5rem">
-                        <a onclick="showPage('workspace')" style="color:var(--text-mid);font-size:0.875rem;cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Transcribe</a>
-                        <a onclick="showPage('pricing')" style="color:var(--text-mid);font-size:0.875rem;cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Pricing</a>
-                        <a onclick="showPage('faq')" style="color:var(--text-mid);font-size:0.875rem;cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">FAQ</a>
+                        <a onclick="showPage('workspace')" href="javascript:void(0)" style="color:var(--text-mid);font-size:0.875rem;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Transcribe</a>
+                        <a onclick="showPage('pricing')" href="javascript:void(0)" style="color:var(--text-mid);font-size:0.875rem;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Pricing</a>
+                        <a onclick="showPage('faq')" href="javascript:void(0)" style="color:var(--text-mid);font-size:0.875rem;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">FAQ</a>
                     </div>
                 </div>
                 <div>
                     <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:0.75rem">Legal & Support</p>
                     <div style="display:flex;flex-direction:column;gap:0.5rem">
-                        <a onclick="openContactModal()" style="color:var(--text-mid);font-size:0.875rem;cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Contact</a>
-                        <a onclick="showPage('privacy')" style="color:var(--text-mid);font-size:0.875rem;cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Privacy Policy</a>
-                        <a onclick="showPage('terms')" style="color:var(--text-mid);font-size:0.875rem;cursor:pointer;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Terms of Service</a>
+                        <a onclick="openContactModal()" href="javascript:void(0)" style="color:var(--text-mid);font-size:0.875rem;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Contact</a>
+                        <a onclick="showPage('privacy')" href="javascript:void(0)" style="color:var(--text-mid);font-size:0.875rem;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Privacy Policy</a>
+                        <a onclick="showPage('terms')" href="javascript:void(0)" style="color:var(--text-mid);font-size:0.875rem;text-decoration:none" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-mid)'">Terms of Service</a>
                     </div>
                 </div>
             </div>
@@ -1229,71 +1013,262 @@
     </div>
 </footer>
 
-<!-- TERMS CONSENT MODAL -->
-<div class="modal-overlay" id="termsConsentModal" style="z-index:9999;background:rgba(0,0,0,0.92)">
-    <div class="modal" style="max-width:600px;max-height:85vh;display:flex;flex-direction:column">
-        <div style="padding:1.5rem 1.75rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0">
+<!-- ════════════════════════════════════════
+     MODALS
+════════════════════════════════════════ -->
+
+<!-- TERMS CONSENT MODAL (FIX #2: uses correct modal-box class) -->
+<!--
+    TERMS CONSENT GATE
+    ─────────────────────────────────────────────────────────────────
+    Security measures:
+    1. z-index 99999 — sits above everything, no element can overlap it
+    2. pointer-events: none on overlay — backdrop clicks do nothing
+    3. No close button, no backdropClose handler
+    4. Links to Privacy/Terms open in an INLINE PANEL inside the modal
+       so the modal never closes
+    5. declineTerms() sets localStorage + sessionStorage flag,
+       replaces document.body, blocks beforeunload, and adds a
+       MutationObserver to re-inject the block screen if anything
+       tries to restore the DOM
+    6. showPage() is gated — won't work until terms_accepted = '1'
+    ─────────────────────────────────────────────────────────────────
+-->
+<div id="termsConsentModal" style="
+    position:fixed;inset:0;
+    background:rgba(0,0,0,0.96);
+    backdrop-filter:blur(12px);
+    z-index:99999;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    padding:1rem;
+    pointer-events:all;
+">
+    <!-- Inline document viewer (shown when user clicks Terms/Privacy links) -->
+    <div id="termsInlineDoc" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.97);z-index:2;overflow-y:auto;padding:2rem;">
+        <div style="max-width:820px;margin:0 auto;">
+            <button onclick="closeInlineDoc()" style="display:flex;align-items:center;gap:8px;background:rgba(91,94,244,0.15);border:1px solid rgba(91,94,244,0.4);color:#5b5ef4;padding:0.5rem 1.1rem;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.85rem;margin-bottom:1.5rem;font-family:'Plus Jakarta Sans',sans-serif">
+                ← Back to Terms Consent
+            </button>
+            <div id="termsInlineContent" style="color:#b0b3d4;line-height:1.8;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem"></div>
+        </div>
+    </div>
+
+    <!-- Main consent card -->
+    <div class="terms-modal-inner" style="position:relative;z-index:1">
+        <div class="terms-modal-header">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:0.4rem">
-                <div style="width:36px;height:36px;background:linear-gradient(135deg,#5b5ef4,#9b5de5);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9V9.01M6 7V11M9 4V14M12 7V11M15 9V9.01" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
-                <h2 style="font-size:1.2rem;font-weight:800;margin:0">Welcome to TranscriptAI</h2>
+                <div style="width:36px;height:36px;background:linear-gradient(135deg,#5b5ef4,#9b5de5);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9V9.01M6 7V11M9 4V14M12 7V11M15 9V9.01" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <h2 style="font-size:1.2rem;font-weight:800;margin:0;color:var(--text)">Welcome to TranscriptAI</h2>
             </div>
             <p style="color:var(--text-dim);font-size:0.85rem;margin:0">Before you continue, please read and accept our Terms of Service.</p>
         </div>
-
-        <!-- Scrollable terms content -->
-        <div style="overflow-y:auto;flex:1;padding:1.25rem 1.75rem;line-height:1.75;color:var(--text-mid);font-size:0.85rem">
-            <p style="margin-bottom:1rem">By using TranscriptAI, you agree to the following terms:</p>
-
+        <div class="terms-modal-body">
+            <p style="margin-bottom:1rem">By using TranscriptAI, you agree to the following:</p>
             <div style="display:flex;flex-direction:column;gap:1.1rem">
-                <div>
-                    <strong style="color:var(--text)">1. Service & Plans</strong>
-                    <p style="margin-top:0.3rem">TranscriptAI offers AI-powered audio and video transcription. Free users receive 20 minutes lifetime. Pro (€12/month) includes 3,000 min/month. Business (€49/month) is unlimited. Minutes on paid plans do not roll over.</p>
-                </div>
-                <div>
-                    <strong style="color:var(--text)">2. Billing & Refunds</strong>
-                    <p style="margin-top:0.3rem">Subscriptions are billed monthly. A 7-day free trial is available on all paid plans. You may cancel anytime. Refunds are offered within 7 days if less than 10% of monthly minutes were used.</p>
-                </div>
-                <div>
-                    <strong style="color:var(--text)">3. Your Content</strong>
-                    <p style="margin-top:0.3rem">You retain ownership of all files you upload. We process them solely to generate your transcription. Uploaded files are deleted immediately after processing. We never use your content to train AI models.</p>
-                </div>
-                <div>
-                    <strong style="color:var(--text)">4. Acceptable Use</strong>
-                    <p style="margin-top:0.3rem">You may not use the service to process illegal content, content that violates third-party rights, or for unauthorised surveillance. Violations may result in immediate account termination.</p>
-                </div>
-                <div>
-                    <strong style="color:var(--text)">5. Privacy & GDPR</strong>
-                    <p style="margin-top:0.3rem">We comply with the EU General Data Protection Regulation. Your personal data is processed only as described in our <a onclick="showPage('privacy');closeModal('termsConsentModal')" style="color:var(--primary);cursor:pointer">Privacy Policy</a>.</p>
-                </div>
-                <div>
-                    <strong style="color:var(--text)">6. Accuracy Disclaimer</strong>
-                    <p style="margin-top:0.3rem">Transcriptions are AI-generated and may contain errors. You are responsible for reviewing outputs before use in any professional or legal context.</p>
-                </div>
-                <div>
-                    <strong style="color:var(--text)">7. Governing Law</strong>
-                    <p style="margin-top:0.3rem">These terms are governed by Dutch law. For the full Terms of Service, <a onclick="showPage('terms');closeModal('termsConsentModal')" style="color:var(--primary);cursor:pointer">click here</a>.</p>
-                </div>
+                <div><strong style="color:var(--text)">1. Service & Plans</strong><p style="margin-top:0.3rem">TranscriptAI offers AI-powered audio and video transcription. Free users receive 20 minutes lifetime. Pro (€12/month) includes 3,000 min/month. Business (€49/month) is unlimited. Minutes on paid plans do not roll over.</p></div>
+                <div><strong style="color:var(--text)">2. Billing & Refunds</strong><p style="margin-top:0.3rem">Subscriptions are billed monthly. A 7-day free trial is available on all paid plans. You may cancel anytime. Refunds offered within 7 days if less than 10% of monthly minutes were used.</p></div>
+                <div><strong style="color:var(--text)">3. Your Content</strong><p style="margin-top:0.3rem">You retain ownership of all files you upload. We process them solely to generate your transcription. Uploaded files are deleted immediately after processing. We never use your content to train AI models.</p></div>
+                <div><strong style="color:var(--text)">4. Acceptable Use</strong><p style="margin-top:0.3rem">You may not use the service to process illegal content, content that violates third-party rights, or for unauthorised surveillance. Violations result in immediate account termination.</p></div>
+                <div><strong style="color:var(--text)">5. Privacy & GDPR</strong><p style="margin-top:0.3rem">We comply with the EU GDPR. Your personal data is processed only as described in our
+                    <!-- Opens inline — modal stays open -->
+                    <a onclick="openInlineDoc('privacy')" style="color:var(--primary);cursor:pointer;font-weight:600;text-decoration:underline">Privacy Policy ↗</a>.
+                </p></div>
+                <div><strong style="color:var(--text)">6. Accuracy Disclaimer</strong><p style="margin-top:0.3rem">Transcriptions are AI-generated and may contain errors. You are responsible for reviewing outputs before professional or legal use.</p></div>
+                <div><strong style="color:var(--text)">7. Governing Law</strong><p style="margin-top:0.3rem">These terms are governed by Dutch law. Read the full document:
+                    <!-- Opens inline — modal stays open -->
+                    <a onclick="openInlineDoc('terms')" style="color:var(--primary);cursor:pointer;font-weight:600;text-decoration:underline">Full Terms of Service ↗</a>
+                </p></div>
             </div>
         </div>
-
-        <!-- Action buttons -->
-        <div style="padding:1.25rem 1.75rem;border-top:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;gap:0.75rem">
+        <div class="terms-modal-footer">
             <div style="display:flex;align-items:flex-start;gap:10px;padding:0.75rem;background:var(--glass);border-radius:10px;border:1px solid var(--border)">
-                <input type="checkbox" id="termsCheckbox" style="margin-top:2px;flex-shrink:0;accent-color:var(--primary);width:16px;height:16px;cursor:pointer" onchange="const btn=document.getElementById('acceptTermsBtn');btn.disabled=!this.checked;btn.style.opacity=this.checked?'1':'0.5';btn.style.cursor=this.checked?'pointer':'not-allowed'">
-                <label for="termsCheckbox" style="font-size:0.83rem;color:var(--text-mid);cursor:pointer;line-height:1.5">I have read and agree to the <a onclick="showPage('terms');closeModal('termsConsentModal')" style="color:var(--primary);cursor:pointer">Terms of Service</a> and <a onclick="showPage('privacy');closeModal('termsConsentModal')" style="color:var(--primary);cursor:pointer">Privacy Policy</a></label>
+                <input type="checkbox" id="termsCheckbox"
+                    style="margin-top:2px;flex-shrink:0;accent-color:#5b5ef4;width:16px;height:16px;cursor:pointer"
+                    onchange="
+                        const btn = document.getElementById('acceptTermsBtn');
+                        btn.disabled = !this.checked;
+                        btn.style.opacity = this.checked ? '1' : '0.5';
+                        btn.style.cursor = this.checked ? 'pointer' : 'not-allowed';
+                    ">
+                <label for="termsCheckbox" style="font-size:0.83rem;color:var(--text-mid);cursor:pointer;line-height:1.5">
+                    I have read and agree to the
+                    <a onclick="openInlineDoc('terms')" style="color:var(--primary);cursor:pointer;font-weight:600">Terms of Service</a>
+                    and
+                    <a onclick="openInlineDoc('privacy')" style="color:var(--primary);cursor:pointer;font-weight:600">Privacy Policy</a>
+                </label>
             </div>
             <div style="display:flex;gap:0.75rem">
-                <button id="acceptTermsBtn" class="btn btn-primary btn-full" onclick="acceptTerms()" disabled style="opacity:0.5;transition:opacity 0.2s">✓ Accept & Continue</button>
-                <button class="btn btn-outline" onclick="declineTerms()" style="flex-shrink:0;padding:0 1.25rem">Decline</button>
+                <button id="acceptTermsBtn" class="btn btn-primary btn-full" onclick="acceptTerms()" disabled style="opacity:0.5;cursor:not-allowed">✓ Accept & Continue</button>
+                <button class="btn btn-danger" onclick="declineTerms()" style="flex-shrink:0;padding:0 1.25rem">Decline</button>
             </div>
-            <p style="font-size:0.75rem;color:var(--text-dim);text-align:center;margin:0">If you decline, you will not be able to use TranscriptAI.</p>
+            <p style="font-size:0.75rem;color:var(--text-dim);text-align:center;margin:0">
+                Declining will permanently block access to TranscriptAI on this device.
+            </p>
         </div>
+    </div>
+</div>
+
+<!-- AUTH MODAL (FIX #7: was completely missing) -->
+<div class="modal-overlay" id="authModal" onclick="backdropClose(event)">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+        <div class="modal-icon">🔐</div>
+        <h2 class="modal-title" id="authTitle">Welcome back</h2>
+        <p class="modal-sub" id="authSub">Sign in to your account</p>
+
+        <!-- Google Sign-In -->
+        <div id="gsiContainer" style="margin-bottom:0.8rem;min-height:44px;display:flex;justify-content:center"></div>
+        <div class="divider"><span>or continue with email</span></div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+            <button class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')">Create Account</button>
+        </div>
+
+        <div class="error-box" id="authError" style="margin-bottom:1rem"></div>
+
+        <form onsubmit="submitAuth(event)">
+            <div class="input-group">
+                <input type="email" id="authEmail" placeholder="Email address" required autocomplete="email">
+                <input type="password" id="authPass" placeholder="Password" required autocomplete="current-password" minlength="8">
+                <input type="password" id="authConfirm" placeholder="Confirm password" style="display:none" autocomplete="new-password">
+            </div>
+            <div class="pass-hint" id="passHint" style="display:none;margin-bottom:0.8rem">
+                🔒 Minimum 8 characters. Use a mix of letters and numbers.
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="authSubmitBtn">Sign In</button>
+        </form>
+
+        <div id="forgotLink" style="text-align:center;margin-top:1rem">
+            <a href="javascript:void(0)" onclick="closeModal('authModal');openModal('recoveryModal','reset')" style="font-size:0.82rem;color:var(--primary);font-weight:600">Forgot your password?</a>
+        </div>
+        <p style="font-size:0.75rem;color:var(--text-dim);text-align:center;margin-top:1.2rem">
+            By signing in you agree to our <a onclick="showPage('terms');closeModal('authModal')" style="color:var(--primary);cursor:pointer">Terms of Service</a>
+        </p>
+    </div>
+</div>
+
+<!-- PASSWORD RECOVERY MODAL (FIX #6: was completely missing) -->
+<div class="modal-overlay" id="recoveryModal" onclick="backdropClose(event)">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('recoveryModal')">✕</button>
+        <div class="modal-icon">🔑</div>
+        <h2 class="modal-title">Account Security</h2>
+        <p class="modal-sub" id="recSubTitle">Reset or update your password</p>
+
+        <div class="recovery-steps">
+            <div class="rec-step active" id="recStep1"></div>
+            <div class="rec-step" id="recStep2"></div>
+            <div class="rec-step" id="recStep3"></div>
+        </div>
+
+        <!-- STEP 1: Enter email for reset -->
+        <div id="recView1">
+            <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem">Enter your email address and we'll send you a 6-digit reset code.</p>
+            <div class="error-box" id="recError1" style="margin-bottom:1rem"></div>
+            <div class="input-group">
+                <input type="email" id="recEmail" placeholder="Your email address" autocomplete="email">
+            </div>
+            <button class="btn btn-primary btn-full" onclick="sendResetLink()">Send Reset Code</button>
+        </div>
+
+        <!-- STEP 2: Enter code + new password -->
+        <div id="recView2" style="display:none">
+            <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem">Enter the 6-digit code sent to <strong id="recEmailDisplay" style="color:var(--text)"></strong> and choose a new password.</p>
+            <div class="error-box" id="recError2" style="margin-bottom:1rem"></div>
+            <div class="input-group">
+                <input type="text" id="recCode" placeholder="6-digit code" maxlength="6" inputmode="numeric" style="letter-spacing:4px;font-size:1.1rem;text-align:center">
+                <input type="password" id="recNewPass" placeholder="New password (min. 8 characters)" minlength="8">
+                <input type="password" id="recConfirmPass" placeholder="Confirm new password" minlength="8">
+            </div>
+            <button class="btn btn-primary btn-full" onclick="verifyAndReset()">Reset Password</button>
+        </div>
+
+        <!-- STEP 3: Success -->
+        <div id="recView3" style="display:none;text-align:center;padding:1rem 0">
+            <div style="font-size:3rem;margin-bottom:1rem">✅</div>
+            <h3 style="font-weight:800;margin-bottom:0.5rem">Password Updated!</h3>
+            <p style="color:var(--text-dim);font-size:0.875rem;margin-bottom:1.5rem">Your password has been reset successfully.</p>
+            <button class="btn btn-primary btn-full" onclick="closeModal('recoveryModal');openModal('authModal','login')">Sign In Now</button>
+        </div>
+
+        <!-- CHANGE PASSWORD (for logged-in users) -->
+        <div id="recViewChange" style="display:none">
+            <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1rem">Enter your current password and choose a new one.</p>
+            <div class="error-box" id="recErrorChange" style="margin-bottom:1rem"></div>
+            <div class="input-group">
+                <input type="password" id="recCurrentPass" placeholder="Current password" autocomplete="current-password">
+                <input type="password" id="recNewPass2" placeholder="New password (min. 8 characters)" minlength="8">
+                <input type="password" id="recConfirm2" placeholder="Confirm new password" minlength="8">
+            </div>
+            <button class="btn btn-primary btn-full" onclick="changePassword()">Update Password</button>
+        </div>
+    </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="payModal" onclick="backdropClose(event)">
+    <div class="modal-box modal-lg">
+        <button class="modal-close" onclick="closeModal('payModal')">✕</button>
+        <div class="modal-icon" id="payIcon">⚡</div>
+        <h2 class="modal-title" id="payTitle">Upgrade to Pro</h2>
+        <p class="modal-sub" id="paySub">Unlock 3000 minutes/month of transcription</p>
+
+        <div class="payment-summary" id="paySummary">
+            <div class="pay-row"><span id="payPlanName">Pro</span><span id="payPrice">€12/month</span></div>
+            <div class="pay-row"><span>Free trial</span><span class="trial-badge">7 days free</span></div>
+            <div class="pay-row"><span>Total today</span><span>€0.00</span></div>
+        </div>
+
+        <div class="pay-methods">
+            <button class="pay-method selected" onclick="selectPay(this,'card')">
+                <div class="pm-icon">💳</div><span class="pm-label">Credit / Debit Card</span><div class="check">✓</div>
+            </button>
+            <button class="pay-method" onclick="selectPay(this,'ideal')">
+                <div class="pm-icon" style="background:#cc0066;color:white;font-size:0.65rem;font-weight:800">iDL</div><span class="pm-label">iDEAL (Dutch bank)</span><div class="check"></div>
+            </button>
+            <button class="pay-method" onclick="selectPay(this,'gpay')">
+                <div class="pm-icon"><span style="font-size:0.7rem;font-weight:800;background:linear-gradient(90deg,#4285F4,#34A853,#FBBC05,#EA4335);-webkit-background-clip:text;-webkit-text-fill-color:transparent">G Pay</span></div><span class="pm-label">Google Pay</span><div class="check"></div>
+            </button>
+            <button class="pay-method" onclick="selectPay(this,'klarna')">
+                <div class="pm-icon" style="background:#ffb3c7;font-size:0.7rem;font-weight:800;color:#000">K</div><span class="pm-label">Klarna — Pay Later</span><div class="check"></div>
+            </button>
+        </div>
+
+        <!-- Card form -->
+        <div id="cardWrap">
+            <div class="card-field-wrap"><div id="cardElement"></div></div>
+            <div class="card-errors" id="cardErrors"></div>
+        </div>
+
+        <!-- iDEAL info -->
+        <div class="ideal-info" id="idealInfo">
+            🏦 You'll be redirected to your Dutch bank to complete payment securely via iDEAL.
+        </div>
+        <!-- Google Pay info -->
+        <div class="gpay-info" id="gpayInfo">
+            📱 You'll be redirected to complete payment via Google Pay.
+        </div>
+        <!-- Klarna info -->
+        <div class="klarna-info" id="klarnaInfo">
+            🛒 Pay in 30 days or spread the cost — you'll be redirected to Klarna to complete your order.
+        </div>
+
+        <p style="font-size:0.75rem;color:var(--text-dim);margin-bottom:0.8rem" id="payNote">U wordt na uw gratis proefperiode maandelijks gefactureerd. Annuleer wanneer u wilt.</p>
+
+        <button class="btn btn-primary btn-full" id="payBtn" onclick="processPayment()">Start Gratis Proefperiode</button>
+
+        <div class="secure-note">🔒 Beveiligd door Stripe &nbsp;·&nbsp; SSL encrypted &nbsp;·&nbsp; Annuleer altijd</div>
     </div>
 </div>
 
 <!-- CONTACT MODAL -->
 <div class="modal-overlay" id="contactModal" onclick="backdropClose(event)">
-    <div class="modal" style="max-width:480px">
+    <div class="modal-box">
         <button class="modal-close" onclick="closeModal('contactModal')">✕</button>
         <h2 class="modal-title">Contact Us</h2>
         <p class="modal-sub">Have a question or issue? We're here to help.</p>
@@ -1312,49 +1287,23 @@
     </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
 /* ══════════════════════════════════════════════════════════
    CONFIG
 ══════════════════════════════════════════════════════════ */
-// ============================================================
-// ✏️  HIER INVULLEN — ALLEEN DEZE REGELS AANPASSEN
-// ============================================================
-
 const CFG = {
-
-    // 1️⃣  BACKEND URL  (jouw Railway server)
-    //     Eindigt altijd op /api  —  geen schuine streep daarna
-    //     Vind je op: railway.app → jouw project → Settings → Domains
     API: 'https://transcriptai-backend-production.up.railway.app/api',
-
-    // 2️⃣  STRIPE PUBLISHABLE KEY  (begint met pk_live_ of pk_test_)
-    //     Vind je op: dashboard.stripe.com/apikeys
-    //     ⚠️  NOOIT je Secret Key (sk_...) hier invullen!
     STRIPE_KEY: 'pk_test_51T5DoB2dH16RYdsmiZNRo9iXRAMTfk8lc0ukZiuhaCnIrX7A2vTbqTG6SETScPiJFjaIJeYTFZpSISgIDmoPq64O009O1QM8lY',
-
-    // 3️⃣  STRIPE BILLING PORTAL URL
-    //     Vind je op: dashboard.stripe.com/settings/billing/portal
-    //     Klik op "Activate" en kopieer de link
     STRIPE_BILLING_PORTAL: 'https://billing.stripe.com/p/login/test_6oU9AMdV771q2rNaKq8EM00',
-
-    // 4️⃣  GOOGLE CLIENT ID  (optioneel — voor inloggen met Google)
-    //     Laat leeg ('') als je dit niet wilt gebruiken
-    //     Vind je op: console.cloud.google.com/apis/credentials
     GOOGLE_CLIENT_ID: '632957367846-m278vdl3ckru9ginlfcinsv5gsbp6d0p.apps.googleusercontent.com',
-
-    // 5️⃣  CONTACT E-MAILADRES  (wordt getoond op de pricing pagina)
     CONTACT_EMAIL: 'transcriptiai@gmail.com',
-
-    // ── Limieten (hoef je niet te wijzigen) ──────────────────
-    FREE_TOTAL: 20,        // gratis minuten totaal per account
-    FREE_PER_FILE: 10,     // max minuten per bestand (gratis plan)
-    PRO_MONTHLY: 3000,     // Pro plan: minuten per maand (50 uur)
-
+    FREE_TOTAL: 20,
+    FREE_PER_FILE: 10,
+    PRO_MONTHLY: 3000,
 };
-
-// ============================================================
-// ✅  KLAAR — de rest van de code hoef je NIET aan te passen
-// ============================================================
 
 /* ══════════════════════════════════════════════════════════
    STATE
@@ -1370,13 +1319,21 @@ const S = {
 };
 
 /* ══════════════════════════════════════════════════════════
-   COOKIES
+   COOKIES  (FIX #18: noted - tokens in JS cookies; backend should use HttpOnly)
 ══════════════════════════════════════════════════════════ */
 const C = {
-    set(n,v,d=365){ const e=new Date(Date.now()+d*864e5).toUTCString(); const s=location.protocol==='https:'?'; Secure':''; document.cookie=`${n}=${encodeURIComponent(JSON.stringify(v))}; expires=${e}; path=/; SameSite=Lax${s}`; },
-    get(n){ const m=document.cookie.match(new RegExp('(^| )'+n+'=([^;]+)')); if(!m)return null; try{return JSON.parse(decodeURIComponent(m[2]));}catch(e){return decodeURIComponent(m[2]);} },
-    del(n){ document.cookie=`${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`; },
-    consented(){ const c=this.get('consent'); return c==='all'||c==='essential'; }
+    set(n, v, d = 365) {
+        const e = new Date(Date.now() + d * 864e5).toUTCString();
+        const sec = location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = `${n}=${encodeURIComponent(JSON.stringify(v))}; expires=${e}; path=/; SameSite=Lax${sec}`;
+    },
+    get(n) {
+        const m = document.cookie.match(new RegExp('(^| )' + n + '=([^;]+)'));
+        if (!m) return null;
+        try { return JSON.parse(decodeURIComponent(m[2])); } catch (e) { return decodeURIComponent(m[2]); }
+    },
+    del(n) { document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`; },
+    consented() { const c = this.get('consent'); return c === 'all' || c === 'essential'; }
 };
 
 /* ══════════════════════════════════════════════════════════
@@ -1384,121 +1341,210 @@ const C = {
 ══════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
-    // Show terms consent on first visit
-    if (!localStorage.getItem('terms_accepted')) {
-        document.getElementById('termsConsentModal').classList.add('open');
+
+    // ── TERMS GATE ───────────────────────────────────────────
+    // If user previously declined, immediately show block screen
+    // and stop ALL further initialisation.
+    if (localStorage.getItem('terms_declined') === '1' || sessionStorage.getItem('terms_declined') === '1') {
+        showDeclinedScreen();
+        return;
     }
+
+    // If terms not yet accepted, show consent modal using inline style
+    // (not via .open class) so closeModal() can never dismiss it.
+    if (!localStorage.getItem('terms_accepted')) {
+        const m = document.getElementById('termsConsentModal');
+        m.style.display = 'flex';
+        // Block Escape key and other shortcuts while terms gate is open
+        document.addEventListener('keydown', blockKeyOnTerms, true);
+    }
+
     if (!C.consented()) document.getElementById('cookieBanner').style.display = 'block';
-    
-    const saved = C.get('minutesUsed'); if (saved) S.minutesUsed = parseInt(saved)||0;
-    const proSaved = C.get('proMinUsed'); if (proSaved) S.proMinUsed = parseInt(proSaved)||0;
-    
-    if (CFG.STRIPE_KEY.startsWith('pk_')) { try { S.stripe = Stripe(CFG.STRIPE_KEY); } catch(e){} }
-    
-    if (CFG.GOOGLE_CLIENT_ID && !CFG.GOOGLE_CLIENT_ID.includes('YOUR_')) initGSI();
+
+    // FIX #10: Use localStorage for history (not cookies — cookies have 4KB limit)
+    const savedHistory = localStorage.getItem('transcriptHistory');
+    if (savedHistory) { try { S.history = JSON.parse(savedHistory); } catch(e) { S.history = []; } }
+
+    const savedMin = C.get('minutesUsed');
+    if (savedMin) S.minutesUsed = parseInt(savedMin) || 0;
+    const savedProMin = C.get('proMinUsed');
+    if (savedProMin) S.proMinUsed = parseInt(savedProMin) || 0;
+
+    if (CFG.STRIPE_KEY && CFG.STRIPE_KEY.startsWith('pk_')) {
+        try {
+            S.stripe = Stripe(CFG.STRIPE_KEY);
+        } catch (e) {
+            // FIX #15: log stripe failure clearly instead of silently swallowing
+            console.warn('Stripe failed to initialise:', e.message);
+        }
+    }
+
+    if (CFG.GOOGLE_CLIENT_ID) initGSI();
     else {
         const c = document.getElementById('gsiContainer');
-        if(c) c.innerHTML = '<div style="font-size:0.75rem;color:var(--text-dim);padding:0.5rem;background:var(--glass);border-radius:8px;text-align:center">ℹ️ Google Sign-In not configured</div>';
+        if (c) c.innerHTML = '<div style="font-size:0.75rem;color:var(--text-dim);padding:0.5rem;background:var(--glass);border-radius:8px;text-align:center">ℹ️ Google Sign-In not configured</div>';
     }
 
     checkAuth();
     healthCheck();
-    applyConfig();
-    document.addEventListener('click', e => { if (!e.target.closest('.dropdown-wrap')) document.getElementById('userDropdown')?.classList.remove('open'); });
-    
-    // Animate waveform intermittently
-    startWaveAnimation();
+
+    // Close dropdowns on outside click
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.dropdown-wrap')) {
+            document.getElementById('userDropdown')?.classList.remove('open');
+        }
+    });
+
+    // FIX #14: Google Translate loaded deferred, non-blocking
+    initGoogleTranslate();
 });
 
-function startWaveAnimation() {
-    const bars = document.querySelectorAll('.wave-bar');
-    bars.forEach((b, i) => { b.style.animationDelay = (i * 0.04) + 's'; });
+/* ══════════════════════════════════════════════════════════
+   GOOGLE TRANSLATE  (FIX #14: async, non-blocking)
+══════════════════════════════════════════════════════════ */
+function initGoogleTranslate() {
+    const lang = (navigator.language || 'en').split('-')[0];
+    const supported = ['nl','de','fr','es','pt','it','pl','sv','da','fi','no','tr','ar','zh','ja','ko','ru','hi'];
+    if (lang !== 'en' && supported.includes(lang)) {
+        window._translateLang = lang;
+        const s = document.createElement('script');
+        s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateInit';
+        s.async = true;
+        s.onerror = () => console.warn('Google Translate failed to load');
+        document.body.appendChild(s);
+    }
 }
+window.googleTranslateInit = function() {
+    if (typeof google === 'undefined' || !google.translate) return;
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'nl,de,fr,es,pt,it,pl,sv,da,fi,no,tr,ar,zh-CN,ja,ko,ru,hi',
+        autoDisplay: true
+    }, 'google_translate_element');
+    setTimeout(() => {
+        const sel = document.querySelector('.goog-te-combo');
+        if (sel && window._translateLang) {
+            sel.value = window._translateLang === 'zh' ? 'zh-CN' : window._translateLang;
+            sel.dispatchEvent(new Event('change'));
+        }
+    }, 800);
+};
 
 /* ══════════════════════════════════════════════════════════
    THEME
 ══════════════════════════════════════════════════════════ */
 function initTheme() {
-    const s = C.get('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    S.theme = s; applyTheme();
+    const saved = C.get('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    S.theme = saved;
+    applyTheme();
 }
 function applyTheme() {
     document.body.setAttribute('data-theme', S.theme);
     const btn = document.getElementById('themeBtn');
-    if(btn) { btn.textContent = S.theme==='dark' ? '☀️' : '🌙'; }
+    if (btn) btn.textContent = S.theme === 'dark' ? '☀️' : '🌙';
 }
-function toggleTheme() { S.theme = S.theme==='dark' ? 'light' : 'dark'; applyTheme(); if(C.consented()) C.set('theme', S.theme); }
+function toggleTheme() {
+    S.theme = S.theme === 'dark' ? 'light' : 'dark';
+    applyTheme();
+    if (C.consented()) C.set('theme', S.theme);
+}
 
 /* ══════════════════════════════════════════════════════════
-   COOKIES
+   COOKIES / CONSENT
 ══════════════════════════════════════════════════════════ */
-function handleCookies(t) {
-    C.set('consent', t); document.getElementById('cookieBanner').style.display = 'none';
-    if(t==='all') C.set('theme', S.theme);
+function handleCookies(type) {
+    C.set('consent', type);
+    document.getElementById('cookieBanner').style.display = 'none';
+    if (type === 'all') C.set('theme', S.theme);
 }
 
 /* ══════════════════════════════════════════════════════════
    NAVIGATION
 ══════════════════════════════════════════════════════════ */
 function showPage(id) {
+    // GATE: block all navigation until terms are accepted
+    if (!localStorage.getItem('terms_accepted')) {
+        console.warn('Terms not accepted — navigation blocked');
+        return;
+    }
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-    const pg = document.getElementById('page-'+id);
-    const nav = document.getElementById('nav-'+id);
-    if(pg) pg.classList.add('active');
-    if(nav) nav.classList.add('active');
-    window.scrollTo({top:0,behavior:'smooth'});
-    if(id==='history' && S.loggedIn) loadHistory();
-    if(id==='account') updateAccountUI();
+    const pg = document.getElementById('page-' + id);
+    const nav = document.getElementById('nav-' + id);
+    if (pg) pg.classList.add('active');
+    if (nav) nav.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (id === 'history') {
+        if (S.loggedIn) loadHistory();
+        else renderHistory();
+    }
+    if (id === 'account') updateAccountUI();
 }
 
 /* ══════════════════════════════════════════════════════════
-   AUTH
+   GOOGLE SIGN-IN
 ══════════════════════════════════════════════════════════ */
 function initGSI() {
-    if (typeof google==='undefined'||!google.accounts) { setTimeout(initGSI, 500); return; }
+    if (typeof google === 'undefined' || !google.accounts) { setTimeout(initGSI, 500); return; }
     try {
         google.accounts.id.initialize({ client_id: CFG.GOOGLE_CLIENT_ID, callback: handleGoogleCB, auto_select: false });
         S.googleOK = true;
-    } catch(e) { console.warn('GSI init failed', e); }
+    } catch (e) { console.warn('GSI init failed', e); }
 }
 
 function renderGSI() {
     if (!S.googleOK) return;
     const c = document.getElementById('gsiContainer');
-    if(!c) return;
+    if (!c) return;
     try {
         c.innerHTML = '';
-        google.accounts.id.renderButton(c, { type:'standard', size:'large', theme: S.theme==='dark'?'filled_black':'outline', text:'continue_with', shape:'rectangular', width:380 });
-    } catch(e) {}
+        google.accounts.id.renderButton(c, {
+            type: 'standard', size: 'large',
+            theme: S.theme === 'dark' ? 'filled_black' : 'outline',
+            text: 'continue_with', shape: 'rectangular', width: 380
+        });
+    } catch (e) {}
 }
 
 function handleGoogleCB(resp) {
     if (!resp?.credential) { notifMsg('Google sign-in failed', 'error'); return; }
-    fetch(`${CFG.API}/auth/google`, { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({credential: resp.credential}) })
-    .then(r => r.ok ? r.json() : r.json().then(d => Promise.reject(new Error(d.error||'Google auth failed'))))
-    .then(data => {
-        if(data.token) C.set('authToken', data.token, 7);
-        if(data.user) C.set('cachedUser', data.user, 7);
-        S.user = data.user; S.loggedIn = true; S.isPro = data.user?.isPro||false; S.isBusiness = data.user?.isBusiness||false;
-        closeModal('authModal'); updateUI();
-        notifMsg(`Welcome, ${data.user?.name||'there'}! 🎉`, 'success');
+    fetch(`${CFG.API}/auth/google`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', body: JSON.stringify({ credential: resp.credential })
     })
-    .catch(e => notifMsg('Google sign-in failed: '+e.message, 'error'));
+    .then(r => r.ok ? r.json() : r.json().then(d => Promise.reject(new Error(d.error || 'Google auth failed'))))
+    .then(data => {
+        if (data.token) C.set('authToken', data.token, 7);
+        if (data.user) C.set('cachedUser', data.user, 7);
+        S.user = data.user; S.loggedIn = true;
+        S.isPro = data.user?.isPro || false; S.isBusiness = data.user?.isBusiness || false;
+        closeModal('authModal'); updateUI();
+        notifMsg(`Welcome, ${data.user?.name || 'there'}! 🎉`, 'success');
+    })
+    .catch(e => notifMsg('Google sign-in failed: ' + e.message, 'error'));
 }
 
+/* ══════════════════════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════════════════════ */
 async function checkAuth() {
     const token = C.get('authToken');
     if (!token) { updateUI(); return; }
     try {
-        const r = await fetch(`${CFG.API}/auth/me`, { headers:{'Authorization':`Bearer ${token}`}, credentials:'include' });
+        const r = await fetch(`${CFG.API}/auth/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }, credentials: 'include'
+        });
         if (r.ok) {
             const u = await r.json();
-            S.user=u; S.loggedIn=true; S.isPro=u.isPro||false; S.isBusiness=u.isBusiness||false; S.minutesUsed=u.minutesUsed||S.minutesUsed;
-        } else { C.del('authToken'); }
-    } catch(e) {
+            S.user = u; S.loggedIn = true;
+            S.isPro = u.isPro || false; S.isBusiness = u.isBusiness || false;
+            S.minutesUsed = u.minutesUsed || S.minutesUsed;
+        } else {
+            C.del('authToken');
+        }
+    } catch (e) {
         const cached = C.get('cachedUser');
-        if(cached) { S.user=cached; S.loggedIn=true; S.isPro=cached.isPro||false; }
+        if (cached) { S.user = cached; S.loggedIn = true; S.isPro = cached.isPro || false; S.isBusiness = cached.isBusiness || false; }
     }
     updateUI();
 }
@@ -1511,36 +1557,42 @@ async function submitAuth(e) {
     const errEl = document.getElementById('authError');
     errEl.style.display = 'none';
 
-    if (S.authTab==='signup') {
+    if (S.authTab === 'signup') {
         const confirm = document.getElementById('authConfirm').value;
-        if (pass !== confirm) { errEl.textContent='Passwords do not match'; errEl.style.display='block'; return; }
-        if (pass.length < 8) { errEl.textContent='Password must be at least 8 characters'; errEl.style.display='block'; return; }
+        if (pass !== confirm) { errEl.textContent = 'Passwords do not match'; errEl.style.display = 'block'; return; }
+        if (pass.length < 8) { errEl.textContent = 'Password must be at least 8 characters'; errEl.style.display = 'block'; return; }
     }
 
-    btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Please wait...';
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Please wait...';
 
     try {
-        const ep = S.authTab==='signup' ? '/auth/register' : '/auth/login';
-        const r = await fetch(`${CFG.API}${ep}`, { method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify({email, password:pass, name:email.split('@')[0]}) });
+        const ep = S.authTab === 'signup' ? '/auth/register' : '/auth/login';
+        const r = await fetch(`${CFG.API}${ep}`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email, password: pass, name: email.split('@')[0] })
+        });
         const data = await r.json();
-        if(!r.ok) throw new Error(data.error||data.message||'Authentication failed');
-        if(data.token) C.set('authToken', data.token, 7);
-        if(data.user) C.set('cachedUser', data.user, 7);
-        S.user=data.user; S.loggedIn=true; S.isPro=data.user?.isPro||false; S.isBusiness=data.user?.isBusiness||false;
+        if (!r.ok) throw new Error(data.error || data.message || 'Authentication failed');
+        if (data.token) C.set('authToken', data.token, 7);
+        if (data.user) C.set('cachedUser', data.user, 7);
+        S.user = data.user; S.loggedIn = true;
+        S.isPro = data.user?.isPro || false; S.isBusiness = data.user?.isBusiness || false;
         closeModal('authModal'); updateUI();
-        notifMsg(`Welcome${data.user?.name?', '+data.user.name:''}! 🎉`, 'success');
-    } catch(err) {
-        errEl.textContent = '⚠️ '+err.message; errEl.style.display='block';
+        notifMsg(`Welcome${data.user?.name ? ', ' + data.user.name : ''}! 🎉`, 'success');
+    } catch (err) {
+        errEl.textContent = '⚠️ ' + err.message; errEl.style.display = 'block';
     } finally {
-        btn.disabled=false; btn.textContent = S.authTab==='login' ? 'Sign In' : 'Create Account';
+        btn.disabled = false;
+        btn.textContent = S.authTab === 'login' ? 'Sign In' : 'Create Account';
     }
 }
 
 function switchAuthTab(tab) {
     S.authTab = tab;
-    const isLogin = tab==='login';
-    document.getElementById('tabLogin').className = 'auth-tab'+(isLogin?' active':'');
-    document.getElementById('tabSignup').className = 'auth-tab'+(!isLogin?' active':'');
+    const isLogin = tab === 'login';
+    document.getElementById('tabLogin').className = 'auth-tab' + (isLogin ? ' active' : '');
+    document.getElementById('tabSignup').className = 'auth-tab' + (!isLogin ? ' active' : '');
     document.getElementById('authTitle').textContent = isLogin ? 'Welcome back' : 'Create account';
     document.getElementById('authSub').textContent = isLogin ? 'Sign in to your account' : 'Start with 20 free minutes';
     document.getElementById('authSubmitBtn').textContent = isLogin ? 'Sign In' : 'Create Account';
@@ -1548,48 +1600,57 @@ function switchAuthTab(tab) {
     document.getElementById('passHint').style.display = isLogin ? 'none' : 'block';
     document.getElementById('forgotLink').style.display = isLogin ? 'block' : 'none';
     document.getElementById('authError').style.display = 'none';
+    // Update autocomplete hint for password field
+    document.getElementById('authPass').setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
 }
 
 function logout() {
     const token = C.get('authToken');
-    if(token) fetch(`${CFG.API}/auth/logout`,{method:'POST',headers:{'Authorization':`Bearer ${token}`},credentials:'include'}).catch(()=>{});
+    if (token) fetch(`${CFG.API}/auth/logout`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, credentials: 'include' }).catch(() => {});
     C.del('authToken'); C.del('cachedUser');
-    S.loggedIn=false; S.user=null; S.isPro=false; S.isBusiness=false;
-    updateUI(); showPage('workspace'); notifMsg('Logged out', 'info');
+    S.loggedIn = false; S.user = null; S.isPro = false; S.isBusiness = false;
+    updateUI(); showPage('workspace');
+    notifMsg('Logged out', 'info');
 }
 
 /* ══════════════════════════════════════════════════════════
-   PASSWORD RECOVERY
+   PASSWORD RECOVERY  (FIX #6)
 ══════════════════════════════════════════════════════════ */
-function openRecoveryModal(mode='reset') {
+function openRecoveryModal(mode = 'reset') {
     S.recoveryMode = mode;
-    document.getElementById('recView1').style.display = mode==='reset' ? 'block' : 'none';
+    const isReset = mode === 'reset';
+    document.getElementById('recView1').style.display = isReset ? 'block' : 'none';
     document.getElementById('recView2').style.display = 'none';
     document.getElementById('recView3').style.display = 'none';
-    document.getElementById('recViewChange').style.display = mode==='change' ? 'block' : 'none';
-    updateRecSteps(mode==='reset' ? 1 : 0);
+    document.getElementById('recViewChange').style.display = !isReset ? 'block' : 'none';
+    document.getElementById('recSubTitle').textContent = isReset ? 'Reset your password via email' : 'Change your current password';
+    updateRecSteps(isReset ? 1 : 0);
+    // Clear previous inputs and errors
+    ['recEmail','recCode','recNewPass','recConfirmPass','recCurrentPass','recNewPass2','recConfirm2'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['recError1','recError2','recErrorChange'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.style.display = 'none';
+    });
 }
 
 function updateRecSteps(step) {
-    [1,2,3].forEach(i => {
-        const el = document.getElementById('recStep'+i);
-        if(!el) return;
-        el.className = 'rec-step' + (i < step ? ' done' : i===step ? ' active' : '');
+    [1, 2, 3].forEach(i => {
+        const el = document.getElementById('recStep' + i);
+        if (!el) return;
+        el.className = 'rec-step' + (i < step ? ' done' : i === step ? ' active' : '');
     });
 }
 
 async function sendResetLink() {
     const email = document.getElementById('recEmail').value.trim();
     const errEl = document.getElementById('recError1');
-    if (!email || !email.includes('@')) { errEl.textContent='Please enter a valid email'; errEl.style.display='block'; return; }
-    errEl.style.display='none';
+    if (!email || !email.includes('@')) { errEl.textContent = 'Please enter a valid email'; errEl.style.display = 'block'; return; }
+    errEl.style.display = 'none';
     S.recoveryEmail = email;
-    
     try {
-        await fetch(`${CFG.API}/auth/forgot-password`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email}) });
-    } catch(e) {}
-    
-    // Show step 2 regardless (security - don't reveal if email exists)
+        await fetch(`${CFG.API}/auth/forgot-password`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
+    } catch (e) { /* Silent — don't reveal if email exists */ }
     document.getElementById('recView1').style.display = 'none';
     document.getElementById('recView2').style.display = 'block';
     document.getElementById('recEmailDisplay').textContent = email;
@@ -1602,20 +1663,18 @@ async function verifyAndReset() {
     const newPass = document.getElementById('recNewPass').value;
     const confirm = document.getElementById('recConfirmPass').value;
     const errEl = document.getElementById('recError2');
-    errEl.style.display='none';
-
-    if (code.length !== 6) { errEl.textContent='Please enter the 6-digit code'; errEl.style.display='block'; return; }
-    if (newPass.length < 8) { errEl.textContent='Password must be at least 8 characters'; errEl.style.display='block'; return; }
-    if (newPass !== confirm) { errEl.textContent='Passwords do not match'; errEl.style.display='block'; return; }
-    
+    errEl.style.display = 'none';
+    if (code.length !== 6) { errEl.textContent = 'Please enter the 6-digit code'; errEl.style.display = 'block'; return; }
+    if (newPass.length < 8) { errEl.textContent = 'Password must be at least 8 characters'; errEl.style.display = 'block'; return; }
+    if (newPass !== confirm) { errEl.textContent = 'Passwords do not match'; errEl.style.display = 'block'; return; }
     try {
-        const r = await fetch(`${CFG.API}/auth/reset-password`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email:S.recoveryEmail, code, newPassword:newPass}) });
+        const r = await fetch(`${CFG.API}/auth/reset-password`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: S.recoveryEmail, code, newPassword: newPass })
+        });
         const data = await r.json();
-        if (!r.ok) throw new Error(data.error||'Reset failed. Check your code.');
-    } catch(e) {
-        errEl.textContent = '⚠️ ' + e.message; errEl.style.display='block'; return;
-    }
-    
+        if (!r.ok) throw new Error(data.error || 'Reset failed. Check your code.');
+    } catch (e) { errEl.textContent = '⚠️ ' + e.message; errEl.style.display = 'block'; return; }
     document.getElementById('recView2').style.display = 'none';
     document.getElementById('recView3').style.display = 'block';
     updateRecSteps(3);
@@ -1626,21 +1685,20 @@ async function changePassword() {
     const next = document.getElementById('recNewPass2').value;
     const confirm = document.getElementById('recConfirm2').value;
     const errEl = document.getElementById('recErrorChange');
-    errEl.style.display='none';
-
-    if (next.length < 8) { errEl.textContent='New password must be at least 8 characters'; errEl.style.display='block'; return; }
-    if (next !== confirm) { errEl.textContent='Passwords do not match'; errEl.style.display='block'; return; }
-    
+    errEl.style.display = 'none';
+    if (next.length < 8) { errEl.textContent = 'New password must be at least 8 characters'; errEl.style.display = 'block'; return; }
+    if (next !== confirm) { errEl.textContent = 'Passwords do not match'; errEl.style.display = 'block'; return; }
     try {
         const token = C.get('authToken');
-        const r = await fetch(`${CFG.API}/auth/change-password`, { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`}, body: JSON.stringify({currentPassword:current,newPassword:next}) });
+        const r = await fetch(`${CFG.API}/auth/change-password`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ currentPassword: current, newPassword: next })
+        });
         const data = await r.json();
-        if (!r.ok) throw new Error(data.error||'Password change failed');
-    } catch(e) {
-        errEl.textContent='⚠️ '+e.message; errEl.style.display='block'; return;
-    }
-    
-    closeModal('recoveryModal'); notifMsg('Password updated successfully!', 'success');
+        if (!r.ok) throw new Error(data.error || 'Password change failed');
+    } catch (e) { errEl.textContent = '⚠️ ' + e.message; errEl.style.display = 'block'; return; }
+    closeModal('recoveryModal');
+    notifMsg('Password updated successfully!', 'success');
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1651,65 +1709,97 @@ function updateUI() {
     document.getElementById('authBtns').style.display = li ? 'none' : 'flex';
     document.getElementById('userMenuWrap').style.display = li ? 'block' : 'none';
     document.getElementById('nav-account').style.display = li ? 'block' : 'none';
-    
+
     if (S.user) {
         const name = S.user.name || S.user.email || 'U';
-        const init = name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
-        ['userAvatar','acctAvatar'].forEach(id => { const e=document.getElementById(id); if(e) e.textContent=init; });
+        const init = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        ['userAvatar', 'acctAvatar'].forEach(id => { const e = document.getElementById(id); if (e) e.textContent = init; });
     }
 
     const isFree = li && !S.isPro && !S.isBusiness;
     document.getElementById('freeUsageCard').style.display = isFree ? 'block' : 'none';
-    document.getElementById('proBanner').style.display = (li&&S.isPro&&!S.isBusiness) ? 'flex' : 'none';
-    document.getElementById('bizBanner').style.display = (li&&S.isBusiness) ? 'flex' : 'none';
-    document.getElementById('adSlot').style.display = (!S.isPro&&!S.isBusiness) ? 'block' : 'none';
-    document.getElementById('freeLimitBadge').style.display = (!S.isPro&&!S.isBusiness) ? 'block' : 'none';
-    
+    document.getElementById('proBanner').style.display = (li && S.isPro && !S.isBusiness) ? 'flex' : 'none';
+    document.getElementById('bizBanner').style.display = (li && S.isBusiness) ? 'flex' : 'none';
+    document.getElementById('adSlot').style.display = (!S.isPro && !S.isBusiness) ? 'block' : 'none';
+    document.getElementById('freeLimitBadge').style.display = (!S.isPro && !S.isBusiness) ? 'block' : 'none';
+
+    // FIX #8: Update pro mode hint and disable Pro options for free users
+    updateModeOptions();
     updateUsageDisplay();
     updateAccountUI();
 }
 
+// FIX #8: Show Pro hint when Pro-only option is selected by non-Pro user
+function checkModeAccess(sel) {
+    const opt = sel.options[sel.selectedIndex];
+    const isPro = opt.getAttribute('data-pro') === 'true';
+    const hint = document.getElementById('proModeHint');
+    if (hint) hint.style.display = (isPro && !S.isPro && !S.isBusiness) ? 'block' : 'none';
+}
+
+function updateModeOptions() {
+    const sel = document.getElementById('modeSelect');
+    if (!sel) return;
+    const canUsePro = S.isPro || S.isBusiness;
+    Array.from(sel.options).forEach(opt => {
+        if (opt.getAttribute('data-pro') === 'true') {
+            opt.style.color = canUsePro ? '' : '#9b5de5';
+        }
+    });
+    checkModeAccess(sel);
+}
+
 function updateUsageDisplay() {
-    const pct = Math.min((S.minutesUsed/CFG.FREE_TOTAL)*100,100);
-    ['usedMin'].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent=S.minutesUsed; });
-    const fill = document.getElementById('usageFill'); if(fill) fill.style.width=pct+'%';
+    const pct = Math.min((S.minutesUsed / CFG.FREE_TOTAL) * 100, 100);
+    const usedEl = document.getElementById('usedMin'); if (usedEl) usedEl.textContent = S.minutesUsed;
+    const fill = document.getElementById('usageFill'); if (fill) fill.style.width = pct + '%';
     const up = document.getElementById('upgradePrompt');
-    if(up) { up.style.display=(pct>=50&&!S.isPro&&!S.isBusiness)?'block':'none'; }
-    const pm = document.getElementById('promptMins'); if(pm) pm.textContent=S.minutesUsed;
-    if(S.isPro) { const pl=document.getElementById('proMinLeft'); if(pl) pl.textContent=`${CFG.PRO_MONTHLY-S.proMinUsed} min remaining`; }
-    if(pct>=100&&!S.isPro&&!S.isBusiness) {
-        const btn=document.getElementById('startBtn'); if(btn){btn.disabled=true;btn.textContent='⬆️ Upgrade to Continue';}
+    if (up) up.style.display = (pct >= 50 && !S.isPro && !S.isBusiness) ? 'block' : 'none';
+    const pm = document.getElementById('promptMins'); if (pm) pm.textContent = S.minutesUsed;
+    if (S.isPro) {
+        const pl = document.getElementById('proMinLeft');
+        if (pl) pl.textContent = `${CFG.PRO_MONTHLY - S.proMinUsed} min remaining`;
+    }
+    if (pct >= 100 && !S.isPro && !S.isBusiness) {
+        const btn = document.getElementById('startBtn');
+        if (btn) { btn.disabled = true; btn.textContent = '⬆️ Upgrade to Continue'; }
     }
 }
 
 function updateAccountUI() {
-    if(!S.loggedIn) return;
-    const e = (id) => document.getElementById(id);
-    if(S.user) { e('acctName').textContent=S.user.name||S.user.email||'User'; e('acctEmail').textContent=S.user.email||''; }
-    const pct=Math.min((S.minutesUsed/CFG.FREE_TOTAL)*100,100);
-    if(S.isBusiness) {
-        e('acctPlanName').textContent='Business Member'; e('acctPlanDetails').textContent='Unlimited · €49/month';
-        if(e('acctPlanBadge')){e('acctPlanBadge').style.display='block';e('acctPlanBadge').textContent='BUSINESS';}
-        if(e('acctFreeBar')) e('acctFreeBar').style.display='none';
-        if(e('acctBizArea')) e('acctBizArea').style.display='block';
-        if(e('acctProArea')) e('acctProArea').style.display='none';
-        if(e('acctUpgradeArea')) e('acctUpgradeArea').style.display='none';
-    } else if(S.isPro) {
-        e('acctPlanName').textContent='Pro Member'; e('acctPlanDetails').textContent=`${S.proMinUsed} / ${CFG.PRO_MONTHLY} min used`;
-        if(e('acctPlanBadge')){e('acctPlanBadge').style.display='block';e('acctPlanBadge').textContent='PRO';}
-        if(e('acctFreeBar')) e('acctFreeBar').style.display='none';
-        if(e('acctProArea')) e('acctProArea').style.display='block';
-        if(e('acctBizArea')) e('acctBizArea').style.display='none';
-        if(e('acctUpgradeArea')) e('acctUpgradeArea').style.display='none';
+    if (!S.loggedIn) return;
+    const e = id => document.getElementById(id);
+    if (S.user) {
+        if (e('acctName')) e('acctName').textContent = S.user.name || S.user.email || 'User';
+        if (e('acctEmail')) e('acctEmail').textContent = S.user.email || '';
+    }
+    const pct = Math.min((S.minutesUsed / CFG.FREE_TOTAL) * 100, 100);
+    if (S.isBusiness) {
+        if (e('acctPlanName')) e('acctPlanName').textContent = 'Business Member';
+        if (e('acctPlanDetails')) e('acctPlanDetails').textContent = 'Unlimited · €49/month';
+        if (e('acctPlanBadge')) { e('acctPlanBadge').style.display = 'block'; e('acctPlanBadge').textContent = 'BUSINESS'; }
+        if (e('acctFreeBar')) e('acctFreeBar').style.display = 'none';
+        if (e('acctBizArea')) e('acctBizArea').style.display = 'block';
+        if (e('acctProArea')) e('acctProArea').style.display = 'none';
+        if (e('acctUpgradeArea')) e('acctUpgradeArea').style.display = 'none';
+    } else if (S.isPro) {
+        if (e('acctPlanName')) e('acctPlanName').textContent = 'Pro Member';
+        if (e('acctPlanDetails')) e('acctPlanDetails').textContent = `${S.proMinUsed} / ${CFG.PRO_MONTHLY} min used`;
+        if (e('acctPlanBadge')) { e('acctPlanBadge').style.display = 'block'; e('acctPlanBadge').textContent = 'PRO'; }
+        if (e('acctFreeBar')) e('acctFreeBar').style.display = 'none';
+        if (e('acctProArea')) e('acctProArea').style.display = 'block';
+        if (e('acctBizArea')) e('acctBizArea').style.display = 'none';
+        if (e('acctUpgradeArea')) e('acctUpgradeArea').style.display = 'none';
     } else {
-        e('acctPlanName').textContent='Free Member'; e('acctPlanDetails').textContent=`${S.minutesUsed} / 20 min used`;
-        if(e('acctPlanBadge')) e('acctPlanBadge').style.display='none';
-        if(e('acctFreeBar')){e('acctFreeBar').style.display='block';}
-        const af=document.getElementById('acctUsageFill'); if(af) af.style.width=pct+'%';
-        const am=document.getElementById('acctUsedMin'); if(am) am.textContent=S.minutesUsed;
-        if(e('acctProArea')) e('acctProArea').style.display='none';
-        if(e('acctBizArea')) e('acctBizArea').style.display='none';
-        if(e('acctUpgradeArea')) e('acctUpgradeArea').style.display='block';
+        if (e('acctPlanName')) e('acctPlanName').textContent = 'Free Member';
+        if (e('acctPlanDetails')) e('acctPlanDetails').textContent = `${S.minutesUsed} / 20 min used`;
+        if (e('acctPlanBadge')) e('acctPlanBadge').style.display = 'none';
+        if (e('acctFreeBar')) e('acctFreeBar').style.display = 'block';
+        const af = document.getElementById('acctUsageFill'); if (af) af.style.width = pct + '%';
+        const am = document.getElementById('acctUsedMin'); if (am) am.textContent = S.minutesUsed;
+        if (e('acctProArea')) e('acctProArea').style.display = 'none';
+        if (e('acctBizArea')) e('acctBizArea').style.display = 'none';
+        if (e('acctUpgradeArea')) e('acctUpgradeArea').style.display = 'block';
     }
 }
 
@@ -1717,318 +1807,668 @@ function updateAccountUI() {
    FILE HANDLING
 ══════════════════════════════════════════════════════════ */
 function onDragOver(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('drag-over'); }
-function onDragLeave(e) { document.getElementById('uploadZone').classList.remove('drag-over'); }
-function onDrop(e) { e.preventDefault(); document.getElementById('uploadZone').classList.remove('drag-over'); const f=e.dataTransfer.files[0]; if(f) handleFileObj(f); }
-function handleFile(inp) { if(inp.files[0]) handleFileObj(inp.files[0]); }
+function onDragLeave() { document.getElementById('uploadZone').classList.remove('drag-over'); }
+function onDrop(e) { e.preventDefault(); document.getElementById('uploadZone').classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if (f) handleFileObj(f); }
+function handleFile(inp) { if (inp.files[0]) handleFileObj(inp.files[0]); }
 
 async function handleFileObj(file) {
-    const allowed = ['audio/','video/','application/ogg'];
-    const ok = allowed.some(t=>file.type.startsWith(t)) || /\.(mp3|mp4|wav|m4a|webm|ogg|flac|aac|wma)$/i.test(file.name);
+    const allowed = ['audio/', 'video/', 'application/ogg'];
+    const ok = allowed.some(t => file.type.startsWith(t)) || /\.(mp3|mp4|wav|m4a|webm|ogg|flac|aac|wma)$/i.test(file.name);
     if (!ok) { showErr('Unsupported file type. Please upload MP3, MP4, WAV, M4A, WEBM, OGG or FLAC.'); return; }
-    
-    try {
-        if(!S.isPro&&!S.isBusiness) {
+
+    if (!S.isPro && !S.isBusiness) {
+        // FIX #11: getAudioDuration race condition fixed — use a flag
+        try {
             const dur = await getAudioDuration(file);
-            if(dur>0&&dur>CFG.FREE_PER_FILE) { showErr(`Free plan: max ${CFG.FREE_PER_FILE} minutes per file. This file is ${dur.toFixed(1)} min. Upgrade to Pro.`); return; }
-        }
-    } catch(e){}
-    
+            if (dur > 0 && dur > CFG.FREE_PER_FILE) {
+                showErr(`Free plan: max ${CFG.FREE_PER_FILE} minutes per file. This file is ${dur.toFixed(1)} min. Upgrade to Pro.`);
+                return;
+            }
+        } catch (e) { /* If duration check fails, let the backend enforce */ }
+    }
+
     S.currentFile = file;
     document.getElementById('fileChip').style.display = 'flex';
     document.getElementById('chipName').textContent = file.name;
-    document.getElementById('chipSize').textContent = (file.size/1024/1024).toFixed(2)+' MB';
+    document.getElementById('chipSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
     hideErr();
-    
-    const canGo = S.isPro||S.isBusiness||S.minutesUsed<CFG.FREE_TOTAL;
+
+    const canGo = S.isPro || S.isBusiness || S.minutesUsed < CFG.FREE_TOTAL;
     const btn = document.getElementById('startBtn');
-    btn.disabled=!canGo; btn.textContent=canGo?'🎙️ Start Transcription':'⬆️ Upgrade to Continue';
+    btn.disabled = !canGo;
+    btn.textContent = canGo ? '🎙️ Start Transcription' : '⬆️ Upgrade to Continue';
 }
 
+// FIX #11: Improved duration checker — no race condition with cleanup flag
 function getAudioDuration(file) {
-    return new Promise(res => {
-        const a=document.createElement('audio'); const url=URL.createObjectURL(file); a.src=url;
-        const clean=()=>URL.revokeObjectURL(url);
-        a.onloadedmetadata=()=>{clean();res(a.duration/60);}; a.onerror=()=>{clean();res(0);};
-        setTimeout(()=>{clean();res(0);},5000);
+    return new Promise((resolve, reject) => {
+        const a = document.createElement('audio');
+        const url = URL.createObjectURL(file);
+        let resolved = false;
+        const cleanup = () => { if (!resolved) { resolved = true; URL.revokeObjectURL(url); } };
+        a.onloadedmetadata = () => { cleanup(); resolve(a.duration / 60); };
+        a.onerror = () => { cleanup(); reject(new Error('Could not read audio duration')); };
+        a.src = url;
+        setTimeout(() => { if (!resolved) { resolved = true; URL.revokeObjectURL(url); resolve(0); } }, 6000);
     });
 }
 
 function resetFile() {
-    S.currentFile=null; document.getElementById('fileChip').style.display='none';
-    document.getElementById('fileInput').value='';
-    const btn=document.getElementById('startBtn'); btn.disabled=true; btn.textContent='🎙️ Start Transcription';
+    S.currentFile = null;
+    document.getElementById('fileChip').style.display = 'none';
+    document.getElementById('fileInput').value = '';
+    const btn = document.getElementById('startBtn');
+    btn.disabled = true; btn.textContent = '🎙️ Start Transcription';
     hideErr();
 }
-function newTranscription() { resetFile(); document.getElementById('resultWrap').style.display='none'; window.scrollTo({top:0,behavior:'smooth'}); }
+function newTranscription() {
+    resetFile();
+    document.getElementById('resultWrap').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 /* ══════════════════════════════════════════════════════════
    TRANSCRIPTION
 ══════════════════════════════════════════════════════════ */
 async function startTranscription() {
-    if(!S.loggedIn) { openModal('authModal','login'); return; }
-    if(!S.currentFile) { showErr('Please select a file first.'); return; }
-    
+    if (!S.loggedIn) { openModal('authModal', 'login'); return; }
+    if (!S.currentFile) { showErr('Please select a file first.'); return; }
+
     const mode = document.getElementById('modeSelect').value;
     const lang = document.getElementById('langSelect').value;
-    
-    if((mode==='speakers'||mode==='summary')&&!S.isPro&&!S.isBusiness) { openPayModal('pro'); return; }
-    if(!S.isPro&&!S.isBusiness&&S.minutesUsed>=CFG.FREE_TOTAL) { openPayModal('pro'); return; }
-    
+
+    // FIX #8: block pro modes before upload attempt
+    if ((mode === 'speakers' || mode === 'summary') && !S.isPro && !S.isBusiness) {
+        openPayModal('pro'); return;
+    }
+    if (!S.isPro && !S.isBusiness && S.minutesUsed >= CFG.FREE_TOTAL) {
+        openPayModal('pro'); return;
+    }
+
     hideErr();
-    const btn=document.getElementById('startBtn');
-    btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Processing...';
-    document.getElementById('resultWrap').style.display='none';
-    document.getElementById('langBanner').style.display='none';
-    document.getElementById('progressWrap').style.display='block';
-    document.getElementById('progressFill').style.width='0%';
-    ['ps1','ps2','ps3','ps4'].forEach((id,i)=>setPStep(id,i===0?'active':''));
-    
+    const btn = document.getElementById('startBtn');
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Processing...';
+    document.getElementById('resultWrap').style.display = 'none';
+    document.getElementById('langBanner').style.display = 'none';
+    document.getElementById('progressWrap').style.display = 'block';
+    document.getElementById('progressFill').style.width = '0%';
+    ['ps1', 'ps2', 'ps3', 'ps4'].forEach((id, i) => setPStep(id, i === 0 ? 'active' : ''));
+
     try {
-        setPStep('ps1','active'); setProgress(10);
-        const fd=new FormData(); fd.append('file',S.currentFile); fd.append('language',lang); fd.append('mode',mode);
-        setPStep('ps1','done'); setPStep('ps2','active'); setProgress(30);
-        
-        const token=C.get('authToken');
-        const headers={}; if(token) headers['Authorization']=`Bearer ${token}`;
-        const r=await fetch(`${CFG.API}/transcription/upload`,{method:'POST',headers,credentials:'include',body:fd});
-        
-        setPStep('ps2','done'); setPStep('ps3','active'); setProgress(60);
-        if(!r.ok){const e=await r.json().catch(()=>({error:'Server error'})); throw new Error(e.error||e.message||'Transcription failed');}
-        const data=await r.json();
-        
-        setPStep('ps3','done'); setPStep('ps4','active'); setProgress(90);
-        if(!S.isPro&&!S.isBusiness&&data.minutesUsed!=null){S.minutesUsed=data.minutesUsed;C.set('minutesUsed',S.minutesUsed,30);updateUsageDisplay();}
-        if(lang==='auto'&&data.transcript?.language_code){const b=document.getElementById('langBanner');b.innerHTML=`🌍 Detected language: <strong>${data.transcript.language_code.toUpperCase()}</strong>`;b.style.display='block';}
-        
-        setPStep('ps4','done'); setProgress(100);
+        setPStep('ps1', 'active'); setProgress(10);
+        const fd = new FormData();
+        fd.append('file', S.currentFile); fd.append('language', lang); fd.append('mode', mode);
+
+        setPStep('ps1', 'done'); setPStep('ps2', 'active'); setProgress(30);
+
+        const token = C.get('authToken');
+        const headers = {};
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const r = await fetch(`${CFG.API}/transcription/upload`, { method: 'POST', headers, credentials: 'include', body: fd });
+        setPStep('ps2', 'done'); setPStep('ps3', 'active'); setProgress(60);
+
+        if (!r.ok) {
+            const errData = await r.json().catch(() => ({ error: 'Server error' }));
+            throw new Error(errData.error || errData.message || 'Transcription failed');
+        }
+        const data = await r.json();
+
+        setPStep('ps3', 'done'); setPStep('ps4', 'active'); setProgress(90);
+
+        if (!S.isPro && !S.isBusiness && data.minutesUsed != null) {
+            S.minutesUsed = data.minutesUsed;
+            C.set('minutesUsed', S.minutesUsed, 30);
+            updateUsageDisplay();
+        }
+
+        if (lang === 'auto' && data.transcript?.language_code) {
+            const b = document.getElementById('langBanner');
+            b.innerHTML = `🌍 Detected language: <strong>${data.transcript.language_code.toUpperCase()}</strong>`;
+            b.style.display = 'block';
+        }
+
+        setPStep('ps4', 'done'); setProgress(100);
         renderResult(data.transcript, mode, S.currentFile.name);
-        addHistory({filename:S.currentFile.name,createdAt:new Date().toISOString(),language:lang,text:data.transcript?.text||''});
-    } catch(e) {
-        document.getElementById('progressWrap').style.display='none';
-        btn.disabled=false; btn.innerHTML='🎙️ Start Transcription';
-        showErr('Transcription failed: '+e.message);
+        addHistory({ filename: S.currentFile.name, createdAt: new Date().toISOString(), language: lang, text: data.transcript?.text || '' });
+
+    } catch (e) {
+        document.getElementById('progressWrap').style.display = 'none';
+        btn.disabled = false; btn.textContent = '🎙️ Start Transcription';
+        showErr('Transcription failed: ' + e.message);
     }
 }
 
-function setPStep(id,s) { const e=document.getElementById(id); if(e) e.className='prog-step'+(s?' '+s:''); }
-function setProgress(p) { const b=document.getElementById('progressFill'); if(b) b.style.width=p+'%'; }
+function setPStep(id, s) { const e = document.getElementById(id); if (e) e.className = 'prog-step' + (s ? ' ' + s : ''); }
+function setProgress(p) { const b = document.getElementById('progressFill'); if (b) b.style.width = p + '%'; }
 
 function renderResult(tr, mode, fname) {
-    document.getElementById('progressWrap').style.display='none';
-    document.getElementById('resultWrap').style.display='block';
-    document.getElementById('resultMeta').textContent=`Completed · ${fname}`;
-    document.getElementById('startBtn').disabled=false;
-    document.getElementById('startBtn').textContent='🎙️ Start Transcription';
-    
-    const area=document.getElementById('transcriptArea'); area.innerHTML='';
-    
-    if(mode==='words'&&tr?.words?.length) {
-        let h='<div style="line-height:2.5">'; tr.words.forEach(w=>{ h+=`<span class="word-ts"><span class="ts-label">[${fmtTime(w.start)}]</span>${esc(w.text)} </span>`; }); h+='</div>'; area.innerHTML=h;
-    } else if(mode==='speakers'&&tr?.utterances?.length) {
-        const cols=['#5b5ef4','#9b5de5','#f72585','#10b981','#f59e0b'];
-        tr.utterances.forEach(u=>{ const c=cols[u.speaker.charCodeAt(0)%cols.length]; area.innerHTML+=`<div class="speaker-seg" style="border-left-color:${c}"><div class="speaker-name" style="color:${c}">🎙️ Speaker ${u.speaker} — ${fmtTime(u.start)}</div><div>${esc(u.text)}</div></div>`; });
-    } else if(mode==='summary'&&tr?.summary) {
-        area.innerHTML=`<div style="margin-bottom:1.5rem"><h3 style="color:var(--primary);font-size:0.95rem;font-weight:800;margin-bottom:0.8rem">✨ AI Summary</h3><div style="line-height:1.8">${esc(tr.summary).replace(/\n/g,'<br>')}</div></div><hr style="border:none;border-top:1px solid #ddd;margin:1.5rem 0"><div style="line-height:2;color:#555;font-size:0.9rem">${esc(tr.text)}</div>`;
+    document.getElementById('progressWrap').style.display = 'none';
+    document.getElementById('resultWrap').style.display = 'block';
+    document.getElementById('resultMeta').textContent = `Completed · ${fname}`;
+    document.getElementById('startBtn').disabled = false;
+    document.getElementById('startBtn').textContent = '🎙️ Start Transcription';
+
+    const area = document.getElementById('transcriptArea');
+    area.innerHTML = '';
+
+    if (mode === 'words' && tr?.words?.length) {
+        let h = '<div style="line-height:2.5">';
+        tr.words.forEach(w => { h += `<span class="word-ts"><span class="ts-label">[${fmtTime(w.start)}]</span>${esc(w.text)} </span>`; });
+        h += '</div>';
+        area.innerHTML = h;
+    } else if (mode === 'speakers' && tr?.utterances?.length) {
+        const cols = ['#5b5ef4', '#9b5de5', '#f72585', '#10b981', '#f59e0b'];
+        tr.utterances.forEach(u => {
+            const c = cols[u.speaker.charCodeAt(0) % cols.length];
+            area.innerHTML += `<div class="speaker-seg" style="border-left-color:${c}"><div class="speaker-name" style="color:${c}">🎙️ Speaker ${u.speaker} — ${fmtTime(u.start)}</div><div>${esc(u.text)}</div></div>`;
+        });
+    } else if (mode === 'summary' && tr?.summary) {
+        area.innerHTML = `<div style="margin-bottom:1.5rem"><h3 style="color:var(--primary);font-size:0.95rem;font-weight:800;margin-bottom:0.8rem">✨ AI Summary</h3><div style="line-height:1.8">${esc(tr.summary).replace(/\n/g, '<br>')}</div></div><hr style="border:none;border-top:1px solid #ddd;margin:1.5rem 0"><div style="line-height:2;color:#555;font-size:0.9rem">${esc(tr.text)}</div>`;
     } else {
-        const t=tr?.text||(typeof tr==='string'?tr:'No transcript returned.');
-        area.innerHTML=`<div style="line-height:2">${esc(t)}</div>`;
+        const t = tr?.text || (typeof tr === 'string' ? tr : 'No transcript returned.');
+        area.innerHTML = `<div style="line-height:2">${esc(t)}</div>`;
     }
-    window.scrollTo({top:document.getElementById('resultWrap').offsetTop-100,behavior:'smooth'});
+    window.scrollTo({ top: document.getElementById('resultWrap').offsetTop - 100, behavior: 'smooth' });
 }
 
-function fmtTime(ms) { const s=Math.floor((ms||0)/1000); return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
-function esc(t) { if(!t)return''; const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+// FIX #12: Improved timestamp regex — handles hours (HH:MM:SS) and minutes (MM:SS)
+function fmtTime(ms) {
+    const totalSec = Math.floor((ms || 0) / 1000);
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    if (h > 0) return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// FIX #17: Use efficient string-replace instead of DOM createElement per call
+function esc(t) {
+    if (!t) return '';
+    return String(t)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
 
 /* ══════════════════════════════════════════════════════════
    COPY / EXPORT
 ══════════════════════════════════════════════════════════ */
 function copyTranscript() {
-    const a=document.getElementById('transcriptArea');
-    navigator.clipboard?.writeText(a.innerText).then(()=>notifMsg('Copied!','success')).catch(()=>{ const r=document.createRange();r.selectNode(a);window.getSelection().removeAllRanges();window.getSelection().addRange(r);document.execCommand('copy');window.getSelection().removeAllRanges();notifMsg('Copied!','success'); });
+    const a = document.getElementById('transcriptArea');
+    navigator.clipboard?.writeText(a.innerText)
+        .then(() => notifMsg('Copied!', 'success'))
+        .catch(() => {
+            const r = document.createRange(); r.selectNode(a);
+            window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+            document.execCommand('copy'); window.getSelection().removeAllRanges();
+            notifMsg('Copied!', 'success');
+        });
 }
+
 function downloadTXT() {
-    const a=document.getElementById('transcriptArea');
-    const blob=new Blob([a.innerText],{type:'text/plain;charset=utf-8'});
-    const url=URL.createObjectURL(blob); const l=document.createElement('a'); l.href=url; l.download='transcript.txt'; document.body.appendChild(l); l.click(); document.body.removeChild(l); URL.revokeObjectURL(url);
+    const a = document.getElementById('transcriptArea');
+    const blob = new Blob([a.innerText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const l = document.createElement('a'); l.href = url; l.download = 'transcript.txt';
+    document.body.appendChild(l); l.click(); document.body.removeChild(l);
+    URL.revokeObjectURL(url);
 }
+
+// FIX #12: Improved PDF export — strips timestamps correctly for all durations
 function downloadPDF() {
-    const area=document.getElementById('transcriptArea');
-    const div=document.createElement('div');
-    div.style.cssText='font-family:Arial,sans-serif;font-size:14px;line-height:1.8;color:#1a1c2e;padding:20px';
-    const words=area.querySelectorAll('.word-ts');
-    if(words.length>0){ let t=''; words.forEach(w=>{ t+=(w.innerText.replace(/\[\d{2}:\d{2}\]/g,'').trim())+' '; }); div.innerHTML=`<div style="line-height:2">${t}</div>`; }
-    else { div.innerHTML=area.innerHTML; }
-    html2pdf().set({margin:15,filename:'Transcript.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(div).save();
+    const area = document.getElementById('transcriptArea');
+    const div = document.createElement('div');
+    div.style.cssText = 'font-family:Arial,sans-serif;font-size:14px;line-height:1.8;color:#1a1c2e;padding:20px';
+
+    const words = area.querySelectorAll('.word-ts');
+    if (words.length > 0) {
+        let t = '';
+        words.forEach(w => {
+            // FIX: strip timestamps in any format: [HH:MM:SS] or [MM:SS]
+            t += (w.innerText.replace(/\[\d{1,2}:\d{2}(?::\d{2})?\]/g, '').trim()) + ' ';
+        });
+        div.innerHTML = `<div style="line-height:2">${t.trim()}</div>`;
+    } else {
+        div.innerHTML = area.innerHTML;
+    }
+    html2pdf().set({
+        margin: 15, filename: 'Transcript.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).from(div).save();
 }
 
 /* ══════════════════════════════════════════════════════════
-   HISTORY
+   HISTORY  (FIX #10: localStorage instead of cookies)
 ══════════════════════════════════════════════════════════ */
 function addHistory(item) {
-    S.history.unshift(item); if(S.history.length>50) S.history=S.history.slice(0,50);
-    C.set('localHistory', S.history.slice(0,20), 90);
-}
-async function loadHistory() {
-    const local = C.get('localHistory');
-    if(local && local.length) { S.history=local; renderHistory(); }
+    S.history.unshift(item);
+    if (S.history.length > 100) S.history = S.history.slice(0, 100);
     try {
-        const token=C.get('authToken');
-        const r=await fetch(`${CFG.API}/transcription/history`,{headers:token?{'Authorization':`Bearer ${token}`}:{},credentials:'include'});
-        if(r.ok){const d=await r.json();if(d.history?.length){S.history=d.history;renderHistory();}}
-    } catch(e){}
+        localStorage.setItem('transcriptHistory', JSON.stringify(S.history));
+    } catch (e) { console.warn('localStorage full — history not saved locally'); }
 }
+
+function clearHistory() {
+    if (!confirm('Clear all transcription history? This cannot be undone.')) return;
+    S.history = [];
+    localStorage.removeItem('transcriptHistory');
+    renderHistory();
+    notifMsg('History cleared', 'info');
+}
+
+async function loadHistory() {
+    renderHistory(); // render local first for instant feedback
+    try {
+        const token = C.get('authToken');
+        const r = await fetch(`${CFG.API}/transcription/history`, {
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+            credentials: 'include'
+        });
+        if (r.ok) {
+            const d = await r.json();
+            if (d.history?.length) {
+                // Merge server history with local
+                S.history = d.history;
+                localStorage.setItem('transcriptHistory', JSON.stringify(S.history));
+                renderHistory();
+            }
+        }
+    } catch (e) { /* Use local history if server is unavailable */ }
+}
+
 function renderHistory() {
-    const tb=document.getElementById('historyBody'); if(!tb)return;
-    if(!S.history.length){tb.innerHTML='<tr><td colspan="5" style="padding:3rem;text-align:center;color:var(--text-dim)"><div style="font-size:3rem;margin-bottom:1rem">📭</div>No transcriptions yet.<br><button class="btn btn-primary btn-sm" onclick="showPage(\'workspace\')" style="margin-top:1rem">Upload your first file</button></td></tr>';return;}
-    tb.innerHTML=S.history.map((item,i)=>`<tr><td style="font-weight:600">${esc(item.filename||item.fileName||'Unknown')}</td><td style="color:var(--text-dim);font-size:0.82rem">${new Date(item.createdAt).toLocaleString()}</td><td style="color:var(--text-dim)">${item.duration||'—'} min</td><td><span style="color:var(--success)">● ${item.language||'Auto'}</span></td><td><button class="btn btn-outline btn-sm" onclick="viewHistItem(${i})">View</button></td></tr>`).join('');
+    const tb = document.getElementById('historyBody');
+    if (!tb) return;
+    if (!S.history.length) {
+        tb.innerHTML = '<tr><td colspan="6" style="padding:3rem;text-align:center;color:var(--text-dim)"><div style="font-size:3rem;margin-bottom:1rem">📭</div>No transcriptions yet.<br><button class="btn btn-primary btn-sm" onclick="showPage(\'workspace\')" style="margin-top:1rem">Upload your first file</button></td></tr>';
+        return;
+    }
+    tb.innerHTML = S.history.map((item, i) => `
+        <tr>
+            <td style="font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(item.filename || item.fileName || 'Unknown')}</td>
+            <td style="color:var(--text-dim);font-size:0.82rem;white-space:nowrap">${new Date(item.createdAt).toLocaleString()}</td>
+            <td style="color:var(--text-dim)">${item.duration || '—'}</td>
+            <td><span style="background:rgba(16,185,129,0.1);color:var(--success);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.75rem;font-weight:700">${esc(item.language || 'Auto')}</span></td>
+            <td><span style="color:var(--success);font-size:0.82rem">● Done</span></td>
+            <td><button class="btn btn-outline btn-sm" onclick="viewHistItem(${i})">View</button></td>
+        </tr>
+    `).join('');
 }
+
 function viewHistItem(i) {
-    const item=S.history[i]; if(!item)return;
-    document.getElementById('transcriptArea').innerHTML=`<div style="line-height:2">${esc(item.text||item.transcript||'')}</div>`;
-    document.getElementById('resultMeta').textContent=`Saved ${new Date(item.createdAt).toLocaleString()} · ${item.filename||item.fileName||''}`;
-    document.getElementById('resultWrap').style.display='block';
-    document.getElementById('langBanner').style.display='none';
+    const item = S.history[i];
+    if (!item) return;
+    document.getElementById('transcriptArea').innerHTML = `<div style="line-height:2">${esc(item.text || item.transcript || '')}</div>`;
+    document.getElementById('resultMeta').textContent = `Saved ${new Date(item.createdAt).toLocaleString()} · ${esc(item.filename || item.fileName || '')}`;
+    document.getElementById('resultWrap').style.display = 'block';
+    document.getElementById('langBanner').style.display = 'none';
     showPage('workspace');
+    window.scrollTo({ top: document.getElementById('resultWrap').offsetTop - 100, behavior: 'smooth' });
 }
 
 /* ══════════════════════════════════════════════════════════
-   PAYMENTS
+   PAYMENTS  (FIX #4, #5, #19)
 ══════════════════════════════════════════════════════════ */
-function openPayModal(plan='pro') {
-    if(!S.loggedIn){openModal('authModal','login');return;}
-    S.payPlan=plan;
-    document.getElementById('payIcon').textContent = plan==='pro'?'⚡':'🏢';
-    document.getElementById('payTitle').textContent = plan==='pro'?'Upgrade to Pro':'Upgrade to Business';
-    document.getElementById('paySub').textContent = plan==='pro'?'Unlock 3000 minutes/month of transcription':'Unlimited transcription for your entire team';
-    document.getElementById('payPlanName').textContent = plan==='pro'?'Pro':'Business';
-    document.getElementById('payPrice').textContent = plan==='pro'?'€12/month':'€49/month';
-    document.getElementById('payNote').textContent = plan==='pro'?'U wordt na uw gratis proefperiode maandelijks gefactureerd. Annuleer wanneer u wilt.':'U wordt na 14 dagen proefperiode maandelijks gefactureerd.';
-    document.querySelector('#paySummary .pay-row:nth-child(2) .trial-badge').textContent = plan==='pro'?'7 days free':'14 days free';
+function openPayModal(plan = 'pro') {
+    if (!S.loggedIn) { openModal('authModal', 'login'); return; }
+    S.payPlan = plan;
+    document.getElementById('payIcon').textContent = plan === 'pro' ? '⚡' : '🏢';
+    document.getElementById('payTitle').textContent = plan === 'pro' ? 'Upgrade to Pro' : 'Upgrade to Business';
+    document.getElementById('paySub').textContent = plan === 'pro' ? 'Unlock 3000 minutes/month of transcription' : 'Unlimited transcription for your entire team';
+    document.getElementById('payPlanName').textContent = plan === 'pro' ? 'Pro' : 'Business';
+    document.getElementById('payPrice').textContent = plan === 'pro' ? '€12/month' : '€49/month';
+    document.getElementById('payNote').textContent = plan === 'pro' ? 'U wordt na uw gratis proefperiode maandelijks gefactureerd. Annuleer wanneer u wilt.' : 'U wordt na 14 dagen proefperiode maandelijks gefactureerd.';
+    document.querySelector('#paySummary .pay-row:nth-child(2) .trial-badge').textContent = plan === 'pro' ? '7 days free' : '14 days free';
     openModal('payModal');
-    
-    setTimeout(()=>{
-        if(S.stripe&&!S.cardEl){
-            const els=S.stripe.elements();
-            S.cardEl=els.create('card',{style:{base:{fontSize:'15px',color:S.theme==='dark'?'#f0f2ff':'#0d0f1c',fontFamily:"'Plus Jakarta Sans',sans-serif",'::placeholder':{color:S.theme==='dark'?'#7a7d9c':'#6b6e8a'}}}});
+
+    // Reset to card method
+    document.querySelectorAll('.pay-method').forEach(b => {
+        b.classList.remove('selected');
+        const ch = b.querySelector('.check'); if (ch) ch.textContent = '';
+    });
+    const firstMethod = document.querySelector('.pay-method');
+    if (firstMethod) { firstMethod.classList.add('selected'); const ch = firstMethod.querySelector('.check'); if (ch) ch.textContent = '✓'; }
+    S.payMethod = 'card';
+    document.getElementById('cardWrap').style.display = 'block';
+    document.getElementById('idealInfo').style.display = 'none';
+    document.getElementById('gpayInfo').style.display = 'none';
+    document.getElementById('klarnaInfo').style.display = 'none';
+    document.getElementById('payBtn').textContent = 'Start Gratis Proefperiode';
+
+    // Mount Stripe card element
+    setTimeout(() => {
+        if (S.stripe && !S.cardEl) {
+            const els = S.stripe.elements();
+            S.cardEl = els.create('card', {
+                style: {
+                    base: {
+                        fontSize: '15px',
+                        color: S.theme === 'dark' ? '#f0f2ff' : '#0d0f1c',
+                        fontFamily: "'Plus Jakarta Sans', sans-serif",
+                        '::placeholder': { color: S.theme === 'dark' ? '#7a7d9c' : '#6b6e8a' }
+                    }
+                }
+            });
             S.cardEl.mount('#cardElement');
-            S.cardEl.on('change',ev=>{const e=document.getElementById('cardErrors');if(e)e.textContent=ev.error?ev.error.message:'';});
+            S.cardEl.on('change', ev => {
+                const e = document.getElementById('cardErrors');
+                if (e) e.textContent = ev.error ? ev.error.message : '';
+            });
         }
-    },120);
+    }, 120);
 }
 
 function selectPay(btn, method) {
-    document.querySelectorAll('.pay-method').forEach(b=>{b.classList.remove('selected');const ch=b.querySelector('.check');if(ch)ch.textContent='';});
-    btn.classList.add('selected'); const ch=btn.querySelector('.check'); if(ch) ch.textContent='✓';
-    S.payMethod=method;
-    document.getElementById('cardWrap').style.display = method==='card'?'block':'none';
-    document.getElementById('idealInfo').style.display = method==='ideal'?'block':'none';
-    document.getElementById('gpayInfo').style.display = method==='gpay'?'block':'none';
-    document.getElementById('klarnaInfo').style.display = method==='klarna'?'block':'none';
-    document.getElementById('payBtn').textContent = method==='card'?'Start Gratis Proefperiode':method==='ideal'?'Betalen via iDEAL':method==='gpay'?'Betalen via Google Pay':'Betalen via Klarna';
+    document.querySelectorAll('.pay-method').forEach(b => {
+        b.classList.remove('selected');
+        const ch = b.querySelector('.check'); if (ch) ch.textContent = '';
+    });
+    btn.classList.add('selected');
+    const ch = btn.querySelector('.check'); if (ch) ch.textContent = '✓';
+    S.payMethod = method;
+    document.getElementById('cardWrap').style.display = method === 'card' ? 'block' : 'none';
+    document.getElementById('idealInfo').style.display = method === 'ideal' ? 'block' : 'none';
+    document.getElementById('gpayInfo').style.display = method === 'gpay' ? 'block' : 'none';
+    document.getElementById('klarnaInfo').style.display = method === 'klarna' ? 'block' : 'none';
+    document.getElementById('payBtn').textContent =
+        method === 'card' ? 'Start Gratis Proefperiode' :
+        method === 'ideal' ? 'Betalen via iDEAL' :
+        method === 'gpay' ? 'Betalen via Google Pay' : 'Betalen via Klarna';
 }
 
 async function processPayment() {
-    const btn=document.getElementById('payBtn');
-    btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Verwerken...';
-    
+    const btn = document.getElementById('payBtn');
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Verwerken...';
+
     try {
-        if(S.payMethod==='card') {
-            if(!S.stripe||!S.cardEl) throw new Error('Payment system not ready. Please refresh.');
-            const {paymentMethod,error}=await S.stripe.createPaymentMethod({type:'card',card:S.cardEl});
-            if(error) throw new Error(error.message);
-            
-            const token=C.get('authToken');
-            const r=await fetch(`${CFG.API}/payments/create-subscription`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},credentials:'include',body:JSON.stringify({paymentMethodId:paymentMethod.id,plan:S.payPlan})});
-            const data=await r.json();
-            if(!r.ok) throw new Error(data.error||'Subscription creation failed');
-            if(data.clientSecret){const c=await S.stripe.confirmCardPayment(data.clientSecret);if(c.error)throw new Error(c.error.message);}
-            if(data.subscriptionId){
-                const cr=await fetch(`${CFG.API}/payments/confirm`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},credentials:'include',body:JSON.stringify({subscriptionId:data.subscriptionId})});
-                const cd=await cr.json();
-                if(cd.isPro){S.isPro=true;S.isBusiness=false;}
-                if(cd.isBusiness){S.isBusiness=true;S.isPro=false;}
-                const cached=C.get('authUser');if(cached){cached.isPro=S.isPro;cached.isBusiness=S.isBusiness;C.set('authUser',cached,7*24*60);}
+        if (S.payMethod === 'card') {
+            if (!S.stripe || !S.cardEl) throw new Error('Payment system not ready. Please refresh the page.');
+
+            const { paymentMethod, error } = await S.stripe.createPaymentMethod({ type: 'card', card: S.cardEl });
+            if (error) throw new Error(error.message);
+
+            const token = C.get('authToken');
+            const r = await fetch(`${CFG.API}/payments/create-subscription`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                credentials: 'include',
+                body: JSON.stringify({ paymentMethodId: paymentMethod.id, plan: S.payPlan })
+            });
+            const data = await r.json();
+            if (!r.ok) throw new Error(data.error || 'Subscription creation failed');
+
+            if (data.clientSecret) {
+                const c = await S.stripe.confirmCardPayment(data.clientSecret);
+                if (c.error) throw new Error(c.error.message);
             }
-        } else if(S.payMethod==='ideal'||S.payMethod==='gpay'||S.payMethod==='klarna') {
-            // Route to Stripe Checkout for these methods
-            const token=C.get('authToken');
-            const r=await fetch(`${CFG.API}/payments/create-checkout`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},credentials:'include',body:JSON.stringify({plan:S.payPlan,method:S.payMethod,successUrl:window.location.href+'?success=1',cancelUrl:window.location.href})});
-            const data=await r.json();
-            if(!r.ok) throw new Error(data.error||'Checkout creation failed');
-            if(data.url){window.location.href=data.url;return;}
+
+            if (data.subscriptionId) {
+                const cr = await fetch(`${CFG.API}/payments/confirm`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    credentials: 'include',
+                    body: JSON.stringify({ subscriptionId: data.subscriptionId })
+                });
+                const cd = await cr.json();
+                // FIX #19: use server response exclusively, don't override with payPlan
+                if (cd.isBusiness) { S.isBusiness = true; S.isPro = false; }
+                else if (cd.isPro) { S.isPro = true; S.isBusiness = false; }
+                // FIX #4 & #5: correct cookie key + correct TTL (7 days, not 7*24*60)
+                const cached = C.get('cachedUser');
+                if (cached) {
+                    cached.isPro = S.isPro; cached.isBusiness = S.isBusiness;
+                    C.set('cachedUser', cached, 7);
+                }
+            }
+        } else {
+            // Redirect-based methods (iDEAL, Google Pay, Klarna)
+            const token = C.get('authToken');
+            const r = await fetch(`${CFG.API}/payments/create-checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                credentials: 'include',
+                body: JSON.stringify({ plan: S.payPlan, method: S.payMethod, successUrl: window.location.href + '?success=1', cancelUrl: window.location.href })
+            });
+            const data = await r.json();
+            if (!r.ok) throw new Error(data.error || 'Checkout creation failed');
+            if (data.url) { window.location.href = data.url; return; }
             throw new Error('No checkout URL returned');
         }
-        
-        if(S.payPlan==='business'){S.isBusiness=true;}else{S.isPro=true;}
+
         updateUI(); closeModal('payModal');
-        notifMsg('🎉 '+(S.payPlan==='pro'?'Pro':'Business')+' activated! Enjoy unlimited transcription.','success');
-    } catch(e) {
-        const ce=document.getElementById('cardErrors'); if(ce) ce.textContent=e.message;
-        btn.disabled=false; btn.textContent='Opnieuw proberen';
+        notifMsg('🎉 ' + (S.payPlan === 'pro' ? 'Pro' : 'Business') + ' activated! Enjoy your subscription.', 'success');
+    } catch (e) {
+        const ce = document.getElementById('cardErrors'); if (ce) ce.textContent = e.message;
+        btn.disabled = false; btn.textContent = 'Opnieuw proberen';
     }
 }
 
-function manageSubscription() { window.open(CFG.STRIPE_BILLING_PORTAL,'_blank'); }
-function cancelSub() { if(confirm('Cancel subscription? You keep access until end of billing period.')) { notifMsg('Manage via the Stripe portal.','info'); manageSubscription(); } }
+function manageSubscription() { window.open(CFG.STRIPE_BILLING_PORTAL, '_blank'); }
+function cancelSub() {
+    if (confirm('Cancel subscription? You keep access until end of billing period.')) {
+        notifMsg('Manage via the Stripe portal.', 'info');
+        manageSubscription();
+    }
+}
 
 /* ══════════════════════════════════════════════════════════
    MODALS
 ══════════════════════════════════════════════════════════ */
 function openModal(id, tab) {
-    document.getElementById(id).classList.add('open');
-    if(id==='authModal'){
-        switchAuthTab(tab||'login');
-        setTimeout(renderGSI,150);
-    }
-    if(id==='recoveryModal') openRecoveryModal(tab||'reset');
+    // GATE: block any modal from opening until terms are accepted
+    if (id !== 'termsConsentModal' && !localStorage.getItem('terms_accepted')) return;
+    document.getElementById(id)?.classList.add('open');
+    if (id === 'authModal') { switchAuthTab(tab || 'login'); setTimeout(renderGSI, 150); }
+    if (id === 'recoveryModal') openRecoveryModal(tab || 'reset');
 }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function backdropClose(e) { if(e.target===e.currentTarget) e.target.classList.remove('open'); }
+function closeModal(id) { if (id === 'termsConsentModal') return; /* terms gate cannot be closed programmatically */ document.getElementById(id)?.classList.remove('open'); }
+function backdropClose(e) { if (e.target === e.currentTarget && e.target.id !== 'termsConsentModal') e.target.classList.remove('open'); }
 function toggleDropdown() { document.getElementById('userDropdown')?.classList.toggle('open'); }
 
 /* ══════════════════════════════════════════════════════════
    FAQ
 ══════════════════════════════════════════════════════════ */
 function toggleFaq(el) {
-    const item=el.parentElement; const wasOpen=item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(f=>f.classList.remove('open'));
-    if(!wasOpen) item.classList.add('open');
+    const item = el.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
 }
 
 /* ══════════════════════════════════════════════════════════
    ERRORS / NOTIFICATIONS
 ══════════════════════════════════════════════════════════ */
-function showErr(msg){const e=document.getElementById('errorBox');if(e){e.textContent='⚠️ '+msg;e.style.display='block';setTimeout(()=>e.style.display='none',8000);}}
-function hideErr(){const e=document.getElementById('errorBox');if(e)e.style.display='none';}
-function notifMsg(msg,type='info'){
-    document.querySelectorAll('.notif').forEach(n=>n.remove());
-    const d=document.createElement('div'); d.className=`notif ${type}`; d.textContent=msg;
-    document.body.appendChild(d); setTimeout(()=>{d.style.opacity='0';d.style.transition='opacity 0.3s';setTimeout(()=>d.remove(),300);},3500);
+function showErr(msg) {
+    const e = document.getElementById('errorBox');
+    if (e) { e.textContent = '⚠️ ' + msg; e.style.display = 'block'; setTimeout(() => e.style.display = 'none', 8000); }
+}
+function hideErr() { const e = document.getElementById('errorBox'); if (e) e.style.display = 'none'; }
+function notifMsg(msg, type = 'info') {
+    document.querySelectorAll('.notif').forEach(n => n.remove());
+    const d = document.createElement('div');
+    d.className = `notif ${type}`; d.textContent = msg;
+    document.body.appendChild(d);
+    setTimeout(() => { d.style.opacity = '0'; d.style.transition = 'opacity 0.3s'; setTimeout(() => d.remove(), 300); }, 3500);
 }
 
 /* ══════════════════════════════════════════════════════════
-   HEALTH CHECK
+   TERMS
 ══════════════════════════════════════════════════════════ */
-// Apply config values to DOM elements
-function applyConfig() {
-    const el = document.getElementById('contactEmailLink');
-    if (el) { el.href = 'mailto:' + CFG.CONTACT_EMAIL; el.textContent = 'Contact us'; }
+/* ══════════════════════════════════════════════════════════
+   TERMS GATE — all accept/decline/inline-doc logic
+══════════════════════════════════════════════════════════ */
+
+// Called from the inline doc back-button — returns user to the consent card
+function closeInlineDoc() {
+    const panel = document.getElementById('termsInlineDoc');
+    if (panel) panel.style.display = 'none';
+}
+
+// Opens Privacy Policy or Terms of Service INSIDE the modal (no escape)
+function openInlineDoc(which) {
+    const panel = document.getElementById('termsInlineDoc');
+    const content = document.getElementById('termsInlineContent');
+    if (!panel || !content) return;
+
+    if (which === 'privacy') {
+        content.innerHTML = `
+            <h1 style="font-size:1.6rem;font-weight:800;color:#f0f2ff;margin-bottom:0.4rem">Privacy Policy</h1>
+            <p style="color:#7a7d9c;margin-bottom:2rem;font-size:0.85rem">Last updated: March 2026</p>
+            <div style="display:flex;flex-direction:column;gap:1.4rem">
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">1. Who we are</h3><p>TranscriptAI is an AI-powered transcription service. GDPR compliant and committed to your privacy.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">2. What data we collect</h3><p>We collect your email and name at registration. Audio files are temporarily processed then immediately deleted. Transcription history is stored in your account.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">3. How we use your data</h3><p>Your data is used solely to provide the service. We never sell your data to third parties.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">4. Payment data</h3><p>Payments are handled by Stripe. We never store credit card details on our servers.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">5. Cookies</h3><p>We use cookies only for authentication and preferences. No tracking or advertising cookies.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">6. Your GDPR rights</h3><p>You can access, correct, or delete your data at any time by contacting us.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">7. Contact</h3><p>Questions? Email <a href="mailto:privacy@transcriptai.com" style="color:#5b5ef4">privacy@transcriptai.com</a></p></div>
+            </div>`;
+    } else {
+        content.innerHTML = `
+            <h1 style="font-size:1.6rem;font-weight:800;color:#f0f2ff;margin-bottom:0.4rem">Terms of Service</h1>
+            <p style="color:#7a7d9c;margin-bottom:2rem;font-size:0.85rem">Last updated: March 12, 2026</p>
+            <div style="display:flex;flex-direction:column;gap:1.4rem">
+                <div style="padding:0.9rem 1.1rem;background:rgba(91,94,244,0.08);border-left:3px solid #5b5ef4;border-radius:0 8px 8px 0"><p style="margin:0;font-size:0.85rem">Please read these Terms carefully. By using TranscriptAI you agree to be bound by them.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">1. Definitions</h3><p>"Service" = the TranscriptAI platform. "User" = you. "We/us" = TranscriptAI and its operators.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">2. Eligibility</h3><p>You must be at least 16 years old. You are responsible for keeping your credentials confidential.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">3. Plans</h3><p><strong style="color:#f0f2ff">Free:</strong> 20 min lifetime. <strong style="color:#f0f2ff">Pro (€12/mo):</strong> 3,000 min/month, speaker detection, summaries. <strong style="color:#f0f2ff">Business (€49/mo):</strong> Unlimited. Minutes do not roll over.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">4. Billing & Refunds</h3><p>Billed monthly via Stripe. 7-day free trial on paid plans. Cancel anytime. Refund within 7 days if &lt;10% of minutes used.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">5. Acceptable Use</h3><p>No illegal content, no third-party rights violations, no surveillance. Violations = immediate suspension.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">6. Your Content</h3><p>You own everything you upload. Files are deleted immediately after transcription. We never train on your data.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">7. Privacy & GDPR</h3><p>GDPR compliant. See Privacy Policy. Files deleted after processing.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">8. Accuracy</h3><p>AI-generated transcriptions may contain errors. Review before legal or professional use.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">9. Liability</h3><p>Service provided "as is". Liability limited to amounts paid in the preceding 30 days.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">10. Governing Law</h3><p>Dutch law. Disputes resolved in Dutch courts. EU consumers may use the <a href="https://ec.europa.eu/consumers/odr" target="_blank" style="color:#5b5ef4">EU ODR platform</a>.</p></div>
+                <div><h3 style="color:#f0f2ff;margin-bottom:0.4rem">11. Contact</h3><p>Email: <a href="mailto:transcriptiai@gmail.com" style="color:#5b5ef4">transcriptiai@gmail.com</a></p></div>
+            </div>`;
+    }
+    panel.style.display = 'block';
+    panel.scrollTop = 0;
+}
+
+// Blocks keyboard shortcuts (Escape etc.) while terms gate is open
+function blockKeyOnTerms(e) {
+    if (!localStorage.getItem('terms_accepted')) {
+        if (e.key === 'Escape' || e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    } else {
+        // Terms accepted — remove this listener, no longer needed
+        document.removeEventListener('keydown', blockKeyOnTerms, true);
+    }
+}
+
+// The declined full-screen block — called immediately on page load if previously declined
+function showDeclinedScreen() {
+    // Hide everything behind it
+    document.body.style.overflow = 'hidden';
+    const el = document.createElement('div');
+    el.id = 'declinedBlockScreen';
+    el.style.cssText = "position:fixed;inset:0;background:#07080f;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;font-family:'Plus Jakarta Sans',sans-serif;gap:1.2rem";
+    el.innerHTML = `
+        <div style="font-size:4rem;line-height:1">🚫</div>
+        <h2 style="font-size:1.6rem;font-weight:800;color:#f0f2ff;margin:0">Access Denied</h2>
+        <p style="color:#7a7d9c;max-width:380px;line-height:1.6;font-size:0.9rem">
+            You declined the Terms of Service.<br>
+            TranscriptAI cannot be used without agreeing to its terms.
+        </p>
+        <div style="display:flex;gap:0.75rem;margin-top:0.5rem;flex-wrap:wrap;justify-content:center">
+            <button onclick="reattemptConsent()" style="padding:0.65rem 1.5rem;background:linear-gradient(135deg,#5b5ef4,#9b5de5);color:#fff;border:none;border-radius:10px;cursor:pointer;font-size:0.875rem;font-weight:700;font-family:inherit">
+                Review Terms Again
+            </button>
+        </div>
+        <p style="font-size:0.72rem;color:#4a4d6a;margin-top:0.5rem">
+            To remove this block, clear your browser's site data for this domain.
+        </p>
+    `;
+    document.body.appendChild(el);
+    // MutationObserver: if anything tries to remove the block screen, put it back
+    const observer = new MutationObserver(() => {
+        if (!document.getElementById('declinedBlockScreen')) {
+            document.body.appendChild(el);
+        }
+    });
+    observer.observe(document.body, { childList: true });
+}
+
+// Lets a declined user try accepting the terms again (clears declined flag, shows modal)
+function reattemptConsent() {
+    localStorage.removeItem('terms_declined');
+    sessionStorage.removeItem('terms_declined');
+    const block = document.getElementById('declinedBlockScreen');
+    if (block) block.remove();
+    document.body.style.overflow = '';
+    const m = document.getElementById('termsConsentModal');
+    if (m) {
+        m.style.display = 'flex';
+        document.addEventListener('keydown', blockKeyOnTerms, true);
+    }
 }
 
 function acceptTerms() {
+    // Remove declined flag in case user is reattempting
+    localStorage.removeItem('terms_declined');
+    sessionStorage.removeItem('terms_declined');
+    // Set accepted
     localStorage.setItem('terms_accepted', '1');
-    document.getElementById('termsConsentModal').classList.remove('open');
-}
-function declineTerms() {
-    // Redirect away — user declined
-    document.body.innerHTML = '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0f;color:#fff;font-family:sans-serif;gap:1rem;text-align:center;padding:2rem"><div style="font-size:3rem">🚫</div><h2 style="font-weight:700;margin:0">Access Denied</h2><p style="color:#888;max-width:360px">You must accept the Terms of Service to use TranscriptAI.</p><button onclick="location.reload()" style="margin-top:1rem;padding:0.6rem 1.5rem;background:#5b5ef4;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem">Try Again</button></div>';
+    // Hide the gate
+    const m = document.getElementById('termsConsentModal');
+    if (m) m.style.display = 'none';
+    // Remove keyboard blocker
+    document.removeEventListener('keydown', blockKeyOnTerms, true);
+    // Close inline doc if open
+    closeInlineDoc();
 }
 
+function declineTerms() {
+    // Persist the declined state in BOTH storages
+    localStorage.setItem('terms_declined', '1');
+    sessionStorage.setItem('terms_declined', '1');
+    // Make sure terms_accepted is not set
+    localStorage.removeItem('terms_accepted');
+    // Hide the consent modal
+    const m = document.getElementById('termsConsentModal');
+    if (m) m.style.display = 'none';
+    // Show the permanent block screen
+    showDeclinedScreen();
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════════════════════ */
 function openContactModal() { openModal('contactModal'); }
 
-async function healthCheck(){
-    try{const c=new AbortController();setTimeout(()=>c.abort(),5000);const r=await fetch(`${CFG.API}/health`,{signal:c.signal});if(!r.ok)throw new Error();document.getElementById('configWarn').style.display='none';}
-    catch(e){document.getElementById('configWarn').style.display='block';}
+/* ══════════════════════════════════════════════════════════
+   HEALTH CHECK  (FIX #16: retry on failure, don't show banner for temporary errors)
+══════════════════════════════════════════════════════════ */
+let _healthRetries = 0;
+async function healthCheck() {
+    try {
+        const c = new AbortController();
+        const t = setTimeout(() => c.abort(), 5000);
+        const r = await fetch(`${CFG.API}/health`, { signal: c.signal });
+        clearTimeout(t);
+        if (r.ok) {
+            document.getElementById('configWarn').style.display = 'none';
+            _healthRetries = 0;
+        } else {
+            throw new Error('Non-OK response');
+        }
+    } catch (e) {
+        _healthRetries++;
+        // FIX #16: Only show warning after 2 failed attempts (handles transient errors)
+        if (_healthRetries >= 2) {
+            document.getElementById('configWarn').style.display = 'block';
+        } else {
+            setTimeout(healthCheck, 3000);
+        }
+    }
 }
 </script>
 </body>
