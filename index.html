@@ -1235,7 +1235,7 @@ const CFG = {
     // ── Limieten (hoef je niet te wijzigen) ──────────────────
     FREE_TOTAL: 20,        // gratis minuten totaal per account
     FREE_PER_FILE: 10,     // max minuten per bestand (gratis plan)
-    PRO_MONTHLY: 5000,     // Pro plan: minuten per maand (50 uur)
+    PRO_MONTHLY: 3000,     // Pro plan: minuten per maand (50 uur)
 
 };
 
@@ -1825,6 +1825,15 @@ async function processPayment() {
             const data=await r.json();
             if(!r.ok) throw new Error(data.error||'Subscription creation failed');
             if(data.clientSecret){const c=await S.stripe.confirmCardPayment(data.clientSecret);if(c.error)throw new Error(c.error.message);}
+            // Bevestig betaling en sla isPro op in database
+            if(data.subscriptionId){
+                const cr=await fetch(`${CFG.API}/payments/confirm`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},credentials:'include',body:JSON.stringify({subscriptionId:data.subscriptionId})});
+                const cd=await cr.json();
+                if(cd.isPro){S.isPro=true;S.isBusiness=false;}
+                if(cd.isBusiness){S.isBusiness=true;S.isPro=false;}
+                // Sla ook op in lokale cache
+                const cached=C.get('authUser');if(cached){cached.isPro=S.isPro;cached.isBusiness=S.isBusiness;C.set('authUser',cached,7*24*60);}
+            }
         } else if(S.payMethod==='ideal'||S.payMethod==='gpay'||S.payMethod==='klarna') {
             // Route to Stripe Checkout for these methods
             const token=C.get('authToken');
